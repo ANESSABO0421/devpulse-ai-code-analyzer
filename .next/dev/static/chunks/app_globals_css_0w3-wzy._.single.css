@@ -117,7 +117,6 @@
     --font-weight-extrabold: 800;
     --tracking-tight: -.025em;
     --tracking-wider: .05em;
-    --tracking-widest: .1em;
     --leading-snug: 1.375;
     --leading-relaxed: 1.625;
     --blur-3xl: 64px;
@@ -998,10 +997,6 @@
     padding-inline: calc(var(--spacing) * 0);
   }
 
-  .px-3 {
-    padding-inline: calc(var(--spacing) * 3);
-  }
-
   .px-4 {
     padding-inline: calc(var(--spacing) * 4);
   }
@@ -1020,10 +1015,6 @@
 
   .py-0\.5 {
     padding-block: calc(var(--spacing) * .5);
-  }
-
-  .py-1 {
-    padding-block: calc(var(--spacing) * 1);
   }
 
   .py-3 {
@@ -1136,11 +1127,6 @@
   .tracking-wider {
     --tw-tracking: var(--tracking-wider);
     letter-spacing: var(--tracking-wider);
-  }
-
-  .tracking-widest {
-    --tw-tracking: var(--tracking-widest);
-    letter-spacing: var(--tracking-widest);
   }
 
   .whitespace-nowrap {
