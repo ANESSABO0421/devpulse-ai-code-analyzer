@@ -1,0 +1,27 @@
+import dotenv from "dotenv";
+import express from "express";
+import cors from "cors";
+import { connectDb } from "./config/db";
+
+dotenv.config();
+
+const PORT = process.env.port || 5000;
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const startServer = async () => {
+  try {
+    await connectDb();
+
+    app.listen(PORT, () => {
+      console.log(`server is running at http://localhost:${PORT}`);
+    });
+  } catch (error: any) {
+    console.log("failed to connect to mongoDb", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
