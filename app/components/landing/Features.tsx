@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -134,7 +135,7 @@ const FEATURES = [
   },
 ];
 
-export default function Features() {
+const Features = () => {
   const container = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState<number | null>(null);
 
@@ -182,8 +183,6 @@ export default function Features() {
       `}</style>
 
       <div className="max-w-6xl w-full">
-
-        {/* Header */}
         <div className="fc-header mb-20">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs dp-mono mb-6"
             style={{ borderColor: "rgba(129,140,248,0.25)", background: "rgba(129,140,248,0.07)", color: "#a5b4fc" }}>
@@ -203,7 +202,6 @@ export default function Features() {
           </div>
         </div>
 
-        {/* Cards */}
         <div className="fc-grid grid grid-cols-1 md:grid-cols-2 gap-4">
           {FEATURES.map((f, i) => (
             <div key={i} className="fc-card cursor-pointer"
@@ -216,14 +214,11 @@ export default function Features() {
                   boxShadow: hovered === i ? `0 0 40px ${f.accentDim}` : "none",
                   transition: "background 0.4s, border-color 0.4s, box-shadow 0.4s",
                 }}>
-
-                {/* Top accent bar */}
                 <div className="h-[1.5px] w-full overflow-hidden">
                   <div className="fc-bar h-full" style={{ background: `linear-gradient(90deg, ${f.accent}, transparent)` }} />
                 </div>
 
                 <div className="p-6">
-                  {/* Card header */}
                   <div className="flex items-start justify-between mb-5">
                     <div>
                       <div className="text-[10px] dp-mono mb-1.5" style={{ color: f.accent }}>{f.tag.toUpperCase()}</div>
@@ -235,16 +230,13 @@ export default function Features() {
                     </div>
                   </div>
 
-                  {/* Mini preview */}
                   <div className="mb-5 p-3 rounded-xl"
                     style={{ background: "rgba(0,0,0,0.3)", border: "1px solid rgba(255,255,255,0.04)" }}>
                     {f.preview}
                   </div>
 
-                  {/* Description */}
                   <p className="text-sm leading-relaxed" style={{ color: "#64748b" }}>{f.description}</p>
 
-                  {/* Footer */}
                   <div className="mt-5 flex items-center justify-between">
                     <div className="h-px flex-1" style={{ background: `linear-gradient(90deg, ${f.accent}30, transparent)` }} />
                     <span className="ml-3 text-xs dp-mono transition-colors duration-300"
@@ -258,7 +250,6 @@ export default function Features() {
           ))}
         </div>
 
-        {/* Footer row */}
         <div className="mt-12 flex items-center gap-4">
           <div className="h-px flex-1" style={{ background: "rgba(255,255,255,0.05)" }} />
           <button className="group flex items-center gap-2 text-xs dp-mono transition-colors duration-300"
@@ -275,4 +266,6 @@ export default function Features() {
       </div>
     </section>
   );
-}
+};
+
+export default Features;

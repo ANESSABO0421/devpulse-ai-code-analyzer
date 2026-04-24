@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -171,7 +172,7 @@ const STEPS = [
   },
 ];
 
-export default function HowItWorks() {
+const HowItWorks = () => {
   const container = useRef<HTMLElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<number | null>(null);
@@ -219,8 +220,6 @@ export default function HowItWorks() {
       `}</style>
 
       <div className="max-w-6xl w-full">
-
-        {/* Header */}
         <div className="hiw-hdr mb-20 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs dp-mono mb-6"
@@ -240,9 +239,7 @@ export default function HowItWorks() {
           </p>
         </div>
 
-        {/* Steps grid */}
         <div className="hiw-grid relative grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Center connector line */}
           <div ref={lineRef}
             className="hidden md:block absolute left-[calc(50%-0.5px)] top-8 bottom-8 w-px"
             style={{ background: "linear-gradient(to bottom, rgba(129,140,248,0.3), rgba(192,132,252,0.3), rgba(251,146,60,0.1))" }} />
@@ -257,14 +254,11 @@ export default function HowItWorks() {
                   border: `1px solid ${active === i ? s.accent + "35" : "rgba(255,255,255,0.06)"}`,
                   boxShadow: active === i ? `0 0 40px ${s.accentDim}` : "none",
                 }}>
-
-                {/* Sweep bar */}
                 <div className="h-[1.5px] overflow-hidden">
                   <div className="hiw-sweep h-full" style={{ background: `linear-gradient(90deg, ${s.accent}, transparent)` }} />
                 </div>
 
                 <div className="p-6">
-                  {/* Step header */}
                   <div className="flex items-start justify-between mb-5">
                     <div className="flex items-center gap-3">
                       <span className="hiw-num text-[42px] font-extrabold leading-none dp-mono opacity-10"
@@ -280,22 +274,18 @@ export default function HowItWorks() {
                     </span>
                   </div>
 
-                  {/* Preview panel */}
                   <div className="mb-5 p-3 rounded-xl"
                     style={{ background: "rgba(0,0,0,0.35)", border: "1px solid rgba(255,255,255,0.04)" }}>
                     {s.preview}
                   </div>
 
-                  {/* Description */}
                   <p className="text-sm leading-relaxed mb-4" style={{ color: "#64748b" }}>{s.description}</p>
 
-                  {/* Detail */}
                   <div className="flex items-center gap-2">
                     <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: s.accent }} />
                     <span className="text-[10px] dp-mono" style={{ color: "#374151" }}>{s.detail}</span>
                   </div>
 
-                  {/* Bottom sweep */}
                   <div className="mt-5 h-px overflow-hidden">
                     <div className="hiw-sweep h-full" style={{ background: `linear-gradient(90deg, ${s.accent}50, transparent)` }} />
                   </div>
@@ -305,7 +295,6 @@ export default function HowItWorks() {
           ))}
         </div>
 
-        {/* Footer */}
         <div className="mt-12 flex items-center gap-4">
           <div className="h-px flex-1" style={{ background: "rgba(255,255,255,0.05)" }} />
           <button
@@ -323,4 +312,6 @@ export default function HowItWorks() {
       </div>
     </section>
   );
-}
+};
+
+export default HowItWorks;

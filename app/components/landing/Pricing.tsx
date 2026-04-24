@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -60,7 +61,7 @@ const TIERS = [
   },
 ];
 
-export default function Pricing() {
+const Pricing = () => {
   const container = useRef<HTMLElement>(null);
   const [hovered, setHovered] = useState<number | null>(null);
 
@@ -86,7 +87,6 @@ export default function Pricing() {
       `}</style>
 
       <div className="max-w-5xl w-full">
-        {/* Header */}
         <div className="pc-hdr text-center mb-20">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs dp-mono mb-6"
             style={{ borderColor: "rgba(129,140,248,0.25)", background: "rgba(129,140,248,0.07)", color: "#a5b4fc" }}>
@@ -104,7 +104,6 @@ export default function Pricing() {
           </p>
         </div>
 
-        {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {TIERS.map((t, i) => (
             <div key={i} className="pc-card cursor-pointer relative"
@@ -124,13 +123,11 @@ export default function Pricing() {
                   boxShadow: t.popular ? `0 0 40px ${t.accentDim}` : hovered === i ? `0 0 30px ${t.accentDim}` : "none",
                 }}>
 
-                {/* Sweep bar */}
                 <div className="h-[1.5px] overflow-hidden">
                   <div className="pc-sweep h-full" style={{ background: `linear-gradient(90deg, ${t.accent}, transparent)` }} />
                 </div>
 
                 <div className="p-6 flex flex-col flex-1">
-                  {/* Tier name + price */}
                   <div className="mb-6">
                     <div className="text-[10px] dp-mono mb-2" style={{ color: t.accent }}>{t.name.toUpperCase()}</div>
                     <div className="flex items-baseline gap-1 mb-2">
@@ -141,7 +138,6 @@ export default function Pricing() {
                     <p className="text-xs leading-relaxed" style={{ color: "#475569" }}>{t.desc}</p>
                   </div>
 
-                  {/* Features */}
                   <div className="space-y-2.5 mb-8 flex-1">
                     {t.features.map(({ t: feat, ok }, fi) => (
                       <div key={fi} className="flex items-center gap-2.5 text-xs">
@@ -155,7 +151,6 @@ export default function Pricing() {
                     ))}
                   </div>
 
-                  {/* CTA */}
                   <button className="w-full py-3 rounded-xl text-xs font-bold dp-mono tracking-wider transition-all duration-300"
                     style={t.popular
                       ? { background: "linear-gradient(135deg, #6366f1, #8b5cf6)", color: "#fff", boxShadow: "0 0 24px rgba(99,102,241,0.3)" }
@@ -168,11 +163,12 @@ export default function Pricing() {
           ))}
         </div>
 
-        {/* Footer note */}
         <p className="text-center text-xs dp-mono mt-8" style={{ color: "#1e293b" }}>
           All plans include MongoDB Atlas · Vercel deployment · Railway backend
         </p>
       </div>
     </section>
   );
-}
+};
+
+export default Pricing;
