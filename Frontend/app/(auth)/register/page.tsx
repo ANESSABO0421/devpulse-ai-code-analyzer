@@ -3,6 +3,7 @@ import { axiosInstance } from "@/lib/axios";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 
 const SUGGESTIONS = [
   {
@@ -188,17 +189,30 @@ const RegisterPage = () => {
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: registerUser,
     onSuccess: (data) => {
-      console.log("SUCCESS:", data);
-      router.push("/login");
+      toast.success("Account created successfully 🎉");
+      setTimeout(() => {
+        router.push("/login");
+      }, 1200);
     },
     onError: (err: any) => {
-      console.log(err.response?.data || err.message);
+      const message = err?.response?.data?.message || "Registration failed";
+
+      toast.error(message);
     },
   });
 
   const handleSubmit = () => {
     if (!form.name || !form.email || !form.password) {
-      alert("All fields required");
+      toast.error("All fields are required");
+      return;
+    }
+    if (!form.email.includes("@")) {
+      toast.error("Invalid email address");
+      return;
+    }
+
+    if (form.password.length < 6) {
+      toast.error("Password must be at least 6 characters");
       return;
     }
 
@@ -672,11 +686,12 @@ const RegisterPage = () => {
               type="submit"
               className="font-semibold transition-colors"
               style={{ color: "#818cf8" }}
+              disabled={isPending}
               onMouseEnter={(e) => (e.currentTarget.style.color = "#c084fc")}
               onMouseLeave={(e) => (e.currentTarget.style.color = "#818cf8")}
               onClick={() => router.push("/login")}
             >
-              Sign in
+              {isPending ? "Creating..." : "Create account →"}
             </button>
           </p>
         </div>

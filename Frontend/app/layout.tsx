@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Outfit, Space_Mono } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "./providers/QueryProvider";
+import {Toaster} from "react-hot-toast"
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -30,7 +31,10 @@ export default function RootLayout({
       className={`${outfit.variable} ${spaceMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>{children}
+
+          <Toaster position="top-right" />
+        </QueryProvider>
       </body>
     </html>
   );

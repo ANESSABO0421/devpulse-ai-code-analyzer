@@ -8,10 +8,15 @@ import "./config/passport";
 
 dotenv.config();
 
-const PORT = process.env.port || 5000;
+const PORT = process.env.PORT || process.env.port || 5001;
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 //  passport
