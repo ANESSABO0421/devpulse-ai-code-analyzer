@@ -1,4 +1,6 @@
 "use client";
+import { axiosInstance } from "@/lib/axios";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 
@@ -129,6 +131,7 @@ const RegisterPage = () => {
   const [score, setScore] = useState(0);
   const [showBubble, setShowBubble] = useState(false);
   const [typed, setTyped] = useState("");
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
 
   useEffect(() => {
     const id = setInterval(
@@ -171,6 +174,36 @@ const RegisterPage = () => {
   }, []);
 
   const s = SUGGESTIONS[activeSugg];
+
+  // register
+  const registerUser = async (data: {
+    name: string;
+    email: string;
+    password: string;
+  }) => {
+    const res = await axiosInstance.post("/auth/register", data);
+    return res.data;
+  };
+
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationFn: registerUser,
+    onSuccess: (data) => {
+      console.log("SUCCESS:", data);
+      router.push("/login");
+    },
+    onError: (err: any) => {
+      console.log(err.response?.data || err.message);
+    },
+  });
+
+  const handleSubmit = () => {
+    if (!form.name || !form.email || !form.password) {
+      alert("All fields required");
+      return;
+    }
+
+    mutate(form);
+  };
 
   const router = useRouter();
 
@@ -523,95 +556,112 @@ const RegisterPage = () => {
             />
           </div>
 
-          <div className="mb-3 dp-race-up">
-            <label
-              className="block text-xs font-medium mb-1.5"
-              style={{ color: "#64748b" }}
-            >
-              Full Name
-            </label>
-            <div className="relative">
-              <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2"
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#374151"
-                strokeWidth="2"
-              >
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-              <input type="text" placeholder="John Doe" className="dp-input" />
-            </div>
-          </div>
-
-          <div className="mb-3 dp-race-up">
-            <label
-              className="block text-xs font-medium mb-1.5"
-              style={{ color: "#64748b" }}
-            >
-              Email
-            </label>
-            <div className="relative">
-              <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2"
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#374151"
-                strokeWidth="2"
-              >
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                <polyline points="22,6 12,13 2,6" />
-              </svg>
-              <input
-                type="email"
-                placeholder="you@company.com"
-                className="dp-input"
-              />
-            </div>
-          </div>
-
-          <div className="mb-6 dp-race-up">
-            <label
-              className="block text-xs font-medium mb-1.5"
-              style={{ color: "#64748b" }}
-            >
-              Password
-            </label>
-            <div className="relative">
-              <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2"
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#374151"
-                strokeWidth="2"
-              >
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                <path d="M7 11V7a5 5 0 0110 0v4" />
-              </svg>
-              <input
-                type="password"
-                placeholder="••••••••"
-                className="dp-input"
-              />
-            </div>
-          </div>
-
-          <button
-            className="dp-btn w-full py-3 rounded-xl text-sm font-semibold text-white mb-6 dp-race-up"
-            style={{
-              background: "linear-gradient(135deg,#6366f1,#8b5cf6)",
-              boxShadow: "0 0 28px rgba(99,102,241,0.25)",
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit();
             }}
           >
-            Create account →
-          </button>
+            {" "}
+            <div className="mb-3 dp-race-up">
+              <label
+                className="block text-xs font-medium mb-1.5"
+                style={{ color: "#64748b" }}
+              >
+                Full Name
+              </label>
+              <div className="relative">
+                <svg
+                  className="absolute left-3 top-1/2 -translate-y-1/2"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#374151"
+                  strokeWidth="2"
+                >
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                <input
+                  type="text"
+                  placeholder="John Doe"
+                  className="dp-input"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                />
+              </div>
+            </div>
+            <div className="mb-3 dp-race-up">
+              <label
+                className="block text-xs font-medium mb-1.5"
+                style={{ color: "#64748b" }}
+              >
+                Email
+              </label>
+              <div className="relative">
+                <svg
+                  className="absolute left-3 top-1/2 -translate-y-1/2"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#374151"
+                  strokeWidth="2"
+                >
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
+                <input
+                  type="email"
+                  placeholder="you@company.com"
+                  className="dp-input"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                />
+              </div>
+            </div>
+            <div className="mb-6 dp-race-up">
+              <label
+                className="block text-xs font-medium mb-1.5"
+                style={{ color: "#64748b" }}
+              >
+                Password
+              </label>
+              <div className="relative">
+                <svg
+                  className="absolute left-3 top-1/2 -translate-y-1/2"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#374151"
+                  strokeWidth="2"
+                >
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0110 0v4" />
+                </svg>
+                <input
+                  type="password"
+                  placeholder="••••••••"
+                  className="dp-input"
+                  value={form.password}
+                  onChange={(e) =>
+                    setForm({ ...form, password: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+            <button
+              className="dp-btn w-full py-3 rounded-xl text-sm font-semibold text-white mb-6 dp-race-up"
+              style={{
+                background: "linear-gradient(135deg,#6366f1,#8b5cf6)",
+                boxShadow: "0 0 28px rgba(99,102,241,0.25)",
+              }}
+            >
+              Create account →
+            </button>
+          </form>
 
           <p
             className="text-center text-xs dp-race-up"
@@ -619,6 +669,7 @@ const RegisterPage = () => {
           >
             Already have an account?{" "}
             <button
+              type="submit"
               className="font-semibold transition-colors"
               style={{ color: "#818cf8" }}
               onMouseEnter={(e) => (e.currentTarget.style.color = "#c084fc")}
