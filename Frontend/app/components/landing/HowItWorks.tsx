@@ -200,11 +200,10 @@ const HowItWorks = () => {
     <section
       ref={container}
       className="w-full py-28 px-6 md:px-12 flex justify-center"
-      style={{ fontFamily: "'Outfit', sans-serif", background: "#080b14", borderTop: "1px solid rgba(255,255,255,0.05)" }}
+      style={{ fontFamily: "var(--font-display)", background: "#080b14", borderTop: "1px solid rgba(255,255,255,0.05)" }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
-        .dp-mono { font-family: 'Space Mono', monospace; }
+        .dp-mono { font-family: var(--font-code); }
         .dp-pulse { animation: dpulse 2s infinite; }
         @keyframes dpulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
         .dp-typing { animation: dbounce 0.9s infinite ease-in-out; }

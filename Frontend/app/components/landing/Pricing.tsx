@@ -76,10 +76,9 @@ const Pricing = () => {
 
   return (
     <section ref={container} className="w-full py-28 px-6 md:px-12 flex justify-center"
-      style={{ fontFamily: "'Outfit', sans-serif", background: "#080b14", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+      style={{ fontFamily: "var(--font-display)", background: "#080b14", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
-        .dp-mono { font-family: 'Space Mono', monospace; }
+        .dp-mono { font-family: var(--font-code); }
         .pc-inner { transition: transform 0.4s cubic-bezier(0.34,1.2,0.64,1), border-color 0.35s, background 0.35s, box-shadow 0.35s; }
         .pc-card:hover .pc-inner { transform: translateY(-5px); }
         .pc-sweep { width: 0; transition: width 0.65s cubic-bezier(0.4,0,0.2,1); }

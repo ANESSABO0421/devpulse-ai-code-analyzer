@@ -138,15 +138,20 @@ const Hero = () => {
   const COMMENT_TEXT = "Line 2 is unsafe in prod — use Zod!";
 
   useEffect(() => {
+    let intervalId: ReturnType<typeof setInterval> | undefined;
     const t = setTimeout(() => {
       let i = 0;
-      const interval = setInterval(() => {
+      intervalId = setInterval(() => {
         i++;
         setActiveSugg(i % SUGGESTIONS.length);
       }, 2200);
-      return () => clearInterval(interval);
     }, 1800);
-    return () => clearTimeout(t);
+    return () => {
+      clearTimeout(t);
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -161,16 +166,24 @@ const Hero = () => {
   }, []);
 
   useEffect(() => {
+    let typingIntervalId: ReturnType<typeof setInterval> | undefined;
     const delay = setTimeout(() => {
       setCommentVisible(true);
       let i = 0;
-      const id = setInterval(() => {
+      typingIntervalId = setInterval(() => {
         i++;
         setTyped(COMMENT_TEXT.slice(0, i));
-        if (i >= COMMENT_TEXT.length) clearInterval(id);
+        if (i >= COMMENT_TEXT.length && typingIntervalId) {
+          clearInterval(typingIntervalId);
+        }
       }, 38);
     }, 3200);
-    return () => clearTimeout(delay);
+    return () => {
+      clearTimeout(delay);
+      if (typingIntervalId) {
+        clearInterval(typingIntervalId);
+      }
+    };
   }, []);
 
   useGSAP(
@@ -219,11 +232,10 @@ const Hero = () => {
     <section
       ref={container}
       className="relative w-full min-h-screen text-white flex items-center justify-center px-6 md:px-12 overflow-hidden"
-      style={{ fontFamily: "'Outfit', sans-serif", background: "#080b14" }}
+      style={{ fontFamily: "var(--font-display)", background: "#080b14" }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
-        .dp-mono { font-family: 'Space Mono', monospace; }
+        .dp-mono { font-family: var(--font-code); }
         .dp-noise::after {
           content: '';
           position: absolute;

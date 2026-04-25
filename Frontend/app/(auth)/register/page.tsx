@@ -129,11 +129,6 @@ const RegisterPage = () => {
   const [score, setScore] = useState(0);
   const [showBubble, setShowBubble] = useState(false);
   const [typed, setTyped] = useState("");
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
 
   useEffect(() => {
     const id = setInterval(
@@ -154,17 +149,25 @@ const RegisterPage = () => {
   }, []);
 
   useEffect(() => {
+    let typingIntervalId: ReturnType<typeof setInterval> | undefined;
     const t = setTimeout(() => {
       setShowBubble(true);
       const txt = "Sanitize user input here!";
       let i = 0;
-      const id = setInterval(() => {
+      typingIntervalId = setInterval(() => {
         i++;
         setTyped(txt.slice(0, i));
-        if (i >= txt.length) clearInterval(id);
+        if (i >= txt.length && typingIntervalId) {
+          clearInterval(typingIntervalId);
+        }
       }, 45);
     }, 2800);
-    return () => clearTimeout(t);
+    return () => {
+      clearTimeout(t);
+      if (typingIntervalId) {
+        clearInterval(typingIntervalId);
+      }
+    };
   }, []);
 
   const s = SUGGESTIONS[activeSugg];
@@ -174,16 +177,15 @@ const RegisterPage = () => {
   return (
     <div
       className="min-h-screen w-full flex"
-      style={{ fontFamily: "'Outfit',sans-serif", background: "#080b14" }}
+      style={{ fontFamily: "var(--font-display)", background: "#080b14" }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
-        .dp-mono { font-family:'Space Mono',monospace; }
+        .dp-mono { font-family: var(--font-code); }
         .dp-grid {
           background-image: linear-gradient(rgba(99,102,241,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.04) 1px,transparent 1px);
           background-size:40px 40px;
         }
-        .dp-input { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:11px 14px 11px 40px; font-size:13px; color:#e2e8f0; outline:none; width:100%; transition:border-color 0.2s,box-shadow 0.2s; font-family:'Outfit',sans-serif; }
+        .dp-input { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:11px 14px 11px 40px; font-size:13px; color:#e2e8f0; outline:none; width:100%; transition:border-color 0.2s,box-shadow 0.2s; font-family:var(--font-display); }
         .dp-input::placeholder { color:#1e293b; }
         .dp-input:focus { border-color:rgba(129,140,248,0.45); box-shadow:0 0 0 3px rgba(129,140,248,0.08); }
         .dp-pulse { animation:dpp 2s infinite; }

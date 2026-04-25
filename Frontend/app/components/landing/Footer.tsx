@@ -54,15 +54,14 @@ export default function Footer() {
 
   return (
     <footer className="relative w-full overflow-hidden"
-      style={{ fontFamily: "'Outfit', sans-serif", background: "#05070f", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+      style={{ fontFamily: "var(--font-display)", background: "#05070f", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
-        .dp-mono { font-family: 'Space Mono', monospace; }
+        .dp-mono { font-family: var(--font-code); }
         .ft-link { color: #1e293b; font-size: 13px; transition: color 0.2s, transform 0.2s; display: inline-block; }
         .ft-link:hover { color: #94a3b8; transform: translateX(2px); }
         .ft-social { width:32px; height:32px; border-radius:10px; display:flex; align-items:center; justify-content:center; color:#374151; border:1px solid rgba(255,255,255,0.06); transition: color 0.25s, border-color 0.25s, background 0.25s; }
         .ft-social:hover { color:#818cf8; border-color:rgba(129,140,248,0.3); background:rgba(129,140,248,0.07); }
-        .ft-input { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:10px 14px; font-size:13px; color:#e2e8f0; outline:none; width:100%; transition:border-color 0.2s; font-family:'Outfit',sans-serif; }
+        .ft-input { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:10px 14px; font-size:13px; color:#e2e8f0; outline:none; width:100%; transition:border-color 0.2s; font-family:var(--font-display); }
         .ft-input::placeholder { color:#1e293b; }
         .ft-input:focus { border-color:rgba(129,140,248,0.4); }
         @keyframes dp-pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }

@@ -87,7 +87,7 @@ const FEATURES = [
           { title: "SQL injection risk",      sev: "critical", status: "open",        sColor: "#ef4444" },
           { title: "Auth token not expiring", sev: "high",     status: "in-progress", sColor: "#f59e0b" },
           { title: "Missing rate limiting",   sev: "medium",   status: "resolved",    sColor: "#34d399" },
-        ].map(({ title, sev, status, sColor }) => (
+        ].map(({ title, sev, sColor }) => (
           <div key={title} className="flex items-center gap-2 p-1.5 rounded"
             style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
             <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: sColor }} />
@@ -157,11 +157,10 @@ const Features = () => {
     <section
       ref={container}
       className="w-full py-28 px-6 md:px-12 flex justify-center"
-      style={{ fontFamily: "'Outfit', sans-serif", background: "#080b14", borderTop: "1px solid rgba(255,255,255,0.05)" }}
+      style={{ fontFamily: "var(--font-display)", background: "#080b14", borderTop: "1px solid rgba(255,255,255,0.05)" }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
-        .dp-mono { font-family: 'Space Mono', monospace; }
+        .dp-mono { font-family: var(--font-code); }
         .dp-typing {
           animation: dp-bounce 0.9s infinite ease-in-out;
         }
