@@ -129,6 +129,11 @@ const RegisterPage = () => {
   const [score, setScore] = useState(0);
   const [showBubble, setShowBubble] = useState(false);
   const [typed, setTyped] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
   useEffect(() => {
     const id = setInterval(

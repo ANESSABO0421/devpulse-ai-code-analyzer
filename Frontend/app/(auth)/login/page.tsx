@@ -1,6 +1,6 @@
-"use client";
-import { useRouter } from "next/navigation";
+"use client"
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const SUGGESTIONS = [
   {
@@ -95,7 +95,7 @@ const CODE = [
   },
 ];
 
-const TC: Record<string, string> = {
+const TC = {
   kw: "#c084fc",
   fn: "#fde68a",
   str: "#6ee7b7",
@@ -103,11 +103,12 @@ const TC: Record<string, string> = {
   pl: "#e2e8f0",
 };
 
-export default function LoginPage() {
+const LoginPage = () => {
   const [activeSugg, setActiveSugg] = useState(0);
   const [score, setScore] = useState(0);
   const [showBubble, setShowBubble] = useState(false);
   const [typed, setTyped] = useState("");
+  
 
   useEffect(() => {
     const id = setInterval(
@@ -142,7 +143,6 @@ export default function LoginPage() {
   }, []);
 
   const s = SUGGESTIONS[activeSugg];
-
   const router = useRouter();
 
   return (
@@ -300,7 +300,7 @@ export default function LoginPage() {
                     </span>
                     <span>
                       {src.map(([t, v], i) => (
-                        <span key={i} style={{ color: TC[t] ?? TC.pl }}>
+                        <span key={i} style={{ color: TC[t as keyof typeof TC] ?? TC.pl }}>
                           {v}
                         </span>
                       ))}
@@ -590,4 +590,6 @@ export default function LoginPage() {
       </div>
     </div>
   );
-}
+};
+
+export default LoginPage;
