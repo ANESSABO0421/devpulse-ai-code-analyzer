@@ -2,6 +2,9 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import { connectDb } from "./config/db";
+import authRoutes from "./routes/auth.routes";
+import passport from "passport";
+import "./config/passport";
 
 dotenv.config();
 
@@ -10,6 +13,11 @@ const PORT = process.env.port || 5000;
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+//  passport
+app.use(passport.initialize());
+
+app.use("/api/auth", authRoutes);
 
 const startServer = async () => {
   try {
