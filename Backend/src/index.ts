@@ -5,6 +5,8 @@ import { connectDb } from "./config/db";
 import authRoutes from "./routes/auth.routes";
 import passport from "passport";
 import "./config/passport";
+import projectRoutes from "./routes/project.route";
+import reviewRoutes from "./routes/review.routes";
 
 dotenv.config();
 
@@ -15,7 +17,7 @@ app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:3000",
     credentials: true,
-  })
+  }),
 );
 app.use(express.json());
 
@@ -23,6 +25,8 @@ app.use(express.json());
 app.use(passport.initialize());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 const startServer = async () => {
   try {
