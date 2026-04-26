@@ -1,6 +1,9 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { axiosInstance } from "@/lib/axios";
+import toast from "react-hot-toast";
 
 const SUGGESTIONS = [
   {
@@ -108,7 +111,7 @@ const LoginPage = () => {
   const [score, setScore] = useState(0);
   const [showBubble, setShowBubble] = useState(false);
   const [typed, setTyped] = useState("");
-  
+  const [form, setForm] = useState({ email: "", password: "" });
 
   useEffect(() => {
     const id = setInterval(
@@ -152,6 +155,47 @@ const LoginPage = () => {
 
   const s = SUGGESTIONS[activeSugg];
   const router = useRouter();
+
+  const loginUser = async (data: { email: string; password: string }) => {
+    const res = await axiosInstance.post("/auth/login", data);
+    return res.data;
+  };
+
+  // github login
+  const handleGithubLogin = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/github`;
+  };
+
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationFn: loginUser,
+    onSuccess: (data) => {
+      toast.success("You Have Been Successfully Logged in 🎉");
+      setTimeout(() => router.push("/dashboard"), 1000);
+    },
+    onError: (err: any) => {
+      const message = err?.response?.data?.message || "Registration failed";
+
+      toast.error(message);
+    },
+  });
+
+  const handleSubmit = () => {
+    if (!form.email || !form.password) {
+      toast.error("All fields are required");
+      return;
+    }
+    if (!form.email.includes("@")) {
+      toast.error("Invalid email address");
+      return;
+    }
+
+    if (form.password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
+    mutate(form);
+  };
 
   return (
     <div
@@ -307,7 +351,10 @@ const LoginPage = () => {
                     </span>
                     <span>
                       {src.map(([t, v], i) => (
-                        <span key={i} style={{ color: TC[t as keyof typeof TC] ?? TC.pl }}>
+                        <span
+                          key={i}
+                          style={{ color: TC[t as keyof typeof TC] ?? TC.pl }}
+                        >
                           {v}
                         </span>
                       ))}
@@ -481,6 +528,7 @@ const LoginPage = () => {
               background: "rgba(255,255,255,0.04)",
               border: "1px solid rgba(255,255,255,0.09)",
             }}
+            onClick={handleGithubLogin}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
               <path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0112 6.8c.85 0 1.71.11 2.52.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10.01 10.01 0 0022 12c0-5.52-4.48-10-10-10z" />
@@ -502,81 +550,99 @@ const LoginPage = () => {
             />
           </div>
 
-          <div className="mb-3 dp-race-up">
-            <label
-              className="block text-xs font-medium mb-1.5"
-              style={{ color: "#64748b" }}
-            >
-              Email
-            </label>
-            <div className="relative">
-              <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2"
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#374151"
-                strokeWidth="2"
-              >
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                <polyline points="22,6 12,13 2,6" />
-              </svg>
-              <input
-                type="email"
-                placeholder="you@company.com"
-                className="dp-input"
-              />
-            </div>
-          </div>
-
-          <div className="mb-4 dp-race-up">
-            <div className="flex justify-between mb-1.5">
-              <label
-                className="text-xs font-medium"
-                style={{ color: "#64748b" }}
-              >
-                Password
-              </label>
-              <button
-                className="text-xs transition-colors"
-                style={{ color: "#4b5563" }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#818cf8")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "#4b5563")}
-              >
-                Forgot?
-              </button>
-            </div>
-            <div className="relative">
-              <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2"
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#374151"
-                strokeWidth="2"
-              >
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                <path d="M7 11V7a5 5 0 0110 0v4" />
-              </svg>
-              <input
-                type="password"
-                placeholder="••••••••"
-                className="dp-input"
-              />
-            </div>
-          </div>
-
-          <button
-            className="dp-btn w-full py-3 rounded-xl text-sm font-semibold text-white mb-6 dp-race-up"
-            style={{
-              background: "linear-gradient(135deg,#6366f1,#8b5cf6)",
-              boxShadow: "0 0 28px rgba(99,102,241,0.25)",
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit();
             }}
           >
-            Sign in →
-          </button>
+            <div className="mb-3 dp-race-up">
+              <label
+                className="block text-xs font-medium mb-1.5"
+                style={{ color: "#64748b" }}
+              >
+                Email
+              </label>
+              <div className="relative">
+                <svg
+                  className="absolute left-3 top-1/2 -translate-y-1/2"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#374151"
+                  strokeWidth="2"
+                >
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
+                <input
+                  type="email"
+                  placeholder="you@company.com"
+                  className="dp-input"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div className="mb-4 dp-race-up">
+              <div className="flex justify-between mb-1.5">
+                <label
+                  className="text-xs font-medium"
+                  style={{ color: "#64748b" }}
+                >
+                  Password
+                </label>
+                <button
+                  className="text-xs transition-colors"
+                  style={{ color: "#4b5563" }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.color = "#818cf8")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.color = "#4b5563")
+                  }
+                >
+                  Forgot?
+                </button>
+              </div>
+              <div className="relative">
+                <svg
+                  className="absolute left-3 top-1/2 -translate-y-1/2"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#374151"
+                  strokeWidth="2"
+                >
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0110 0v4" />
+                </svg>
+                <input
+                  type="password"
+                  placeholder="••••••••"
+                  className="dp-input"
+                  value={form.password}
+                  onChange={(e) =>
+                    setForm({ ...form, password: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+
+            <button
+              className="dp-btn w-full py-3 rounded-xl text-sm font-semibold text-white mb-6 dp-race-up"
+              style={{
+                background: "linear-gradient(135deg,#6366f1,#8b5cf6)",
+                boxShadow: "0 0 28px rgba(99,102,241,0.25)",
+              }}
+              disabled={isPending}
+            >
+              {isPending ? "Signing In..." : "Sign In →"}
+            </button>
+          </form>
 
           <p
             className="text-center text-xs dp-race-up"
