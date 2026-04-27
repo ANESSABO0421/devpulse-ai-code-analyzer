@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { getApiErrorMessage } from "@/lib/api";
 import { axiosInstance } from "@/lib/axios";
 import { useAuth } from "@/hooks/useAuth";
+import { FolderPlus, Globe, Code2, GitBranch, } from "lucide-react";
 
 export default function NewProjectPage() {
   useAuth();
@@ -32,23 +33,80 @@ export default function NewProjectPage() {
 
   return (
     <AppShell>
-      <div>
-        <h1 className="text-5xl font-black">Create Project</h1>
-        <p className="mt-3 text-[var(--muted)]">Spin up a code review hub for your repo, teammates, and issue backlog.</p>
-      </div>
-      <form className="card max-w-3xl space-y-4 p-6" onSubmit={handleSubmit}>
-        <input className="w-full rounded-2xl border border-[var(--line)] bg-white px-4 py-3" placeholder="Project name" value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} />
-        <textarea className="min-h-40 w-full rounded-2xl border border-[var(--line)] bg-white px-4 py-3" placeholder="Describe this workspace" value={form.description} onChange={(event) => setForm({ ...form, description: event.target.value })} />
-        <div className="grid gap-4 md:grid-cols-2">
-          <select className="rounded-2xl border border-[var(--line)] bg-white px-4 py-3" value={form.language} onChange={(event) => setForm({ ...form, language: event.target.value })}>
-            <option value="typescript">TypeScript</option>
-            <option value="javascript">JavaScript</option>
-            <option value="python">Python</option>
-            <option value="go">Go</option>
-          </select>
-          <input className="rounded-2xl border border-[var(--line)] bg-white px-4 py-3" placeholder="owner/repo (optional)" value={form.githubRepo} onChange={(event) => setForm({ ...form, githubRepo: event.target.value })} />
+      <section className="mb-10">
+        <h1 className="text-4xl font-black text-white md:text-5xl">Create Project</h1>
+        <p className="mt-4 max-w-2xl text-lg text-muted">
+          Spin up a professional code review hub for your repository, team, and automated issue tracking.
+        </p>
+      </section>
+
+      <form className="glass-card max-w-3xl space-y-8 p-8 md:p-10" onSubmit={handleSubmit}>
+        <div className="space-y-2">
+          <label className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-muted">
+            <FolderPlus size={16} className="text-accent" />
+            Project Name
+          </label>
+          <input
+            className="w-full"
+            placeholder="e.g. DevPulse Frontend"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            required
+          />
         </div>
-        <Button type="submit">Create Project</Button>
+
+        <div className="space-y-2">
+          <label className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-muted">
+            <Globe size={16} className="text-accent" />
+            Workspace Description
+          </label>
+          <textarea
+            className="min-h-[120px] w-full"
+            placeholder="What is this workspace for?"
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+          />
+        </div>
+
+        <div className="grid gap-8 md:grid-cols-2">
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-muted">
+              <Code2 size={16} className="text-accent" />
+              Primary Language
+            </label>
+            <select
+              className="w-full"
+              value={form.language}
+              onChange={(e) => setForm({ ...form, language: e.target.value })}
+            >
+              <option value="typescript">TypeScript</option>
+              <option value="javascript">JavaScript</option>
+              <option value="python">Python</option>
+              <option value="go">Go</option>
+              <option value="rust">Rust</option>
+              <option value="java">Java</option>
+            </select>
+          </div>
+
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-muted">
+              <GitBranch size={16} className="text-accent" />
+              GitHub Repository
+            </label>
+            <input
+              className="w-full"
+              placeholder="owner/repo"
+              value={form.githubRepo}
+              onChange={(e) => setForm({ ...form, githubRepo: e.target.value })}
+            />
+          </div>
+        </div>
+
+        <div className="pt-4">
+          <Button type="submit" className="h-14 w-full text-base sm:w-auto sm:px-12">
+            Create Workspace
+          </Button>
+        </div>
       </form>
     </AppShell>
   );

@@ -15,6 +15,7 @@ import { useSocket } from "@/hooks/useSocket";
 import { useReviewStore } from "@/store/useReviewStore";
 import { useAuth } from "@/hooks/useAuth";
 import { useAuthStore } from "@/store/useAuthStore";
+import { RefreshCw, MessageCircle, Hash, Send, AlertCircle } from "lucide-react";
 
 interface SocketCommentPayload {
   comment: import("@/types/comment").Comment;
@@ -36,6 +37,7 @@ export default function ReviewDetailPage() {
   const { user } = useAuthStore();
   const [comment, setComment] = useState("");
   const [line, setLine] = useState("");
+  const [isRerunning, setIsRerunning] = useState(false);
 
   const socketHandlers = useMemo(
     () => ({
@@ -59,16 +61,24 @@ export default function ReviewDetailPage() {
   }, [comments]);
 
   if (loading) {
-    return <AppShell><div className="card p-6">Loading review...</div></AppShell>;
+    return (
+      <AppShell>
+        <div className="glass-card flex h-64 flex-col items-center justify-center p-10 text-center">
+          <RefreshCw size={32} className="mb-4 animate-spin text-accent" />
+          <p className="text-muted">Loading review workspace...</p>
+        </div>
+      </AppShell>
+    );
   }
 
   if (error || !currentReview) {
     return (
       <AppShell>
-        <div className="card p-6">
-          <h2 className="text-2xl font-semibold">Couldn&apos;t load this review</h2>
-          <p className="mt-3 text-[var(--muted)]">
-            {error || "This review may not exist anymore or you may not have access to it."}
+        <div className="glass-card border-rose-500/20 bg-rose-500/5 p-10 text-center">
+          <AlertCircle size={48} className="mx-auto mb-6 text-rose-500" />
+          <h2 className="text-2xl font-bold text-white">Review not found</h2>
+          <p className="mt-4 text-muted">
+            {error || "This review may have been deleted or moved to another workspace."}
           </p>
         </div>
       </AppShell>
@@ -77,12 +87,17 @@ export default function ReviewDetailPage() {
 
   return (
     <AppShell>
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div>
-          <h1 className="text-4xl font-black">{currentReview.title}</h1>
-          <p className="mt-3 text-[var(--muted)]">Review live with line comments, AI feedback, and a shared status.</p>
+      <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="max-w-3xl">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="rounded-full bg-accent/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-accent border border-accent/20">
+              {currentReview.language}
+            </span>
+          </div>
+          <h1 className="text-4xl font-black text-white md:text-5xl">{currentReview.title}</h1>
+          <p className="mt-4 text-lg text-muted">Review live with line comments, AI feedback, and a shared status.</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-3">
           <ReviewStatus
             value={currentReview.status}
             onChange={async (status) => {
@@ -92,66 +107,117 @@ export default function ReviewDetailPage() {
           />
           <Button
             variant="secondary"
+            disabled={isRerunning}
             onClick={async () => {
-              const { data } = await axiosInstance.post(`/reviews/${currentReview._id}/ai-rerun`);
-              setCurrentReview({ ...currentReview, ...data });
-              toast.success("AI review refreshed");
+              setIsRerunning(true);
+              try {
+                const { data } = await axiosInstance.post(`/reviews/${currentReview._id}/ai-rerun`);
+                setCurrentReview({ ...currentReview, ...data });
+                toast.success("AI review refreshed");
+              } finally {
+                setIsRerunning(false);
+              }
             }}
           >
-            Re-run AI
+            <RefreshCw size={16} className={`mr-2 ${isRerunning ? "animate-spin" : ""}`} />
+            Refresh AI
           </Button>
         </div>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-        <CodeEditor
-          value={currentReview.code}
-          language={currentReview.language}
-          readOnly
-          suggestions={currentReview.aiSuggestions}
-        />
-        <AIFeedback review={currentReview} />
-      </div>
-
-      <section className="card p-6">
-        <h2 className="text-2xl font-semibold">Comments</h2>
-        <div className="mt-5 grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-          <form
-            className="space-y-4"
-            onSubmit={async (event) => {
-              event.preventDefault();
-              await axiosInstance.post("/comments", {
-                reviewId: currentReview._id,
-                content: comment,
-                line: line ? Number(line) : undefined,
-              });
-              if (user) {
-                toast.success("Comment posted");
-              }
-              setComment("");
-              setLine("");
-            }}
-          >
-            <input className="w-full rounded-2xl border border-[var(--line)] bg-white px-4 py-3" placeholder="Optional line number" value={line} onChange={(event) => setLine(event.target.value)} />
-            <textarea className="min-h-36 w-full rounded-2xl border border-[var(--line)] bg-white px-4 py-3" placeholder="Share your feedback with the team" value={comment} onChange={(event) => setComment(event.target.value)} />
-            <Button type="submit">Add Comment</Button>
-          </form>
-          <div className="space-y-6">
-            <div>
-              <h3 className="mb-3 text-lg font-semibold">Line-specific comments</h3>
-              <div className="space-y-3">
-                {groupedComments.lineComments.map((item) => <LineComment key={item._id} comment={item} />)}
-              </div>
-            </div>
-            <div>
-              <h3 className="mb-3 text-lg font-semibold">General comments</h3>
-              <div className="space-y-3">
-                {groupedComments.generalComments.map((item) => <LineComment key={item._id} comment={item} />)}
-              </div>
-            </div>
+      <div className="grid gap-8 xl:grid-cols-[1fr_400px]">
+        <div className="space-y-8">
+          <div className="overflow-hidden rounded-2xl border border-white/5 shadow-2xl">
+            <CodeEditor
+              value={currentReview.code}
+              language={currentReview.language}
+              readOnly
+              suggestions={currentReview.aiSuggestions}
+            />
           </div>
+
+          <section className="glass-card p-8">
+            <div className="mb-8 flex items-center gap-3">
+              <MessageCircle size={24} className="text-accent" />
+              <h2 className="text-2xl font-bold text-white">Collaboration</h2>
+            </div>
+            
+            <div className="grid gap-10 lg:grid-cols-[400px_1fr]">
+              <form
+                className="space-y-6"
+                onSubmit={async (event) => {
+                  event.preventDefault();
+                  if (!comment.trim()) return;
+                  await axiosInstance.post("/comments", {
+                    reviewId: currentReview._id,
+                    content: comment,
+                    line: line ? Number(line) : undefined,
+                  });
+                  if (user) {
+                    toast.success("Comment posted");
+                  }
+                  setComment("");
+                  setLine("");
+                }}
+              >
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted opacity-60">
+                    <Hash size={12} />
+                    Specific Line (Optional)
+                  </label>
+                  <input 
+                    className="w-full text-sm" 
+                    placeholder="Line #" 
+                    value={line} 
+                    onChange={(e) => setLine(e.target.value)} 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted opacity-60">
+                    <MessageCircle size={12} />
+                    Your Feedback
+                  </label>
+                  <textarea 
+                    className="min-h-[140px] w-full text-sm leading-relaxed" 
+                    placeholder="Share your thoughts..." 
+                    value={comment} 
+                    onChange={(e) => setComment(e.target.value)} 
+                  />
+                </div>
+                <Button type="submit" className="w-full">
+                  <Send size={16} className="mr-2" />
+                  Post Comment
+                </Button>
+              </form>
+
+              <div className="space-y-10">
+                {groupedComments.lineComments.length > 0 && (
+                  <div>
+                    <h3 className="mb-6 text-xs font-bold uppercase tracking-[0.2em] text-muted opacity-60">Line-specific</h3>
+                    <div className="space-y-4">
+                      {groupedComments.lineComments.map((item) => <LineComment key={item._id} comment={item} />)}
+                    </div>
+                  </div>
+                )}
+                <div>
+                  <h3 className="mb-6 text-xs font-bold uppercase tracking-[0.2em] text-muted opacity-60">General Discussion</h3>
+                  <div className="space-y-4">
+                    {groupedComments.generalComments.length > 0 ? (
+                      groupedComments.generalComments.map((item) => <LineComment key={item._id} comment={item} />)
+                    ) : (
+                      <p className="text-sm text-muted italic">No general comments yet. Be the first to start the thread!</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
-      </section>
+
+        <aside className="space-y-8">
+          <AIFeedback review={currentReview} />
+        </aside>
+      </div>
     </AppShell>
   );
 }

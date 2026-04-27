@@ -8,6 +8,7 @@ import { getApiErrorMessage } from "@/lib/api";
 import { axiosInstance } from "@/lib/axios";
 import { getServerBaseUrl } from "@/lib/env";
 import { useAuthStore } from "@/store/useAuthStore";
+import { User, Mail, Lock, UserPlus, GitBranchPlusIcon, } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -31,24 +32,78 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="shell py-16">
-      <div className="card mx-auto max-w-lg p-8">
-        <h1 className="text-4xl font-black">Create your DevPulse workspace</h1>
-        <p className="mt-3 text-[var(--muted)]">Set up projects, invite teammates, and run AI reviews.</p>
-        <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
-          <input className="w-full rounded-2xl border border-[var(--line)] bg-white px-4 py-3" placeholder="Name" value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} />
-          <input className="w-full rounded-2xl border border-[var(--line)] bg-white px-4 py-3" placeholder="Email" type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} />
-          <input className="w-full rounded-2xl border border-[var(--line)] bg-white px-4 py-3" placeholder="Password" type="password" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} />
-          <Button type="submit" className="w-full">{loading ? "Creating account..." : "Create Account"}</Button>
+    <div className="flex min-h-[80vh] items-center justify-center py-16">
+      <div className="glass-card mx-auto w-full max-w-lg p-10 md:p-12">
+        <section className="mb-10 text-center">
+          <h1 className="text-4xl font-black text-white">Join DevPulse</h1>
+          <p className="mt-4 text-muted">Set up your workspace and ship cleaner code with AI.</p>
+        </section>
+
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted opacity-60">
+              <User size={12} />
+              Full Name
+            </label>
+            <input
+              className="w-full"
+              placeholder="Jane Doe"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted opacity-60">
+              <Mail size={12} />
+              Email Address
+            </label>
+            <input
+              className="w-full"
+              placeholder="name@company.com"
+              type="email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted opacity-60">
+              <Lock size={12} />
+              Password
+            </label>
+            <input
+              className="w-full"
+              placeholder="Min. 8 characters"
+              type="password"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              required
+            />
+          </div>
+
+          <Button type="submit" className="h-14 w-full text-base" disabled={loading}>
+            <UserPlus size={20} className="mr-2" />
+            {loading ? "Creating account..." : "Create Account"}
+          </Button>
+
+          <div className="relative py-4">
+            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/5"></div></div>
+            <div className="relative flex justify-center text-xs uppercase"><span className="bg-[#020617] px-2 text-muted">Or continue with</span></div>
+          </div>
+
           <Button
             type="button"
             variant="secondary"
-            className="w-full"
+            className="h-14 w-full text-base"
             onClick={() => {
               window.location.href = `${getServerBaseUrl()}/api/auth/github`;
             }}
           >
-            Continue with GitHub
+            <GitBranchPlusIcon size={20} className="mr-2" />
+            GitHub Account
           </Button>
         </form>
       </div>

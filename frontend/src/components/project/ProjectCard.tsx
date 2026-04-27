@@ -1,18 +1,25 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { Project } from "@/types/project";
+import { Layers, AlertCircle } from "lucide-react";
 
 export function ProjectCard({ project }: { project: Project }) {
   return (
-    <Link href={`/projects/${project._id}`} className="card block p-5 transition hover:-translate-y-1">
-      <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-lg font-semibold">{project.name}</h3>
-        <Badge>{project.language}</Badge>
+    <Link href={`/projects/${project._id}`} className="glass-card group block p-6">
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="text-xl font-bold text-white group-hover:text-accent transition-colors">{project.name}</h3>
+        <Badge tone="info" className="bg-accent/10 text-accent border-accent/20">{project.language}</Badge>
       </div>
-      <p className="mb-4 text-sm leading-6 text-[var(--muted)]">{project.description}</p>
-      <div className="flex gap-4 text-sm text-[var(--muted)]">
-        <span>{project.reviewCount} reviews</span>
-        <span>{project.issueCount} issues</span>
+      <p className="mb-6 text-sm leading-relaxed text-muted line-clamp-2">{project.description}</p>
+      <div className="flex items-center gap-6 text-xs font-bold uppercase tracking-widest text-muted">
+        <span className="flex items-center gap-1.5">
+          <Layers size={14} className="text-accent" />
+          {project.reviewCount} Reviews
+        </span>
+        <span className="flex items-center gap-1.5">
+          <AlertCircle size={14} className="text-rose-400" />
+          {project.issueCount} Issues
+        </span>
       </div>
     </Link>
   );

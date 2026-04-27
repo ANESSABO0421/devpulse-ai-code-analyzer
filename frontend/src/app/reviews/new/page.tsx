@@ -10,6 +10,7 @@ import { getApiErrorMessage } from "@/lib/api";
 import { axiosInstance } from "@/lib/axios";
 import { Project } from "@/types/project";
 import { useAuth } from "@/hooks/useAuth";
+import { FileEdit, Layers, Brackets, AlertTriangle } from "lucide-react";
 
 const supportedLanguages = [
   "typescript",
@@ -81,42 +82,82 @@ function NewReviewContent() {
 
   return (
     <AppShell>
-      <div>
-        <h1 className="text-5xl font-black">New Review</h1>
-        <p className="mt-3 text-[var(--muted)]">Paste code, pick a project, and let AI review it while your team watches the thread.</p>
-      </div>
-      <div className="card space-y-4 p-6">
-        <div className="grid gap-4 md:grid-cols-[1.2fr_0.8fr_0.8fr]">
-          <input className="rounded-2xl border border-[var(--line)] bg-white px-4 py-3" placeholder="Review title" value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} />
-          <select className="rounded-2xl border border-[var(--line)] bg-white px-4 py-3" value={form.projectId} onChange={(event) => setForm({ ...form, projectId: event.target.value })}>
-            <option value="" disabled>
-              {loadingProjects ? "Loading projects..." : projects.length ? "Select a project" : "Create a project first"}
-            </option>
-            {projects.map((project) => <option key={project._id} value={project._id}>{project.name}</option>)}
-          </select>
-          <select className="rounded-2xl border border-[var(--line)] bg-white px-4 py-3" value={form.language} onChange={(event) => setForm({ ...form, language: event.target.value })}>
-            <option value="typescript">TypeScript</option>
-            <option value="javascript">JavaScript</option>
-            <option value="python">Python</option>
-            <option value="go">Go</option>
-            <option value="css">CSS</option>
-            <option value="scss">SCSS</option>
-            <option value="html">HTML</option>
-            <option value="json">JSON</option>
-            <option value="markdown">Markdown</option>
-            <option value="yaml">YAML</option>
-            <option value="plaintext">Plain Text</option>
-          </select>
+      <section className="mb-10">
+        <h1 className="text-4xl font-black text-white md:text-5xl">New Review</h1>
+        <p className="mt-4 max-w-2xl text-lg text-muted">
+          Paste code or import from GitHub. Let our AI analyze security, performance, and best practices in seconds.
+        </p>
+      </section>
+
+      <div className="glass-card space-y-8 p-8 md:p-10">
+        <div className="grid gap-8 lg:grid-cols-3">
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-muted">
+              <FileEdit size={16} className="text-accent" />
+              Review Title
+            </label>
+            <input 
+              className="w-full" 
+              placeholder="e.g. Auth logic refactor" 
+              value={form.title} 
+              onChange={(e) => setForm({ ...form, title: e.target.value })} 
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-muted">
+              <Layers size={16} className="text-accent" />
+              Project Workspace
+            </label>
+            <select 
+              className="w-full" 
+              value={form.projectId} 
+              onChange={(e) => setForm({ ...form, projectId: e.target.value })}
+            >
+              <option value="" disabled>
+                {loadingProjects ? "Loading projects..." : projects.length ? "Select a project" : "Create a project first"}
+              </option>
+              {projects.map((project) => <option key={project._id} value={project._id}>{project.name}</option>)}
+            </select>
+          </div>
+
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-muted">
+              <Brackets size={16} className="text-accent" />
+              Language
+            </label>
+            <select 
+              className="w-full" 
+              value={form.language} 
+              onChange={(e) => setForm({ ...form, language: e.target.value })}
+            >
+              {supportedLanguages.map(lang => (
+                <option key={lang} value={lang}>{lang.charAt(0).toUpperCase() + lang.slice(1)}</option>
+              ))}
+            </select>
+          </div>
         </div>
+
         {!projects.length && !loadingProjects ? (
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-            You need at least one project before creating a review.
+          <div className="flex items-center gap-4 rounded-xl border border-amber-500/20 bg-amber-500/10 p-5 text-amber-200">
+            <AlertTriangle size={24} className="shrink-0" />
+            <p className="text-sm font-medium">You need at least one project before creating a review.</p>
           </div>
         ) : null}
-        <CodeEditor value={form.code} language={form.language} onChange={(code) => setForm({ ...form, code })} />
-        <Button disabled={loading || !form.projectId || !projects.length} onClick={handleSubmit}>
-          {loading ? "AI is reviewing your code..." : "Submit Review"}
-        </Button>
+
+        <div className="overflow-hidden rounded-2xl border border-white/5">
+          <CodeEditor value={form.code} language={form.language} onChange={(code) => setForm({ ...form, code })} />
+        </div>
+
+        <div className="flex justify-end pt-4">
+          <Button 
+            className="h-14 w-full text-base sm:w-auto sm:px-12" 
+            disabled={loading || !form.projectId || !projects.length} 
+            onClick={handleSubmit}
+          >
+            {loading ? "AI is reviewing your code..." : "Submit for Review"}
+          </Button>
+        </div>
       </div>
     </AppShell>
   );
@@ -124,7 +165,7 @@ function NewReviewContent() {
 
 export default function NewReviewPage() {
   return (
-    <Suspense fallback={<AppShell><div className="card p-6">Loading review draft...</div></AppShell>}>
+    <Suspense fallback={<AppShell><div className="glass-card p-10 text-center text-muted">Loading review draft...</div></AppShell>}>
       <NewReviewContent />
     </Suspense>
   );
