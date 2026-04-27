@@ -1,12 +1,12 @@
-import express from "express";
-import { listRepos, importFile } from "../controller/github.controller";
-import { protect } from "../middleware/auth.middleware";
+import { Router } from "express";
+import { importRepoFile, listGithubRepos } from "../controllers/github.controller";
+import { verifyJwt } from "../middleware/auth.middleware";
+import { requireFields } from "../middleware/validate.middleware";
 
-const githubRoutes = express.Router();
+const router = Router();
 
-githubRoutes.use(protect);
+router.use(verifyJwt);
+router.get("/repos", listGithubRepos);
+router.post("/import", requireFields(["repoFullName", "filePath"]), importRepoFile);
 
-githubRoutes.get("/repos", listRepos);
-githubRoutes.post("/import", importFile);
-
-export default githubRoutes;
+export default router;

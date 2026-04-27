@@ -1,55 +1,75 @@
+import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
-import cors from "cors";
-import { connectDb } from "./config/db";
-import authRoutes from "./routes/auth.routes";
-import passport from "passport";
-import "./config/passport";
-import projectRoutes from "./routes/project.route";
-import reviewRoutes from "./routes/review.routes";
-import commentRoutes from "./routes/comment.routes";
+import helmet from "helmet";
 import http from "http";
+import morgan from "morgan";
+import passport from "passport";
+import { connectDb } from "./config/db";
+import "./config/passport";
 import { initSocket } from "./config/socket";
-import issueRouter from "./routes/issue.routes";
+import authRoutes from "./routes/auth.routes";
+import commentRoutes from "./routes/comment.routes";
 import githubRoutes from "./routes/github.routes";
+import issueRoutes from "./routes/issue.routes";
+import projectRoutes from "./routes/project.routes";
+import reviewRoutes from "./routes/review.routes";
+import userRoutes from "./routes/user.routes";
+import { errorHandler, notFoundHandler } from "./middleware/error.middleware";
 
 dotenv.config();
-
-const PORT = process.env.PORT || process.env.port || 5001;
 
 const app = express();
 const server = http.createServer(app);
 
 initSocket(server);
+
 app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:3000",
     credentials: true,
   }),
 );
-app.use(express.json());
-
-//  passport
+app.use(helmet());
+app.use(morgan("dev"));
+app.use(express.json({ limit: "2mb" }));
+app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 
+app.get("/health", (_req, res) => {
+  res.json({ success: true, message: "DevPulse backend is healthy" });
+});
+
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/projects", projectRoutes);
+app.use("/api/v1/reviews", reviewRoutes);
+app.use("/api/v1/comments", commentRoutes);
+app.use("/api/v1/issues", issueRoutes);
+app.use("/api/v1/github", githubRoutes);
+
+// Backward-compatible aliases for older frontend/env setups.
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/comments", commentRoutes);
-app.use("/api/issues", issueRouter);
+app.use("/api/issues", issueRoutes);
 app.use("/api/github", githubRoutes);
 
-const startServer = async () => {
-  try {
-    await connectDb();
+app.use(notFoundHandler);
+app.use(errorHandler);
 
-    server.listen(PORT, () => {
-      console.log(`server is running at http://localhost:${PORT}`);
-    });
-  } catch (error: any) {
-    console.log("failed to connect to mongoDb", error.message);
-    process.exit(1);
-  }
-};
+const port = Number(process.env.PORT) || 5000;
 
-startServer();
+async function startServer() {
+  await connectDb();
+  server.listen(port, () => {
+    console.log(`DevPulse backend listening on http://localhost:${port}`);
+  });
+}
+
+startServer().catch((error) => {
+  console.error("Failed to start server", error);
+  process.exit(1);
+});

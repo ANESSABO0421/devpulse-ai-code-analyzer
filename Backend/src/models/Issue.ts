@@ -1,63 +1,40 @@
-import mongoose, { Schema, Document } from "mongoose";
+import { Document, Schema, Types, model } from "mongoose";
 
 export interface IIssue extends Document {
-  projectId: mongoose.Types.ObjectId;
-  reporterId: mongoose.Types.ObjectId;
-  assigneeId?: mongoose.Types.ObjectId;
+  projectId: Types.ObjectId;
+  reporterId: Types.ObjectId;
+  assigneeId?: Types.ObjectId;
   title: string;
   description: string;
   severity: "low" | "medium" | "high" | "critical";
   status: "open" | "in-progress" | "resolved" | "closed";
   tags: string[];
-  linkedReviewId?: mongoose.Types.ObjectId;
+  linkedReviewId?: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
 
 const issueSchema = new Schema<IIssue>(
   {
-    projectId: {
-      type: Schema.Types.ObjectId,
-      ref: "Project",
-      required: true,
-    },
-    reporterId: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    assigneeId: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
-    title: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
+    projectId: { type: Schema.Types.ObjectId, ref: "Project", required: true },
+    reporterId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    assigneeId: { type: Schema.Types.ObjectId, ref: "User" },
+    title: { type: String, required: true, trim: true },
+    description: { type: String, required: true },
     severity: {
       type: String,
       enum: ["low", "medium", "high", "critical"],
-      default: "low",
+      default: "medium",
     },
     status: {
       type: String,
       enum: ["open", "in-progress", "resolved", "closed"],
       default: "open",
     },
-    tags: {
-      type: [String],
-      default: [],
-    },
-    linkedReviewId: {
-      type: Schema.Types.ObjectId,
-      ref: "Review",
-    },
+    tags: { type: [String], default: [] },
+    linkedReviewId: { type: Schema.Types.ObjectId, ref: "Review" },
   },
   { timestamps: true },
 );
 
-export default mongoose.model<IIssue>("Issue", issueSchema);
+export default model<IIssue>("Issue", issueSchema);

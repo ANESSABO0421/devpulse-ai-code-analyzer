@@ -1,16 +1,23 @@
-import express from "express";
-import { protect } from "../middleware/auth.middleware";
-import { createReview, deleteReview, getReviewById, getReviews, rerunAIReview, updateReviewStatus } from "../controller/review.controller";
+import { Router } from "express";
+import {
+  createReview,
+  deleteReview,
+  getReviewById,
+  listReviews,
+  rerunAiReview,
+  updateReviewStatus,
+} from "../controllers/review.controller";
+import { verifyJwt } from "../middleware/auth.middleware";
+import { requireFields } from "../middleware/validate.middleware";
 
-const reviewRoutes = express.Router();
+const router = Router();
 
-reviewRoutes.use(protect);
+router.use(verifyJwt);
+router.post("/", requireFields(["projectId", "title", "code", "language"]), createReview);
+router.get("/", listReviews);
+router.get("/:id", getReviewById);
+router.patch("/:id/status", requireFields(["status"]), updateReviewStatus);
+router.delete("/:id", deleteReview);
+router.post("/:id/ai-rerun", rerunAiReview);
 
-reviewRoutes.post("/", createReview);
-reviewRoutes.get("/", getReviews);
-reviewRoutes.get("/:id", getReviewById);
-reviewRoutes.patch("/:id/status", updateReviewStatus);
-reviewRoutes.delete("/:id", deleteReview);
-reviewRoutes.post("/:id/ai-rerun", rerunAIReview);
-
-export default reviewRoutes;
+export default router;

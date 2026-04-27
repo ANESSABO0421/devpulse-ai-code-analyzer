@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
-export const connectDb = async () => {
-  try {
-    dotenv.config()
-    await mongoose.connect(process.env.MONGODB_URL as string);
-    console.log("MongoDB conncected successfully✅");
-  } catch (error) {
-    console.log("Cannot connect to mongodb", error);
-    process.exit(1);
+
+export async function connectDb() {
+  const uri = process.env.MONGO_URI || process.env.MONGODB_URL;
+
+  if (!uri) {
+    throw new Error("MONGO_URI or MONGODB_URL must be configured");
   }
-};
+
+  mongoose.set("strictQuery", true);
+  await mongoose.connect(uri);
+  console.log("MongoDB connected");
+}

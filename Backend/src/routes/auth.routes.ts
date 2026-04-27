@@ -1,26 +1,38 @@
-import express from "express";
-import { Login, register } from "../controller/auth.controller";
-import { generateToken } from "../utils/jwt";
+import { Router } from "express";
 import passport from "passport";
+import { getCurrentUser, login, register } from "../controllers/auth.controller";
+import { verifyJwt } from "../middleware/auth.middleware";
+import { requireFields } from "../middleware/validate.middleware";
+import { generateToken } from "../utils/jwt";
 
-const authRoutes = express.Router();
+const router = Router();
 
-authRoutes.post("/login", Login);
-authRoutes.post("/register", register);
-
-authRoutes.get(
+router.post("/register", requireFields(["name", "email", "password"]), register);
+router.post("/login", requireFields(["email", "password"]), login);
+router.get(
   "/github",
-  passport.authenticate("github", { scope: ["user:email"] }),
+  passport.authenticate("github", { scope: ["user:email"], session: false }),
 );
-
-authRoutes.get(
+router.get(
   "/github/callback",
   passport.authenticate("github", { session: false }),
   (req: any, res) => {
     const token = generateToken(req.user._id.toString());
-
-    res.redirect(`${process.env.CLIENT_URL}/oauth-success?token=${token}`);
+    res.redirect(
+      `${process.env.CLIENT_URL || "http://localhost:3000"}/auth/callback?token=${token}`,
+    );
   },
 );
+router.get(
+  "/github/callback-legacy",
+  passport.authenticate("github", { session: false }),
+  (req: any, res) => {
+    const token = generateToken(req.user._id.toString());
+    res.redirect(
+      `${process.env.CLIENT_URL || "http://localhost:3000"}/auth/callback?token=${token}`,
+    );
+  },
+);
+router.get("/me", verifyJwt, getCurrentUser);
 
-export default authRoutes;
+export default router;

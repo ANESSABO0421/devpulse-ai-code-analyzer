@@ -1,10 +1,10 @@
-import mongoose, { Schema, Document } from "mongoose";
+import { Document, Schema, model } from "mongoose";
 
 export interface IUser extends Document {
   name: string;
   email: string;
   password?: string;
-  avatar?: string;
+  avatar: string;
   githubId?: string;
   githubUsername?: string;
   githubAccessToken?: string;
@@ -13,54 +13,23 @@ export interface IUser extends Document {
   updatedAt: Date;
 }
 
-const userSchema: Schema<IUser> = new Schema(
+const userSchema = new Schema<IUser>(
   {
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      lowercase: true,
-      trim: true,
-    },
-
+    name: { type: String, required: true, trim: true },
+    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: {
       type: String,
-      required: function () {
-        return !this.githubId; // optional if OAuth user
+      required() {
+        return !this.githubId;
       },
     },
-
-    avatar: {
-      type: String,
-      default: "",
-    },
-
-    githubId: {
-      type: String,
-    },
-
-    githubUsername: {
-      type: String,
-    },
-
-    githubAccessToken: {
-      type: String,
-    },
-
-    reviewCount: {
-      type: Number,
-      default: 0,
-    },
+    avatar: { type: String, default: "" },
+    githubId: { type: String },
+    githubUsername: { type: String },
+    githubAccessToken: { type: String },
+    reviewCount: { type: Number, default: 0 },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true },
 );
 
-export default mongoose.model<IUser>("User", userSchema);
+export default model<IUser>("User", userSchema);

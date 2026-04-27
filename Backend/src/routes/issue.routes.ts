@@ -1,21 +1,25 @@
-import express from "express";
+import { Router } from "express";
 import {
   createIssue,
-  getIssues,
-  getIssueById,
-  updateIssue,
   deleteIssue,
-} from "../controller/issue.controller";
-import { protect } from "../middleware/auth.middleware";
+  getIssueById,
+  listIssues,
+  updateIssue,
+} from "../controllers/issue.controller";
+import { verifyJwt } from "../middleware/auth.middleware";
+import { requireFields } from "../middleware/validate.middleware";
 
-const issueRouter = express.Router();
+const router = Router();
 
-issueRouter.use(protect);
+router.use(verifyJwt);
+router.post(
+  "/",
+  requireFields(["projectId", "title", "description", "severity"]),
+  createIssue,
+);
+router.get("/", listIssues);
+router.get("/:id", getIssueById);
+router.patch("/:id", updateIssue);
+router.delete("/:id", deleteIssue);
 
-issueRouter.post("/", createIssue);
-issueRouter.get("/", getIssues);
-issueRouter.get("/:id", getIssueById);
-issueRouter.patch("/:id", updateIssue);
-issueRouter.delete("/:id", deleteIssue);
-
-export default issueRouter;
+export default router;

@@ -1,19 +1,19 @@
-import express from "express";
+import { Router } from "express";
 import {
-  addComment,
-  getComments,
-  updateComment,
+  createComment,
   deleteComment,
-} from "../controller/comment.controller";
-import { protect } from "../middleware/auth.middleware";
+  listComments,
+  updateComment,
+} from "../controllers/comment.controller";
+import { verifyJwt } from "../middleware/auth.middleware";
+import { requireFields } from "../middleware/validate.middleware";
 
-const commentRoutes = express.Router();
+const router = Router();
 
-commentRoutes.use(protect);
+router.use(verifyJwt);
+router.post("/", requireFields(["reviewId", "content"]), createComment);
+router.get("/", listComments);
+router.patch("/:id", requireFields(["content"]), updateComment);
+router.delete("/:id", deleteComment);
 
-commentRoutes.post("/", addComment);
-commentRoutes.get("/", getComments);
-commentRoutes.patch("/:id", updateComment);
-commentRoutes.delete("/:id", deleteComment);
-
-export default commentRoutes;
+export default router;
