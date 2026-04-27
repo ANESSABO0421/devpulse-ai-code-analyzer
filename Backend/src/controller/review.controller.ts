@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Review from "../models/Review";
 import Projects from "../models/Projects";
+import { analyzeCode } from "../services/ai.service";
 
 // CREATE REVIEW
 export const createReview = async (req: any, res: Response) => {
@@ -14,13 +15,13 @@ export const createReview = async (req: any, res: Response) => {
     }
 
     // Check membership
-    const isMember = project.members.some(
-      (m) => m.toString() === req.user.id
-    );
+    const isMember = project.members.some((m) => m.toString() === req.user.id);
 
     if (!isMember) {
       return res.status(403).json({ message: "Not a project member" });
     }
+
+    const aiResult = await analyzeCode(code, language);
 
     const review = await Review.create({
       projectId,
@@ -28,6 +29,9 @@ export const createReview = async (req: any, res: Response) => {
       title,
       code,
       language,
+      aiScore: aiResult.aiScore,
+      aiSummary: aiResult.aiSummary,
+      aiSuggestions: aiResult.aiSuggestions,
     });
 
     // increment project review count
@@ -125,22 +129,32 @@ export const deleteReview = async (req: any, res: Response) => {
 // AI RERUN (placeholder for now)
 export const rerunAIReview = async (req: any, res: Response) => {
   try {
-    const review = await Review.findById(req.params.id);
+    const reviewId = req.params.id;
 
+    const review = await Review.findById(reviewId);
     if (!review) {
       return res.status(404).json({ message: "Review not found" });
     }
 
-    // placeholder
-    review.aiScore = Math.floor(Math.random() * 100);
-    review.aiSummary = "AI analysis placeholder";
-    review.aiSuggestions = [
-      {
-        line: 1,
-        type: "suggestion",
-        message: "Improve variable naming",
-      },
-    ];
+    // 🔐 Authorization check (IMPORTANT)
+    const project = await Projects.findById(review.projectId);
+
+    const isMember = project?.members.some((m) => m.toString() === req.user.id);
+
+    if (!isMember) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    // ⚠️ Prevent very large payload issues
+    const trimmedCode = review.code.slice(0, 5000);
+
+    // 🤖 Call AI service
+    const aiResult = await analyzeCode(trimmedCode, review.language);
+
+    // 💾 Update review
+    review.aiScore = aiResult.aiScore;
+    review.aiSummary = aiResult.aiSummary;
+    review.aiSuggestions = aiResult.aiSuggestions;
 
     await review.save();
 
@@ -150,6 +164,10 @@ export const rerunAIReview = async (req: any, res: Response) => {
       aiSuggestions: review.aiSuggestions,
     });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    console.error("AI rerun error:", error.message);
+
+    res.status(500).json({
+      message: "Failed to rerun AI review",
+    });
   }
 };
