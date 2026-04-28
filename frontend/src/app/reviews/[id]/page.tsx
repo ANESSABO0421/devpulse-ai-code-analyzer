@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { AppShell } from "@/components/layout/AppShell";
 import { AIFeedback } from "@/components/review/AIFeedback";
 import { ReviewStatus } from "@/components/review/ReviewStatus";
@@ -16,6 +16,8 @@ import { useReviewStore } from "@/store/useReviewStore";
 import { useAuth } from "@/hooks/useAuth";
 import { useAuthStore } from "@/store/useAuthStore";
 import { RefreshCw, MessageCircle, Hash, Send, AlertCircle } from "lucide-react";
+import { DeleteButton } from "@/components/ui/DeleteButton";
+import { getApiErrorMessage } from "@/lib/api";
 
 interface SocketCommentPayload {
   comment: import("@/types/comment").Comment;
@@ -31,6 +33,7 @@ interface SocketStatusPayload {
 
 export default function ReviewDetailPage() {
   useAuth();
+  const router = useRouter();
   const params = useParams<{ id: string }>();
   const { currentReview, comments, loading, error } = useReview(params.id);
   const { addComment, updateComment, removeComment, setCurrentReview } = useReviewStore();
@@ -38,6 +41,7 @@ export default function ReviewDetailPage() {
   const [comment, setComment] = useState("");
   const [line, setLine] = useState("");
   const [isRerunning, setIsRerunning] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const socketHandlers = useMemo(
     () => ({
@@ -59,6 +63,27 @@ export default function ReviewDetailPage() {
     const generalComments = comments.filter((item) => !item.line);
     return { lineComments, generalComments };
   }, [comments]);
+  const reviewAuthorId = currentReview
+    ? typeof currentReview.authorId === "string"
+      ? currentReview.authorId
+      : currentReview.authorId?._id
+    : null;
+  const canDeleteReview = reviewAuthorId === user?._id;
+
+  async function handleDeleteReview() {
+    if (!currentReview || !canDeleteReview) return;
+    if (!window.confirm(`Delete review "${currentReview.title}"? This cannot be undone.`)) return;
+
+    setIsDeleting(true);
+    try {
+      await axiosInstance.delete(`/reviews/${currentReview._id}`);
+      toast.success("Review deleted");
+      router.push("/reviews");
+    } catch (error: unknown) {
+      toast.error(getApiErrorMessage(error, "Delete failed"));
+      setIsDeleting(false);
+    }
+  }
 
   if (loading) {
     return (
@@ -122,6 +147,13 @@ export default function ReviewDetailPage() {
             <RefreshCw size={16} className={`mr-2 ${isRerunning ? "animate-spin" : ""}`} />
             Refresh AI
           </Button>
+          {canDeleteReview ? (
+            <DeleteButton
+              pending={isDeleting}
+              onClick={handleDeleteReview}
+              label="Delete Review"
+            />
+          ) : null}
         </div>
       </div>
 
@@ -136,15 +168,15 @@ export default function ReviewDetailPage() {
             />
           </div>
 
-          <section className="glass-card p-8">
+          <section className="glass-card p-6 md:p-8">
             <div className="mb-8 flex items-center gap-3">
               <MessageCircle size={24} className="text-accent" />
-              <h2 className="text-2xl font-bold text-white">Collaboration</h2>
+              <h2 className="text-2xl font-bold text-[color:var(--foreground)]">Collaboration</h2>
             </div>
             
-            <div className="grid gap-10 lg:grid-cols-[400px_1fr]">
+            <div className="grid gap-8 xl:grid-cols-[minmax(320px,0.95fr)_minmax(0,1.25fr)] xl:items-start">
               <form
-                className="space-y-6"
+                className="space-y-6 rounded-[28px] border border-[color:var(--glass-border)] bg-[color:var(--glass)] p-5 shadow-[0_18px_40px_rgba(2,6,23,0.12)] backdrop-blur-xl md:p-6"
                 onSubmit={async (event) => {
                   event.preventDefault();
                   if (!comment.trim()) return;
@@ -178,13 +210,13 @@ export default function ReviewDetailPage() {
                     Your Feedback
                   </label>
                   <textarea 
-                    className="min-h-[140px] w-full text-sm leading-relaxed" 
+                    className="min-h-[180px] w-full resize-y text-sm leading-relaxed" 
                     placeholder="Share your thoughts..." 
                     value={comment} 
                     onChange={(e) => setComment(e.target.value)} 
                   />
                 </div>
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="h-14 w-full text-base">
                   <Send size={16} className="mr-2" />
                   Post Comment
                 </Button>
@@ -193,19 +225,21 @@ export default function ReviewDetailPage() {
               <div className="space-y-10">
                 {groupedComments.lineComments.length > 0 && (
                   <div>
-                    <h3 className="mb-6 text-xs font-bold uppercase tracking-[0.2em] text-muted opacity-60">Line-specific</h3>
+                    <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-muted opacity-60">Line-specific</h3>
                     <div className="space-y-4">
                       {groupedComments.lineComments.map((item) => <LineComment key={item._id} comment={item} />)}
                     </div>
                   </div>
                 )}
                 <div>
-                  <h3 className="mb-6 text-xs font-bold uppercase tracking-[0.2em] text-muted opacity-60">General Discussion</h3>
+                  <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-muted opacity-60">General Discussion</h3>
                   <div className="space-y-4">
                     {groupedComments.generalComments.length > 0 ? (
                       groupedComments.generalComments.map((item) => <LineComment key={item._id} comment={item} />)
                     ) : (
-                      <p className="text-sm text-muted italic">No general comments yet. Be the first to start the thread!</p>
+                      <div className="rounded-[24px] border border-dashed border-[color:var(--glass-border)] bg-[color:var(--glass)] px-5 py-6 text-sm italic text-muted">
+                        No general comments yet. Be the first to start the thread!
+                      </div>
                     )}
                   </div>
                 </div>

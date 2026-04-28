@@ -4,7 +4,7 @@ import "./globals.css";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { SmoothScroll } from "@/components/ui/SmoothScroll";
-import { PageLoader } from "@/components/ui/PageLoader";
+import { ClientPageLoader } from "@/components/ui/ClientPageLoader";
 
 export const metadata: Metadata = {
   title: "DevPulse | AI-Powered Code Review Workspace",
@@ -13,9 +13,27 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = localStorage.getItem("devpulse-theme");
+                  var theme = saved === "light" || saved === "dark"
+                    ? saved
+                    : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+                  document.documentElement.dataset.theme = theme;
+                  document.documentElement.style.colorScheme = theme;
+                } catch (error) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body>
-        <PageLoader />
+        <ClientPageLoader />
         <SmoothScroll>
           <div className="bg-mesh" />
           <Navbar />

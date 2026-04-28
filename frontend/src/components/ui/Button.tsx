@@ -8,9 +8,9 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export function Button({ className, variant = "primary", ...props }: ButtonProps) {
   const variants = {
     primary: "bg-accent text-white shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:bg-accent/90 hover:shadow-[0_0_25px_rgba(249,115,22,0.4)]",
-    secondary: "bg-white/5 text-white border border-white/10 hover:bg-white/10 hover:border-white/20",
+    secondary: "border border-[color:var(--glass-border)] bg-[color:var(--glass)] text-[color:var(--foreground)] hover:border-[color:var(--accent)]/20 hover:bg-[color:var(--surface-strong)]/60",
     outline: "border border-accent text-accent hover:bg-accent/10",
-    ghost: "text-muted hover:text-white hover:bg-white/5",
+    ghost: "text-muted hover:bg-white/5 hover:text-[color:var(--foreground)]",
   };
 
   return (

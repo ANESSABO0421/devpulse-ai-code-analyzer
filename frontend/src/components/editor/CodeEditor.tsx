@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AISuggestion } from "@/types/review";
 
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
@@ -39,6 +39,7 @@ export function CodeEditor({
 }) {
   const editorRef = useRef<EditorHandle | null>(null);
   const monacoRef = useRef<MonacoHandle | null>(null);
+  const [editorTheme, setEditorTheme] = useState<"vs-light" | "vs-dark">("vs-dark");
 
   const applyDecorations = useCallback(() => {
     if (!editorRef.current || !monacoRef.current) {
@@ -73,6 +74,23 @@ export function CodeEditor({
     applyDecorations();
   }, [applyDecorations]);
 
+  useEffect(() => {
+    const syncTheme = () => {
+      const nextTheme = document.documentElement.dataset.theme === "light" ? "vs-light" : "vs-dark";
+      setEditorTheme(nextTheme);
+    };
+
+    syncTheme();
+
+    const observer = new MutationObserver(syncTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="overflow-hidden rounded-[22px] border border-[var(--line)]">
       <MonacoEditor
@@ -80,7 +98,7 @@ export function CodeEditor({
         defaultLanguage={language}
         language={language}
         value={value}
-        theme="vs-light"
+        theme={editorTheme}
         onChange={(nextValue) => onChange?.(nextValue || "")}
         onMount={(editor, monaco) => {
           editorRef.current = editor as EditorHandle;
@@ -94,6 +112,7 @@ export function CodeEditor({
           fontSize: 14,
           glyphMargin: true,
           lineNumbersMinChars: 3,
+          automaticLayout: true,
         }}
       />
     </div>

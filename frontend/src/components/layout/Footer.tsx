@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Code, MessageSquare, Users } from "lucide-react";
+import { Logo } from "@/components/brand/Logo";
 
 export function Footer() {
   return (
@@ -7,8 +8,8 @@ export function Footer() {
       <div className="shell">
         <div className="grid gap-12 md:grid-cols-4">
           <div className="md:col-span-1">
-            <Link href="/" className="text-2xl font-black tracking-tighter text-white">
-              DevPulse
+            <Link href="/">
+              <Logo compact />
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-muted">
               The premium workspace for AI-powered code reviews and team collaboration. Ship cleaner code, faster.
@@ -21,31 +22,31 @@ export function Footer() {
           </div>
           
           <div>
-            <h4 className="text-sm font-bold uppercase tracking-widest text-white">Product</h4>
+            <h4 className="text-sm font-bold uppercase tracking-widest text-[color:var(--foreground)]">Product</h4>
             <ul className="mt-6 space-y-4 text-sm text-muted">
-              <li><Link href="/features" className="hover:text-white transition-colors">Features</Link></li>
-              <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
-              <li><Link href="/changelog" className="hover:text-white transition-colors">Changelog</Link></li>
-              <li><Link href="/docs" className="hover:text-white transition-colors">Documentation</Link></li>
+              <li><Link href="/features" className="transition-colors hover:text-[color:var(--foreground)]">Features</Link></li>
+              <li><Link href="/pricing" className="transition-colors hover:text-[color:var(--foreground)]">Pricing</Link></li>
+              <li><Link href="/changelog" className="transition-colors hover:text-[color:var(--foreground)]">Changelog</Link></li>
+              <li><Link href="/docs" className="transition-colors hover:text-[color:var(--foreground)]">Documentation</Link></li>
             </ul>
           </div>
           
           <div>
-            <h4 className="text-sm font-bold uppercase tracking-widest text-white">Company</h4>
+            <h4 className="text-sm font-bold uppercase tracking-widest text-[color:var(--foreground)]">Company</h4>
             <ul className="mt-6 space-y-4 text-sm text-muted">
-              <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
-              <li><Link href="/careers" className="hover:text-white transition-colors">Careers</Link></li>
-              <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
-              <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+              <li><Link href="/about" className="transition-colors hover:text-[color:var(--foreground)]">About Us</Link></li>
+              <li><Link href="/careers" className="transition-colors hover:text-[color:var(--foreground)]">Careers</Link></li>
+              <li><Link href="/blog" className="transition-colors hover:text-[color:var(--foreground)]">Blog</Link></li>
+              <li><Link href="/contact" className="transition-colors hover:text-[color:var(--foreground)]">Contact</Link></li>
             </ul>
           </div>
           
           <div>
-            <h4 className="text-sm font-bold uppercase tracking-widest text-white">Legal</h4>
+            <h4 className="text-sm font-bold uppercase tracking-widest text-[color:var(--foreground)]">Legal</h4>
             <ul className="mt-6 space-y-4 text-sm text-muted">
-              <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
-              <li><Link href="/cookie" className="hover:text-white transition-colors">Cookie Policy</Link></li>
+              <li><Link href="/privacy" className="transition-colors hover:text-[color:var(--foreground)]">Privacy Policy</Link></li>
+              <li><Link href="/terms" className="transition-colors hover:text-[color:var(--foreground)]">Terms of Service</Link></li>
+              <li><Link href="/cookie" className="transition-colors hover:text-[color:var(--foreground)]">Cookie Policy</Link></li>
             </ul>
           </div>
         </div>

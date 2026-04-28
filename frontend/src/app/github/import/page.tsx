@@ -62,7 +62,7 @@ export default function GithubImportPage() {
       </div>
       <div className="grid gap-6 xl:grid-cols-[0.8fr_1.2fr]">
         <div className="card p-6">
-          <input className="mb-4 w-full rounded-2xl border border-[var(--line)] bg-white px-4 py-3" placeholder="Search repos" value={search} onChange={(event) => setSearch(event.target.value)} />
+          <input className="mb-4 w-full" placeholder="Search repos" value={search} onChange={(event) => setSearch(event.target.value)} />
           {repoError ? (
             <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
               {repoError}
@@ -78,14 +78,17 @@ export default function GithubImportPage() {
               </div>
             </div>
           ) : (
-            <div className="max-h-[420px] space-y-3 overflow-auto">
+            <div
+              data-lenis-prevent
+              className="max-h-[420px] space-y-3 overflow-y-auto overscroll-contain pr-2"
+            >
               {loadingRepos ? (
                 <div className="text-sm text-[var(--muted)]">Loading repositories...</div>
               ) : filteredRepos.length ? (
                 filteredRepos.map((repo) => (
                   <button
                     key={repo.id}
-                    className="w-full rounded-2xl border border-[var(--line)] bg-white/80 p-4 text-left"
+                    className="w-full rounded-2xl border border-[var(--line)] bg-[color:var(--glass)] p-4 text-left transition-colors hover:border-[color:var(--accent)]/25"
                     onClick={() => setForm({ ...form, repoFullName: repo.fullName, branch: repo.defaultBranch })}
                   >
                     <div className="font-semibold">{repo.fullName}</div>
@@ -100,10 +103,10 @@ export default function GithubImportPage() {
         </div>
         <div className="card space-y-4 p-6">
           <h2 className="text-2xl font-semibold">Import file</h2>
-          <input className="w-full rounded-2xl border border-[var(--line)] bg-white px-4 py-3" placeholder="owner/repo" value={form.repoFullName} onChange={(event) => setForm({ ...form, repoFullName: event.target.value })} />
+          <input className="w-full" placeholder="owner/repo" value={form.repoFullName} onChange={(event) => setForm({ ...form, repoFullName: event.target.value })} />
           <div className="grid gap-4 md:grid-cols-2">
-            <input className="rounded-2xl border border-[var(--line)] bg-white px-4 py-3" placeholder="Branch" value={form.branch} onChange={(event) => setForm({ ...form, branch: event.target.value })} />
-            <input className="rounded-2xl border border-[var(--line)] bg-white px-4 py-3" placeholder="src/app/page.tsx" value={form.filePath} onChange={(event) => setForm({ ...form, filePath: event.target.value })} />
+            <input className="w-full" placeholder="Branch" value={form.branch} onChange={(event) => setForm({ ...form, branch: event.target.value })} />
+            <input className="w-full" placeholder="src/app/page.tsx" value={form.filePath} onChange={(event) => setForm({ ...form, filePath: event.target.value })} />
           </div>
           <Button
             disabled={Boolean(repoError) || !form.repoFullName || !form.filePath}

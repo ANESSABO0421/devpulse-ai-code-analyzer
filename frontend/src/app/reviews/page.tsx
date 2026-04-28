@@ -6,17 +6,39 @@ import { AppShell } from "@/components/layout/AppShell";
 import { ReviewCard } from "@/components/review/ReviewCard";
 import { Button } from "@/components/ui/Button";
 import { axiosInstance } from "@/lib/axios";
+import { getApiErrorMessage } from "@/lib/api";
 import { Review } from "@/types/review";
 import { useAuth } from "@/hooks/useAuth";
+import { useAuthStore } from "@/store/useAuthStore";
+import toast from "react-hot-toast";
 
 export default function ReviewsPage() {
   useAuth();
+  const { user } = useAuthStore();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [status, setStatus] = useState("");
+  const [deletingReviewId, setDeletingReviewId] = useState<string | null>(null);
 
   useEffect(() => {
     axiosInstance.get("/reviews", { params: { status } }).then(({ data }) => setReviews(data.reviews));
   }, [status]);
+
+  async function handleDeleteReview(review: Review) {
+    const authorId = typeof review.authorId === "string" ? review.authorId : review.authorId?._id;
+    if (!user || authorId !== user._id) return;
+    if (!window.confirm(`Delete review "${review.title}"? This cannot be undone.`)) return;
+
+    setDeletingReviewId(review._id);
+    try {
+      await axiosInstance.delete(`/reviews/${review._id}`);
+      setReviews((current) => current.filter((entry) => entry._id !== review._id));
+      toast.success("Review deleted");
+    } catch (error: unknown) {
+      toast.error(getApiErrorMessage(error, "Delete failed"));
+    } finally {
+      setDeletingReviewId(null);
+    }
+  }
 
   return (
     <AppShell>
@@ -36,7 +58,18 @@ export default function ReviewsPage() {
         </select>
       </div>
       <div className="grid gap-5">
-        {reviews.map((review) => <ReviewCard key={review._id} review={review} />)}
+        {reviews.map((review) => {
+          const authorId = typeof review.authorId === "string" ? review.authorId : review.authorId?._id;
+          return (
+            <ReviewCard
+              key={review._id}
+              review={review}
+              canDelete={authorId === user?._id}
+              deleting={deletingReviewId === review._id}
+              onDelete={handleDeleteReview}
+            />
+          );
+        })}
       </div>
     </AppShell>
   );
