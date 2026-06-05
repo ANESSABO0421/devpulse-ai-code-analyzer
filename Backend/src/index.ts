@@ -1,5 +1,5 @@
+import "./config/env";
 import cors from "cors";
-import dotenv from "dotenv";
 import express from "express";
 import helmet from "helmet";
 import http from "http";
@@ -16,8 +16,6 @@ import projectRoutes from "./routes/project.routes";
 import reviewRoutes from "./routes/review.routes";
 import userRoutes from "./routes/user.routes";
 import { errorHandler, notFoundHandler } from "./middleware/error.middleware";
-
-dotenv.config();
 
 const app = express();
 const server = http.createServer(app);

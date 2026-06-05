@@ -21,79 +21,49 @@ export function Logo({
     <div className={cn("flex items-center gap-3", compact && "gap-2.5", className)}>
       <div
         className={cn(
-          "relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-[color:var(--glass-border)] bg-[linear-gradient(145deg,var(--surface),var(--background))] shadow-[0_8px_20px_rgba(0,0,0,0.3)]",
-          compact && "h-9 w-9 rounded-lg",
+          "relative flex h-10 w-10 items-center justify-center bg-white rounded-lg shadow-sm",
+          compact && "h-9 w-9",
           iconClassName,
         )}
         aria-hidden="true"
       >
-        {/* Glow Layer */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--accent),transparent_70%)] opacity-[0.08]" />
-        
-        <div className="absolute inset-[1px] rounded-[inherit] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.12),transparent_70%)]" />
-        
         <svg
           viewBox="0 0 64 64"
-          className="relative z-10 h-6 w-6"
+          className="h-7 w-7"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          {/* Hexagonal System Frame */}
+          {/* Pulse Wave - Starts sharp and code-like */}
           <path
-            d="M32 6L56 19.5V44.5L32 58L8 44.5V19.5L32 6Z"
-            stroke="var(--accent)"
-            strokeWidth="2.5"
+            d="M6 32H14L18 18L24 46L30 28L36 32"
+            stroke="#00CFFF"
+            strokeWidth="4"
+            strokeLinecap="round"
             strokeLinejoin="round"
-            className="opacity-40"
           />
           
-          {/* AI Sparkle / Insight Core */}
-          <g>
-            <path
-              d="M32 20V44M20 32H44"
-              stroke="var(--accent)"
-              strokeWidth="4"
-              strokeLinecap="round"
-              className="opacity-90"
-            />
-            <path
-              d="M23.5 23.5L40.5 40.5M40.5 23.5L23.5 40.5"
-              stroke="var(--accent-secondary)"
-              strokeWidth="4"
-              strokeLinecap="round"
-              className="opacity-60"
-            />
-            {/* Central Glow Dot */}
-            <circle cx="32" cy="32" r="4" fill="var(--accent)" className="animate-pulse" />
-          </g>
+          {/* Neural Transitions */}
+          <path d="M36 32L46 20" stroke="#00CFFF" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+          <path d="M36 32L54 32" stroke="#00CFFF" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+          <path d="M36 32L46 44" stroke="#00CFFF" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
 
-          {/* Review Brackets (The "Gaze") */}
-          <path
-            d="M16 26L10 32L16 38"
-            stroke="var(--foreground)"
-            strokeWidth="4.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M48 26L54 32L48 38"
-            stroke="var(--foreground)"
-            strokeWidth="4.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          {/* Neural Nodes */}
+          <circle cx="46" cy="20" r="3.5" fill="#00CFFF" />
+          <circle cx="54" cy="32" r="3.5" fill="#00CFFF" />
+          <circle cx="46" cy="44" r="3.5" fill="#00CFFF" />
         </svg>
       </div>
 
       {showWordmark ? (
         <span
           className={cn(
-            "text-2xl font-black tracking-[-0.04em] text-[color:var(--foreground)]",
+            "text-2xl font-bold tracking-tight",
             compact && "text-xl",
             textClassName,
           )}
         >
-          Dev<span className="text-[color:var(--accent)]">Pulse</span>
+          <span className="text-[#1A1A2E] dark:text-white">Dev</span>
+          <span className="text-[#00CFFF]">Pulse</span>
         </span>
       ) : null}
     </div>

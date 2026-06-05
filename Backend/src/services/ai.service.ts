@@ -1,22 +1,7 @@
 import { AISuggestion } from "../types";
 
-const grokKey = process.env.GROK_API_KEY || process.env.GROQ_API_KEY;
-
-function fallbackAnalysis(code: string, language: string) {
-  const lines = code.split("\n").length;
-  const score = Math.max(45, Math.min(92, 82 - Math.floor(lines / 12)));
-
-  return {
-    score,
-    summary: `Automated fallback review for ${language} code. Configure GROK_API_KEY (or GROQ_API_KEY) for richer analysis.`,
-    suggestions: [
-      {
-        line: 1,
-        type: "suggestion" as const,
-        message: "AI fallback mode is active, so this review is intentionally lightweight.",
-      },
-    ],
-  };
+function getGroqKey() {
+  return process.env.GROQ_API_KEY || "";
 }
 
 function parseJsonPayload(text: string) {
@@ -32,15 +17,12 @@ function parseJsonPayload(text: string) {
 }
 
 export async function analyzeCode(code: string, language: string) {
-  if (grokKey) {
-    try {
-      return normalizeAnalysis(await analyzeWithGrok(code, language));
-    } catch (error) {
-      console.warn("Grok/Groq analysis failed, using fallback review.", error);
-    }
+  const groqKey = getGroqKey();
+  if (!groqKey) {
+    throw new Error("GROQ_API_KEY is not configured");
   }
 
-  return normalizeAnalysis(fallbackAnalysis(code, language));
+  return normalizeAnalysis(await analyzeWithGroq(code, language, groqKey));
 }
 
 function buildPrompt(code: string, language: string) {
@@ -55,19 +37,19 @@ ${code}
 Return ONLY valid JSON, no markdown.`;
 }
 
-async function analyzeWithGrok(code: string, language: string) {
-  if (!grokKey) {
-    throw new Error("Grok/Groq is not configured");
+async function analyzeWithGroq(code: string, language: string, groqKey: string) {
+  if (!groqKey) {
+    throw new Error("Groq is not configured");
   }
 
   const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${grokKey}`,
+      Authorization: `Bearer ${groqKey}`,
     },
     body: JSON.stringify({
-      model: process.env.GROK_MODEL || process.env.GROQ_MODEL || "openai/gpt-oss-120b",
+      model: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
       temperature: 0.2,
       response_format: { type: "json_object" },
       messages: [
@@ -81,7 +63,7 @@ async function analyzeWithGrok(code: string, language: string) {
 
   if (!response.ok) {
     const errorBody = await response.text();
-    throw new Error(`Grok/Groq request failed: ${response.status} ${errorBody}`);
+    throw new Error(`Groq request failed: ${response.status} ${errorBody}`);
   }
 
   const payload = (await response.json()) as {
@@ -94,7 +76,7 @@ async function analyzeWithGrok(code: string, language: string) {
 
   const content = payload.choices?.[0]?.message?.content;
   if (!content) {
-    throw new Error("Grok/Groq response did not contain any content");
+    throw new Error("Groq response did not contain any content");
   }
 
   return parseJsonPayload(content);
