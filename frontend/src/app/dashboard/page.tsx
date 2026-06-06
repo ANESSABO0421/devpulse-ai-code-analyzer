@@ -12,7 +12,7 @@ import { Project } from "@/types/project";
 import { Review } from "@/types/review";
 import { User, UserStats } from "@/types/user";
 import { useAuth } from "@/hooks/useAuth";
-import { ArrowRight, Plus, FileCode, Sparkles } from "lucide-react";
+import { ArrowRight, Plus, FileCode } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -58,8 +58,7 @@ export default function DashboardPage() {
   useGSAP(() => {
     if (!isDataLoaded) return;
 
-    // Initial states
-    gsap.set([".dash-header", ".dash-stats", ".dash-section", ".dash-action"], { opacity: 0, y: 30 });
+    gsap.set([".dash-header", ".dash-stats", ".dash-section", ".dash-action"], { opacity: 0, y: 20 });
 
     const tl = gsap.timeline();
     
@@ -78,18 +77,17 @@ export default function DashboardPage() {
     .to(".dash-section", {
       opacity: 1,
       y: 0,
-      duration: 0.8,
-      stagger: 0.2,
+      duration: 0.6,
+      stagger: 0.1,
       ease: "power3.out"
     }, "-=0.4")
     .to(".dash-action", {
       opacity: 1,
-      scale: 1,
       y: 0,
       duration: 0.6,
       stagger: 0.1,
-      ease: "back.out(1.7)"
-    }, "-=0.6");
+      ease: "power3.out"
+    }, "-=0.4");
 
   }, { scope: container, dependencies: [isDataLoaded] });
 
@@ -103,27 +101,23 @@ export default function DashboardPage() {
   return (
     <AppShell>
       <div ref={container}>
-        <section className="dash-header mb-12">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#00CFFF]/30 bg-[#00CFFF]/10 px-4 py-2 text-sm font-semibold text-[#00CFFF]">
-            <Sparkles size={16} className="animate-pulse" />
-            <span>Welcome back</span>
-          </div>
-          <h1 className="text-5xl font-black text-white md:text-6xl">Dashboard</h1>
-          <p className="mt-4 max-w-2xl text-xl text-slate-400">
-            Track team velocity, recent reviews, and what still needs attention in your workspaces.
+        <section className="dash-header mb-10">
+          <h1 className="text-4xl font-bold text-[#F1F5F9] md:text-5xl">Dashboard</h1>
+          <p className="mt-4 text-lg text-[#94A3B8]">
+            Track your reviews and projects.
           </p>
         </section>
 
-        <div className="dash-stats mb-12">
+        <div className="dash-stats mb-10">
           <ProjectStats items={statsItems} />
         </div>
 
-        <div className="grid gap-10 xl:grid-cols-2">
+        <div className="grid gap-8 xl:grid-cols-2">
           <section className="dash-section">
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-3xl font-bold text-white">Recent Reviews</h2>
+              <h2 className="text-2xl font-bold text-[#F1F5F9]">Recent Reviews</h2>
               <Link href="/reviews">
-                <Button variant="ghost" className="group text-sm font-semibold text-slate-400 hover:text-white">
+                <Button variant="ghost" className="group text-sm font-semibold text-[#94A3B8] hover:text-[#F1F5F9]">
                   All Reviews <ArrowRight size={16} className="ml-2 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
@@ -132,8 +126,8 @@ export default function DashboardPage() {
               {reviews.length > 0 ? (
                 reviews.map((review) => <ReviewCard key={review._id} review={review} />)
               ) : (
-                <div className="glass-card flex h-32 flex-col items-center justify-center p-6 text-center border-dashed border-2 border-white/10">
-                  <p className="text-slate-400">No reviews found yet.</p>
+                <div className="rounded-xl border border-dashed border-[#334155] bg-[#1E293B] flex h-32 flex-col items-center justify-center p-6 text-center">
+                  <p className="text-[#94A3B8]">No reviews found yet.</p>
                 </div>
               )}
             </div>
@@ -141,9 +135,9 @@ export default function DashboardPage() {
 
           <section className="dash-section">
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-3xl font-bold text-white">Active Projects</h2>
+              <h2 className="text-2xl font-bold text-[#F1F5F9]">Active Projects</h2>
               <Link href="/projects">
-                <Button variant="ghost" className="group text-sm font-semibold text-slate-400 hover:text-white">
+                <Button variant="ghost" className="group text-sm font-semibold text-[#94A3B8] hover:text-[#F1F5F9]">
                   All Projects <ArrowRight size={16} className="ml-2 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
@@ -152,35 +146,31 @@ export default function DashboardPage() {
               {projects.length > 0 ? (
                 projects.map((project) => <ProjectCard key={project._id} project={project} />)
               ) : (
-                <div className="glass-card flex h-32 flex-col items-center justify-center p-6 text-center border-dashed border-2 border-white/10">
-                  <p className="text-slate-400">No active projects.</p>
+                <div className="rounded-xl border border-dashed border-[#334155] bg-[#1E293B] flex h-32 flex-col items-center justify-center p-6 text-center">
+                  <p className="text-[#94A3B8]">No active projects.</p>
                 </div>
               )}
             </div>
           </section>
         </div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
-          <Link href="/reviews/new" className="dash-action glass-card group flex flex-col p-8 hover:border-[#00CFFF]/40 transition-all duration-300 hover:-translate-y-1">
-            <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#00CFFF] to-[#6366f1] p-[1px] shadow-lg">
-              <div className="flex h-full w-full items-center justify-center rounded-2xl bg-background">
-                <FileCode size={28} className="text-white" />
-              </div>
+        <div className="mt-10 grid gap-6 md:grid-cols-2">
+          <Link href="/reviews/new" className="dash-action rounded-xl border border-[#334155] bg-[#1E293B] group flex flex-col p-8 hover:border-[#3B82F6] transition-colors">
+            <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-[#3B82F6]/10">
+              <FileCode size={24} className="text-[#3B82F6]" />
             </div>
-            <h3 className="text-2xl font-bold text-white transition-colors group-hover:text-[#00CFFF]">New Review</h3>
-            <p className="mt-3 text-slate-400 leading-relaxed">
-              Paste code or GitHub-imported content and ask AI for a fresh review.
+            <h3 className="text-xl font-bold text-[#F1F5F9] transition-colors group-hover:text-[#3B82F6]">New Review</h3>
+            <p className="mt-3 text-[#94A3B8] leading-relaxed">
+              Paste code and get AI feedback.
             </p>
           </Link>
-          <Link href="/projects/new" className="dash-action glass-card group flex flex-col p-8 hover:border-[#00CFFF]/40 transition-all duration-300 hover:-translate-y-1">
-            <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#6366f1] to-[#ec4899] p-[1px] shadow-lg">
-              <div className="flex h-full w-full items-center justify-center rounded-2xl bg-background">
-                <Plus size={28} className="text-white" />
-              </div>
+          <Link href="/projects/new" className="dash-action rounded-xl border border-[#334155] bg-[#1E293B] group flex flex-col p-8 hover:border-[#3B82F6] transition-colors">
+            <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-[#3B82F6]/10">
+              <Plus size={24} className="text-[#3B82F6]" />
             </div>
-            <h3 className="text-2xl font-bold text-white transition-colors group-hover:text-[#00CFFF]">New Project</h3>
-            <p className="mt-3 text-slate-400 leading-relaxed">
-              Create a workspace for teammates, issues, and review history.
+            <h3 className="text-xl font-bold text-[#F1F5F9] transition-colors group-hover:text-[#3B82F6]">New Project</h3>
+            <p className="mt-3 text-[#94A3B8] leading-relaxed">
+              Create a workspace for your team.
             </p>
           </Link>
         </div>

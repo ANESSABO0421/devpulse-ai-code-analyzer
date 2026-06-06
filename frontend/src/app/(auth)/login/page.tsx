@@ -8,7 +8,7 @@ import { getApiErrorMessage } from "@/lib/api";
 import { axiosInstance } from "@/lib/axios";
 import { getServerBaseUrl } from "@/lib/env";
 import { useAuthStore } from "@/store/useAuthStore";
-import { Mail, Lock, LogIn, GitBranch, Sparkles } from "lucide-react";
+import { Mail, Lock, LogIn, GitBranch } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -32,25 +32,17 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center py-16 relative overflow-hidden">
-      {/* Background gradients */}
-      <div className="absolute top-1/4 left-1/4 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#00CFFF]/20 blur-3xl" />
-      <div className="absolute bottom-1/4 right-1/4 h-96 w-96 translate-x-1/2 translate-y-1/2 rounded-full bg-[#6366f1]/20 blur-3xl" />
-      
-      <div className="relative z-10 glass-card mx-auto w-full max-w-lg p-10 md:p-12 border-[#00CFFF]/20 shadow-2xl shadow-[#00CFFF]/10">
-        <section className="mb-10 text-center">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#00CFFF]/30 bg-[#00CFFF]/10 px-4 py-2 text-sm font-semibold text-[#00CFFF]">
-            <Sparkles size={16} className="animate-pulse" />
-            <span>Welcome Back</span>
-          </div>
-          <h1 className="text-5xl font-black text-white md:text-6xl">Sign In</h1>
-          <p className="mt-4 text-xl text-slate-400">Access your workspace and continue shipping.</p>
+    <div className="flex min-h-screen items-center justify-center py-16">
+      <div className="w-full max-w-md p-8">
+        <section className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-[#F1F5F9]">Sign in</h1>
+          <p className="mt-2 text-[#94A3B8]">Welcome back to DevPulse</p>
         </section>
 
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        <form className="space-y-5" onSubmit={handleSubmit}>
           <div className="space-y-2">
-            <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400">
-              <Mail size={14} className="text-[#00CFFF]" />
+            <label className="flex items-center gap-2 text-sm font-semibold text-[#94A3B8]">
+              <Mail size={16} className="text-[#3B82F6]" />
               Email Address
             </label>
             <input
@@ -64,8 +56,8 @@ export default function LoginPage() {
           </div>
 
           <div className="space-y-2">
-            <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400">
-              <Lock size={14} className="text-[#ec4899]" />
+            <label className="flex items-center gap-2 text-sm font-semibold text-[#94A3B8]">
+              <Lock size={16} className="text-[#3B82F6]" />
               Password
             </label>
             <input
@@ -78,32 +70,32 @@ export default function LoginPage() {
             />
           </div>
 
-          <Button type="submit" className="h-14 w-full text-base font-semibold bg-gradient-to-r from-[#00CFFF] to-[#6366f1] hover:from-[#00CFFF]/90 hover:to-[#6366f1]/90 shadow-lg shadow-[#00CFFF]/25" disabled={loading}>
-            <LogIn size={20} className="mr-2" />
+          <Button type="submit" className="h-12 w-full text-base font-semibold bg-[#3B82F6] hover:bg-[#2563EB] text-white" disabled={loading}>
+            <LogIn size={18} className="mr-2" />
             {loading ? "Signing in..." : "Sign In"}
           </Button>
 
           <div className="relative py-4">
-            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/10"></div></div>
-            <div className="relative flex justify-center text-xs uppercase"><span className="bg-[#020617] px-3 text-slate-400">Or continue with</span></div>
+            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#334155]"></div></div>
+            <div className="relative flex justify-center text-xs"><span className="bg-[#0F172A] px-3 text-[#94A3B8]">Or continue with</span></div>
           </div>
 
           <Button
             type="button"
             variant="secondary"
-            className="h-14 w-full text-base font-semibold border-[#6366f1]/30 bg-[#6366f1]/10 text-[#6366f1] hover:bg-[#6366f1]/20"
+            className="h-12 w-full text-base font-semibold border-[#334155] text-[#94A3B8] hover:bg-[#1E293B]"
             onClick={() => {
               window.location.href = `${getServerBaseUrl()}/api/auth/github`;
             }}
           >
-            <GitBranch size={20} className="mr-2" />
-            GitHub Account
+            <GitBranch size={18} className="mr-2" />
+            GitHub
           </Button>
 
           <div className="text-center">
-            <p className="text-slate-400">
+            <p className="text-[#94A3B8]">
               Don't have an account?{" "}
-              <a href="/register" className="text-[#00CFFF] font-semibold hover:underline">
+              <a href="/register" className="text-[#3B82F6] font-semibold hover:underline">
                 Sign up
               </a>
             </p>

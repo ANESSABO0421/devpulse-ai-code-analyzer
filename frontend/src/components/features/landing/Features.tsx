@@ -14,45 +14,38 @@ export function Features() {
   const features = useMemo(() => [
     {
       title: "AI Review Engine",
-      desc: "Claude-generated summaries, scoring, and line-by-line suggestions that actually make sense.",
-      icon: Cpu,
-      gradient: "from-[#00CFFF] to-[#6366f1]"
+      desc: "AI-generated summaries, scoring, and line-by-line suggestions.",
+      icon: Cpu
     },
     {
       title: "Live Collaboration",
-      desc: "Threaded comments and typing indicators inside each review room for seamless teamwork.",
-      icon: MessageSquare,
-      gradient: "from-[#6366f1] to-[#ec4899]"
+      desc: "Threaded comments and real-time teamwork in review rooms.",
+      icon: MessageSquare
     },
     {
-      title: "GitHub Ecosystem",
-      desc: "Sync your repositories and import files directly into the review workspace without switching tabs.",
-      icon: Code,
-      gradient: "from-[#10b981] to-[#00CFFF]"
+      title: "GitHub Integration",
+      desc: "Sync repositories and import files directly.",
+      icon: Code
     },
     {
-      title: "Smart Issue Tracking",
-      desc: "Turn review findings into actionable issues with severity levels and automated ownership.",
-      icon: Bug,
-      gradient: "from-[#ef4444] to-[#f59e0b]"
+      title: "Issue Tracking",
+      desc: "Turn review findings into actionable issues.",
+      icon: Bug
     },
     {
-      title: "Lightning Fast",
-      desc: "Get instant feedback with sub-second response times powered by cutting-edge AI infrastructure.",
-      icon: Zap,
-      gradient: "from-[#f59e0b] to-[#eab308]"
+      title: "Fast Performance",
+      desc: "Get instant feedback with sub-second response times.",
+      icon: Zap
     },
     {
-      title: "Enterprise Security",
-      desc: "SOC 2 compliant with end-to-end encryption and granular access controls for your team.",
-      icon: Shield,
-      gradient: "from-[#06b6d4] to-[#3b82f6]"
+      title: "Secure",
+      desc: "End-to-end encryption and access controls.",
+      icon: Shield
     }
   ], []);
 
   useGSAP(() => {
-    // Initial state to prevent flash
-    gsap.set(".feature-card", { opacity: 0, y: 50 });
+    gsap.set(".feature-card", { opacity: 0, y: 30 });
 
     ScrollTrigger.refresh();
 
@@ -61,7 +54,7 @@ export function Features() {
         gsap.to(elements, {
           opacity: 1,
           y: 0,
-          duration: 0.8,
+          duration: 0.6,
           stagger: 0.1,
           ease: "power3.out",
           overwrite: true
@@ -72,30 +65,22 @@ export function Features() {
   }, { scope: container });
 
   return (
-    <section ref={container} className="shell py-24 lg:py-32 relative">
-      {/* Background gradient */}
-      <div className="absolute top-1/2 left-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#00CFFF]/10 blur-3xl" />
-      
-      <div className="relative z-10 mb-20 max-w-3xl text-center">
-        <h2 className="text-sm font-bold uppercase tracking-[0.4em] text-[#00CFFF]">Capabilities</h2>
-        <h3 className="mt-4 text-4xl font-black text-white md:text-6xl leading-tight">
-          Everything your <span className="bg-gradient-to-r from-[#00CFFF] via-[#6366f1] to-[#ec4899] bg-clip-text text-transparent">review loop</span> needs.
-        </h3>
-        <p className="mt-6 text-xl text-slate-400 max-w-2xl mx-auto">
-          Powerful features designed to accelerate your development workflow and improve code quality.
+    <section ref={container} className="shell py-20 lg:py-32">
+      <div className="mb-16 max-w-3xl">
+        <h2 className="text-3xl font-bold text-[#F1F5F9] md:text-4xl">
+          Built for developers
+        </h2>
+        <p className="mt-4 text-lg text-[#94A3B8]">
+          Everything you need to review code efficiently.
         </p>
       </div>
       
-      <div className="relative z-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {features.map((f, i) => (
-          <div key={i} className="feature-card glass-card group p-8 hover:border-[#00CFFF]/30 transition-all duration-300 hover:-translate-y-1">
-            <div className={`mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${f.gradient} p-[1px] shadow-lg shadow-${f.gradient.split('-')[1]}/20`}>
-              <div className="flex h-full w-full items-center justify-center rounded-2xl bg-background">
-                <f.icon size={32} className="text-white" />
-              </div>
-            </div>
-            <h4 className="mb-3 text-xl font-bold text-white group-hover:text-[#00CFFF] transition-colors">{f.title}</h4>
-            <p className="text-base leading-relaxed text-slate-400">{f.desc}</p>
+          <div key={i} className="feature-card rounded-xl border border-[#334155] bg-[#1E293B] p-6 hover:border-[#3B82F6] transition-colors">
+            <f.icon size={24} className="mb-4 text-[#3B82F6]" />
+            <h4 className="mb-2 text-lg font-semibold text-[#F1F5F9]">{f.title}</h4>
+            <p className="text-sm text-[#94A3B8]">{f.desc}</p>
           </div>
         ))}
       </div>

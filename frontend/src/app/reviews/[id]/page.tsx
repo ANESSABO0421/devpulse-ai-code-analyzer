@@ -15,7 +15,7 @@ import { useSocket } from "@/hooks/useSocket";
 import { useReviewStore } from "@/store/useReviewStore";
 import { useAuth } from "@/hooks/useAuth";
 import { useAuthStore } from "@/store/useAuthStore";
-import { RefreshCw, MessageCircle, Hash, Send, AlertCircle, Sparkles } from "lucide-react";
+import { RefreshCw, MessageCircle, Hash, Send, AlertCircle } from "lucide-react";
 import { DeleteButton } from "@/components/ui/DeleteButton";
 import { getApiErrorMessage } from "@/lib/api";
 
@@ -88,9 +88,9 @@ export default function ReviewDetailPage() {
   if (loading) {
     return (
       <AppShell>
-        <div className="glass-card flex h-64 flex-col items-center justify-center p-10 text-center">
-          <RefreshCw size={32} className="mb-4 animate-spin text-[#00CFFF]" />
-          <p className="text-slate-400">Loading review workspace...</p>
+        <div className="rounded-xl border border-[#334155] bg-[#1E293B] flex h-64 flex-col items-center justify-center p-10 text-center">
+          <RefreshCw size={32} className="mb-4 animate-spin text-[#3B82F6]" />
+          <p className="text-[#94A3B8]">Loading review workspace...</p>
         </div>
       </AppShell>
     );
@@ -99,10 +99,10 @@ export default function ReviewDetailPage() {
   if (error || !currentReview) {
     return (
       <AppShell>
-        <div className="glass-card border-[#ef4444]/20 bg-[#ef4444]/5 p-10 text-center">
-          <AlertCircle size={48} className="mx-auto mb-6 text-[#ef4444]" />
-          <h2 className="text-2xl font-bold text-white">Review not found</h2>
-          <p className="mt-4 text-slate-400">
+        <div className="rounded-xl border border-[#EF4444]/30 bg-[#EF4444]/5 p-10 text-center">
+          <AlertCircle size={48} className="mx-auto mb-6 text-[#EF4444]" />
+          <h2 className="text-2xl font-bold text-[#F1F5F9]">Review not found</h2>
+          <p className="mt-4 text-[#94A3B8]">
             {error || "This review may have been deleted or moved to another workspace."}
           </p>
         </div>
@@ -112,19 +112,15 @@ export default function ReviewDetailPage() {
 
   return (
     <AppShell>
-      <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-3xl">
-          <div className="mb-4 flex items-center gap-3">
-            <span className="rounded-full border border-[#00CFFF]/30 bg-[#00CFFF]/10 px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] text-[#00CFFF]">
+          <div className="mb-3 flex items-center gap-2">
+            <span className="rounded-full border border-[#3B82F6]/30 bg-[#3B82F6]/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#3B82F6]">
               {currentReview.language}
             </span>
-            <div className="flex items-center gap-2 rounded-full border border-[#6366f1]/30 bg-[#6366f1]/10 px-3 py-1.5 text-xs font-semibold text-[#6366f1]">
-              <Sparkles size={12} className="animate-pulse" />
-              <span>AI Powered</span>
-            </div>
           </div>
-          <h1 className="text-5xl font-black text-white md:text-6xl">{currentReview.title}</h1>
-          <p className="mt-4 text-xl text-slate-400">Review live with line comments, AI feedback, and a shared status.</p>
+          <h1 className="text-4xl font-bold text-[#F1F5F9] md:text-5xl">{currentReview.title}</h1>
+          <p className="mt-2 text-lg text-[#94A3B8]">Review with line comments and AI feedback.</p>
         </div>
         <div className="flex shrink-0 items-center gap-3">
           <ReviewStatus
@@ -147,16 +143,16 @@ export default function ReviewDetailPage() {
                 setIsRerunning(false);
               }
             }}
-            className="h-12 px-6 font-semibold border-[#00CFFF]/30 bg-[#00CFFF]/10 text-[#00CFFF] hover:bg-[#00CFFF]/20"
+            className="h-10 px-4 font-semibold border-[#3B82F6] text-[#3B82F6] hover:bg-[#3B82F6]/10"
           >
             <RefreshCw size={16} className={`mr-2 ${isRerunning ? "animate-spin" : ""}`} />
-            Refresh AI
+            Refresh
           </Button>
           {canDeleteReview ? (
             <DeleteButton
               pending={isDeleting}
               onClick={handleDeleteReview}
-              label="Delete Review"
+              label="Delete"
             />
           ) : null}
         </div>
@@ -164,7 +160,7 @@ export default function ReviewDetailPage() {
 
       <div className="grid gap-8 xl:grid-cols-[1fr_400px]">
         <div className="space-y-8">
-          <div className="overflow-hidden rounded-2xl border border-[#00CFFF]/20 shadow-2xl shadow-[#00CFFF]/10">
+          <div className="overflow-hidden rounded-xl border border-[#334155] bg-[#1E293B]">
             <CodeEditor
               value={currentReview.code}
               language={currentReview.language}
@@ -173,19 +169,17 @@ export default function ReviewDetailPage() {
             />
           </div>
 
-          <section className="glass-card p-6 md:p-8 border-[#00CFFF]/10">
-            <div className="mb-8 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#00CFFF] to-[#6366f1] p-[1px]">
-                <div className="flex h-full w-full items-center justify-center rounded-xl bg-background">
-                  <MessageCircle size={20} className="text-white" />
-                </div>
+          <section className="rounded-xl border border-[#334155] bg-[#1E293B] p-6">
+            <div className="mb-6 flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#3B82F6]/10">
+                <MessageCircle size={20} className="text-[#3B82F6]" />
               </div>
-              <h2 className="text-3xl font-bold text-white">Collaboration</h2>
+              <h2 className="text-2xl font-bold text-[#F1F5F9]">Comments</h2>
             </div>
             
-            <div className="grid gap-8 xl:grid-cols-[minmax(320px,0.95fr)_minmax(0,1.25fr)] xl:items-start">
+            <div className="grid gap-6 xl:grid-cols-[minmax(300px,0.95fr)_minmax(0,1.25fr)] xl:items-start">
               <form
-                className="space-y-6 rounded-2xl border border-white/10 bg-white/5 p-6 shadow-xl backdrop-blur-xl"
+                className="space-y-5 rounded-xl border border-[#334155] bg-[#0F172A] p-5"
                 onSubmit={async (event) => {
                   event.preventDefault();
                   if (!comment.trim()) return;
@@ -202,9 +196,9 @@ export default function ReviewDetailPage() {
                 }}
               >
                 <div className="space-y-2">
-                  <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400">
-                    <Hash size={14} className="text-[#00CFFF]" />
-                    Specific Line (Optional)
+                  <label className="flex items-center gap-2 text-sm font-semibold text-[#94A3B8]">
+                    <Hash size={14} className="text-[#3B82F6]" />
+                    Line (Optional)
                   </label>
                   <input 
                     className="w-full text-sm" 
@@ -214,40 +208,40 @@ export default function ReviewDetailPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400">
-                    <MessageCircle size={14} className="text-[#6366f1]" />
-                    Your Feedback
+                  <label className="flex items-center gap-2 text-sm font-semibold text-[#94A3B8]">
+                    <MessageCircle size={14} className="text-[#3B82F6]" />
+                    Comment
                   </label>
                   <textarea 
-                    className="min-h-[180px] w-full resize-y text-sm leading-relaxed" 
+                    className="min-h-[120px] w-full resize-y text-sm leading-relaxed" 
                     placeholder="Share your thoughts..." 
                     value={comment} 
                     onChange={(e) => setComment(e.target.value)} 
                   />
                 </div>
-                <Button type="submit" className="h-14 w-full text-base font-semibold bg-gradient-to-r from-[#00CFFF] to-[#6366f1] hover:from-[#00CFFF]/90 hover:to-[#6366f1]/90 shadow-lg shadow-[#00CFFF]/25">
+                <Button type="submit" className="h-11 w-full text-base font-semibold bg-[#3B82F6] hover:bg-[#2563EB] text-white">
                   <Send size={16} className="mr-2" />
-                  Post Comment
+                  Post
                 </Button>
               </form>
 
-              <div className="space-y-10">
+              <div className="space-y-6">
                 {groupedComments.lineComments.length > 0 && (
                   <div>
-                    <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Line-specific</h3>
-                    <div className="space-y-4">
+                    <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#94A3B8]">Line-specific</h3>
+                    <div className="space-y-3">
                       {groupedComments.lineComments.map((item) => <LineComment key={item._id} comment={item} />)}
                     </div>
                   </div>
                 )}
                 <div>
-                  <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-slate-400">General Discussion</h3>
-                  <div className="space-y-4">
+                  <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#94A3B8]">General</h3>
+                  <div className="space-y-3">
                     {groupedComments.generalComments.length > 0 ? (
                       groupedComments.generalComments.map((item) => <LineComment key={item._id} comment={item} />)
                     ) : (
-                      <div className="rounded-2xl border border-dashed border-white/10 bg-white/5 px-6 py-8 text-sm italic text-slate-400 text-center">
-                        No general comments yet. Be the first to start the thread!
+                      <div className="rounded-xl border border-dashed border-[#334155] bg-[#0F172A] px-5 py-6 text-sm italic text-[#94A3B8] text-center">
+                        No comments yet.
                       </div>
                     )}
                   </div>
@@ -257,7 +251,7 @@ export default function ReviewDetailPage() {
           </section>
         </div>
 
-        <aside className="space-y-8">
+        <aside className="space-y-6">
           <AIFeedback review={currentReview} />
         </aside>
       </div>

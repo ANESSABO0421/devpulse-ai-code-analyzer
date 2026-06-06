@@ -46,14 +46,14 @@ export default function ProjectsPage() {
     <AppShell>
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <h1 className="text-5xl font-black">Projects</h1>
-          <p className="mt-3 text-[var(--muted)]">Filter by language, scan activity, and jump into a workspace.</p>
+          <h1 className="text-4xl font-bold text-[#F1F5F9] md:text-5xl">Projects</h1>
+          <p className="mt-2 text-lg text-[#94A3B8]">Manage your workspaces.</p>
         </div>
-        <Link href="/projects/new"><Button>New Project</Button></Link>
+        <Link href="/projects/new"><Button className="bg-[#3B82F6] hover:bg-[#2563EB] text-white">New Project</Button></Link>
       </div>
-      <div className="card grid gap-4 p-5 md:grid-cols-[1fr_220px]">
-        <input className="rounded-2xl border border-[var(--line)] bg-white px-4 py-3" placeholder="Search projects" value={search} onChange={(event) => setSearch(event.target.value)} />
-        <select className="rounded-2xl border border-[var(--line)] bg-white px-4 py-3" value={language} onChange={(event) => setLanguage(event.target.value)}>
+      <div className="rounded-xl border border-[#334155] bg-[#1E293B] grid gap-4 p-5 md:grid-cols-[1fr_220px]">
+        <input className="rounded-lg border border-[#334155] bg-[#0F172A] px-4 py-3 text-[#F1F5F9]" placeholder="Search projects" value={search} onChange={(event) => setSearch(event.target.value)} />
+        <select className="rounded-lg border border-[#334155] bg-[#0F172A] px-4 py-3 text-[#F1F5F9]" value={language} onChange={(event) => setLanguage(event.target.value)}>
           <option value="">All languages</option>
           <option value="typescript">TypeScript</option>
           <option value="javascript">JavaScript</option>
@@ -61,7 +61,7 @@ export default function ProjectsPage() {
           <option value="go">Go</option>
         </select>
       </div>
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2">
         {projects.map((project) => (
           <ProjectCard
             key={project._id}
