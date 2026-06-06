@@ -1,11 +1,11 @@
 import dynamic from "next/dynamic";
-import { Hero } from "@/components/landing/Hero";
+import { Hero } from "@/components/features/landing/Hero";
 
 // Lazy load non-critical sections
-const Features = dynamic(() => import("@/components/landing/Features").then(mod => mod.Features), { ssr: true });
-const HowItWorks = dynamic(() => import("@/components/landing/HowItWorks").then(mod => mod.HowItWorks), { ssr: true });
-const Pricing = dynamic(() => import("@/components/landing/Pricing").then(mod => mod.Pricing), { ssr: true });
-const CTA = dynamic(() => import("@/components/landing/CTA").then(mod => mod.CTA), { ssr: true });
+const Features = dynamic(() => import("@/components/features/landing/Features").then(mod => mod.Features), { ssr: true });
+const HowItWorks = dynamic(() => import("@/components/features/landing/HowItWorks").then(mod => mod.HowItWorks), { ssr: true });
+const Pricing = dynamic(() => import("@/components/features/landing/Pricing").then(mod => mod.Pricing), { ssr: true });
+const CTA = dynamic(() => import("@/components/features/landing/CTA").then(mod => mod.CTA), { ssr: true });
 
 export default function LandingPage() {
   return (

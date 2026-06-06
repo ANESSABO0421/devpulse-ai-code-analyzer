@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
-import { ProjectCard } from "@/components/project/ProjectCard";
+import { ProjectCard } from "@/components/features/projects/ProjectCard";
 import { Button } from "@/components/ui/Button";
 import { axiosInstance } from "@/lib/axios";
 import { getApiErrorMessage } from "@/lib/api";

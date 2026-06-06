@@ -21,49 +21,59 @@ export function Logo({
     <div className={cn("flex items-center gap-3", compact && "gap-2.5", className)}>
       <div
         className={cn(
-          "relative flex h-10 w-10 items-center justify-center bg-white rounded-lg shadow-sm",
-          compact && "h-9 w-9",
+          "relative flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#00CFFF] via-[#6366f1] to-[#ec4899] shadow-lg shadow-[#00CFFF]/20",
+          compact && "h-10 w-10",
           iconClassName,
         )}
         aria-hidden="true"
       >
         <svg
           viewBox="0 0 64 64"
-          className="h-7 w-7"
+          className="h-8 w-8"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          {/* Pulse Wave - Starts sharp and code-like */}
+          <defs>
+            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#00CFFF" />
+              <stop offset="50%" stopColor="#6366f1" />
+              <stop offset="100%" stopColor="#ec4899" />
+            </linearGradient>
+          </defs>
+          
+          {/* Main pulse line with gradient */}
           <path
-            d="M6 32H14L18 18L24 46L30 28L36 32"
-            stroke="#00CFFF"
-            strokeWidth="4"
+            d="M8 32L16 32L20 16L28 48L34 24L40 32L56 32"
+            stroke="white"
+            strokeWidth="3.5"
             strokeLinecap="round"
             strokeLinejoin="round"
+            fill="none"
           />
           
-          {/* Neural Transitions */}
-          <path d="M36 32L46 20" stroke="#00CFFF" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
-          <path d="M36 32L54 32" stroke="#00CFFF" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
-          <path d="M36 32L46 44" stroke="#00CFFF" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
-
-          {/* Neural Nodes */}
-          <circle cx="46" cy="20" r="3.5" fill="#00CFFF" />
-          <circle cx="54" cy="32" r="3.5" fill="#00CFFF" />
-          <circle cx="46" cy="44" r="3.5" fill="#00CFFF" />
+          {/* Glowing nodes */}
+          <circle cx="20" cy="16" r="4" fill="white" fillOpacity="0.9" />
+          <circle cx="28" cy="48" r="4" fill="white" fillOpacity="0.9" />
+          <circle cx="34" cy="24" r="4" fill="white" fillOpacity="0.9" />
+          <circle cx="56" cy="32" r="4" fill="white" fillOpacity="0.9" />
+          
+          {/* Subtle circuit lines */}
+          <path d="M20 16L28 48" stroke="white" strokeWidth="1" strokeLinecap="round" opacity="0.3" />
+          <path d="M28 48L34 24" stroke="white" strokeWidth="1" strokeLinecap="round" opacity="0.3" />
+          <path d="M34 24L40 32" stroke="white" strokeWidth="1" strokeLinecap="round" opacity="0.3" />
         </svg>
       </div>
 
       {showWordmark ? (
         <span
           className={cn(
-            "text-2xl font-bold tracking-tight",
+            "text-2xl font-black tracking-tight",
             compact && "text-xl",
             textClassName,
           )}
         >
-          <span className="text-[#1A1A2E] dark:text-white">Dev</span>
-          <span className="text-[#00CFFF]">Pulse</span>
+          <span className="bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent dark:from-white dark:via-white dark:to-white/80">Dev</span>
+          <span className="bg-gradient-to-r from-[#00CFFF] via-[#6366f1] to-[#ec4899] bg-clip-text text-transparent">Pulse</span>
         </span>
       ) : null}
     </div>

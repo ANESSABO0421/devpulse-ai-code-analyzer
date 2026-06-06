@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
-import { ReviewCard } from "@/components/review/ReviewCard";
+import { ReviewCard } from "@/components/features/reviews/ReviewCard";
 import { Button } from "@/components/ui/Button";
 import { axiosInstance } from "@/lib/axios";
 import { getApiErrorMessage } from "@/lib/api";

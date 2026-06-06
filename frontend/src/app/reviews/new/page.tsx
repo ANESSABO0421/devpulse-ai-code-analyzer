@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { AppShell } from "@/components/layout/AppShell";
-import { CodeEditor } from "@/components/editor/CodeEditor";
+import { CodeEditor } from "@/components/features/reviews/CodeEditor";
 import { Button } from "@/components/ui/Button";
 import { getApiErrorMessage } from "@/lib/api";
 import { axiosInstance } from "@/lib/axios";

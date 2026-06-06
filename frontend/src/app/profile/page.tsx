@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { AppShell } from "@/components/layout/AppShell";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
-import { ProjectStats } from "@/components/project/ProjectStats";
+import { ProjectStats } from "@/components/features/projects/ProjectStats";
 import { axiosInstance } from "@/lib/axios";
 import { User, UserStats } from "@/types/user";
 import { Review } from "@/types/review";
