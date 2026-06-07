@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface LogoProps {
@@ -17,60 +18,40 @@ export function Logo({
   showWordmark = true,
   compact = false,
 }: LogoProps) {
+  const size = compact ? 36 : 44;
+
   return (
     <div className={cn("flex items-center gap-3", compact && "gap-2.5", className)}>
       <div
         className={cn(
-          "relative flex h-12 w-12 items-center justify-center rounded-xl bg-[#1E293B] border-2 border-[#3B82F6]",
-          compact && "h-10 w-10",
+          "relative flex shrink-0 items-center justify-center overflow-hidden rounded-2xl",
+          "ring-1 ring-[color:var(--glass-border)] shadow-[0_8px_32px_rgba(34,211,238,0.12)]",
+          compact ? "h-9 w-9 rounded-xl" : "h-11 w-11",
           iconClassName,
         )}
         aria-hidden="true"
       >
-        <svg
-          viewBox="0 0 64 64"
-          className="h-8 w-8"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          {/* Hexagon shape */}
-          <path
-            d="M32 4L58 20V44L32 60L6 44V20L32 4Z"
-            fill="#3B82F6"
-            stroke="#60A5FA"
-            strokeWidth="2"
-          />
-          
-          {/* Inner D letter */}
-          <path
-            d="M24 20V44L32 48L40 44V20"
-            stroke="#1E293B"
-            strokeWidth="4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            fill="none"
-          />
-          <path
-            d="M24 20L32 24L40 20"
-            stroke="#1E293B"
-            strokeWidth="4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            fill="none"
-          />
-        </svg>
+        <Image
+          src="/devpulse-logo-mark.png"
+          alt=""
+          width={size}
+          height={size}
+          className="h-full w-full object-cover"
+          priority
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[rgba(34,211,238,0.15)] to-transparent" />
       </div>
 
       {showWordmark ? (
         <span
           className={cn(
-            "text-2xl font-bold tracking-tight",
+            "font-display text-2xl font-extrabold tracking-tight",
             compact && "text-xl",
             textClassName,
           )}
         >
-          <span className="text-[#3B82F6]">Dev</span>
-          <span className="text-[#60A5FA]">Pulse</span>
+          <span className="accent-gradient">Dev</span>
+          <span className="text-[color:var(--foreground)]">Pulse</span>
         </span>
       ) : null}
     </div>

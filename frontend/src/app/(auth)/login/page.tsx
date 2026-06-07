@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/Button";
+import { AuthLayout } from "@/components/layout/AuthLayout";
 import { getApiErrorMessage } from "@/lib/api";
 import { axiosInstance } from "@/lib/axios";
 import { getServerBaseUrl } from "@/lib/env";
@@ -32,21 +33,16 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center py-16">
-      <div className="w-full max-w-md p-8">
-        <section className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-[#F1F5F9]">Sign in</h1>
-          <p className="mt-2 text-[#94A3B8]">Welcome back to DevPulse</p>
-        </section>
-
-        <form className="space-y-5" onSubmit={handleSubmit}>
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-semibold text-[#94A3B8]">
-              <Mail size={16} className="text-[#3B82F6]" />
-              Email Address
-            </label>
+    <AuthLayout title="Welcome back" subtitle="Sign in to your DevPulse workspace">
+      <form className="space-y-5" onSubmit={handleSubmit}>
+        <div className="space-y-2">
+          <label className="text-xs font-bold uppercase tracking-wider text-[color:var(--muted)]">
+            Email Address
+          </label>
+          <div className="relative">
+            <Mail size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[color:var(--accent)]" />
             <input
-              className="w-full"
+              className="w-full !pl-10"
               placeholder="name@company.com"
               type="email"
               value={form.email}
@@ -54,14 +50,16 @@ export default function LoginPage() {
               required
             />
           </div>
+        </div>
 
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-semibold text-[#94A3B8]">
-              <Lock size={16} className="text-[#3B82F6]" />
-              Password
-            </label>
+        <div className="space-y-2">
+          <label className="text-xs font-bold uppercase tracking-wider text-[color:var(--muted)]">
+            Password
+          </label>
+          <div className="relative">
+            <Lock size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[color:var(--accent)]" />
             <input
-              className="w-full"
+              className="w-full !pl-10"
               placeholder="Enter your password"
               type="password"
               value={form.password}
@@ -69,39 +67,34 @@ export default function LoginPage() {
               required
             />
           </div>
+        </div>
 
-          <Button type="submit" className="h-12 w-full text-base font-semibold bg-[#3B82F6] hover:bg-[#2563EB] text-white" disabled={loading}>
-            <LogIn size={18} className="mr-2" />
-            {loading ? "Signing in..." : "Sign In"}
-          </Button>
+        <Button type="submit" className="h-12 w-full" disabled={loading}>
+          <LogIn size={17} />
+          {loading ? "Signing in..." : "Sign In"}
+        </Button>
 
-          <div className="relative py-4">
-            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#334155]"></div></div>
-            <div className="relative flex justify-center text-xs"><span className="bg-[#0F172A] px-3 text-[#94A3B8]">Or continue with</span></div>
-          </div>
+        <div className="divider-or py-2">Or continue with</div>
 
-          <Button
-            type="button"
-            variant="secondary"
-            className="h-12 w-full text-base font-semibold border-[#334155] text-[#94A3B8] hover:bg-[#1E293B]"
-            onClick={() => {
-              window.location.href = `${getServerBaseUrl()}/api/auth/github`;
-            }}
-          >
-            <GitBranch size={18} className="mr-2" />
-            GitHub
-          </Button>
+        <Button
+          type="button"
+          variant="secondary"
+          className="h-12 w-full"
+          onClick={() => {
+            window.location.href = `${getServerBaseUrl()}/api/auth/github`;
+          }}
+        >
+          <GitBranch size={17} />
+          Continue with GitHub
+        </Button>
 
-          <div className="text-center">
-            <p className="text-[#94A3B8]">
-              Don&apos;t have an account?{" "}
-              <a href="/register" className="text-[#3B82F6] font-semibold hover:underline">
-                Sign up
-              </a>
-            </p>
-          </div>
-        </form>
-      </div>
-    </div>
+        <p className="text-center text-sm text-[color:var(--muted)]">
+          Don&apos;t have an account?{" "}
+          <a href="/register" className="font-semibold text-[color:var(--accent)] transition-colors hover:underline">
+            Create one free
+          </a>
+        </p>
+      </form>
+    </AuthLayout>
   );
 }

@@ -11,30 +11,42 @@ export function Navbar() {
   const { user, token, logout } = useAuthStore();
 
   return (
-    <header className="sticky top-0 z-[60] border-b border-[color:var(--line)] bg-[color:var(--background)]/85 backdrop-blur-xl">
-      <div className="shell flex items-center justify-between gap-4 py-4">
-        <Link href="/" className="group">
-          <Logo className="transition-transform duration-300 group-hover:translate-x-0.5" compact />
+    <header className="nav-blur sticky top-0 z-[60]">
+      <div className="shell flex items-center justify-between gap-4 py-3.5">
+        <Link href="/" className="group relative">
+          <Logo className="transition-transform duration-300 group-hover:scale-[1.02]" compact />
         </Link>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <ThemeToggle />
+
           {token && user ? (
-            <>
-              <div className="flex items-center gap-3">
-                <Avatar user={user} size={38} />
-                <Button variant="secondary" onClick={logout} className="h-10">
-                  Log Out
-                </Button>
-              </div>
-            </>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Link
+                href="/profile"
+                className="hidden items-center gap-2.5 rounded-full border border-[color:var(--glass-border)] bg-[color:var(--glass)] py-1.5 pl-1.5 pr-3.5 backdrop-blur-xl transition-all hover:border-[color:var(--accent)]/30 sm:flex"
+              >
+                <Avatar user={user} size={32} />
+                <span className="max-w-[120px] truncate text-sm font-semibold text-[color:var(--foreground)]">
+                  {user.name.split(" ")[0]}
+                </span>
+              </Link>
+              <Link href="/profile" className="sm:hidden">
+                <Avatar user={user} size={34} />
+              </Link>
+              <Button variant="secondary" size="sm" onClick={logout}>
+                Log Out
+              </Button>
+            </div>
           ) : (
             <>
               <Link href="/login">
-                <Button variant="ghost">Log In</Button>
+                <Button variant="ghost" size="sm">
+                  Log In
+                </Button>
               </Link>
               <Link href="/register">
-                <Button className="bg-accent hover:bg-accent/90 shadow-accent/20">Get Started</Button>
+                <Button size="sm">Get Started</Button>
               </Link>
             </>
           )}

@@ -8,11 +8,11 @@ interface BadgeProps {
 
 export function Badge({ children, tone = "neutral", className }: BadgeProps) {
   const tones = {
-    neutral: "bg-stone-100 text-stone-700",
-    success: "bg-emerald-100 text-emerald-700",
-    warning: "bg-amber-100 text-amber-700",
-    danger: "bg-rose-100 text-rose-700",
-    info: "bg-sky-100 text-sky-700",
+    neutral: "bg-[color:var(--surface-strong)] text-[color:var(--muted)] border border-[color:var(--line)]",
+    success: "bg-[color:var(--success)]/12 text-[color:var(--success)] border border-[color:var(--success)]/20",
+    warning: "bg-[color:var(--warning)]/12 text-[color:var(--warning)] border border-[color:var(--warning)]/20",
+    danger: "bg-[color:var(--danger)]/12 text-[color:var(--danger)] border border-[color:var(--danger)]/20",
+    info: "bg-[color:var(--info)]/12 text-[color:var(--info)] border border-[color:var(--info)]/20",
   };
 
   return (

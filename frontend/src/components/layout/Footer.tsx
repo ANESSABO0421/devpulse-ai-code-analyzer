@@ -1,58 +1,97 @@
 import Link from "next/link";
-import { Code, MessageSquare, Users } from "lucide-react";
+import { Code2, GitBranch, MessageSquare, Share2 } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
+
+const columns = [
+  {
+    title: "Product",
+    links: [
+      { label: "Features", href: "/#features" },
+      { label: "Pricing", href: "/#pricing" },
+      { label: "Dashboard", href: "/dashboard" },
+      { label: "Documentation", href: "/reviews/new" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "About", href: "/#features" },
+      { label: "Blog", href: "#" },
+      { label: "Careers", href: "#" },
+      { label: "Contact", href: "#" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { label: "Privacy Policy", href: "#" },
+      { label: "Terms of Service", href: "#" },
+      { label: "Cookie Policy", href: "#" },
+    ],
+  },
+];
 
 export function Footer() {
   return (
-    <footer className="mt-24 border-t border-white/5 bg-background/50 py-16 backdrop-blur-sm">
-      <div className="shell">
-        <div className="grid gap-12 md:grid-cols-4">
-          <div className="md:col-span-1">
+    <footer className="relative mt-32 border-t border-[color:var(--line)]">
+      <div className="pointer-events-none absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-[var(--accent)]/40 to-transparent" />
+
+      <div className="shell py-16 lg:py-20">
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-5">
+          <div className="lg:col-span-2">
             <Link href="/">
               <Logo compact />
             </Link>
-            <p className="mt-4 text-sm leading-relaxed text-muted">
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-[color:var(--muted)]">
               The premium workspace for AI-powered code reviews and team collaboration. Ship cleaner code, faster.
             </p>
-            <div className="mt-6 flex gap-4">
-              <a href="#" className="text-muted hover:text-accent transition-colors"><Code size={20} /></a>
-              <a href="#" className="text-muted hover:text-accent transition-colors"><MessageSquare size={20} /></a>
-              <a href="#" className="text-muted hover:text-accent transition-colors"><Users size={20} /></a>
+            <div className="mt-6 flex gap-3">
+              {[
+                { icon: GitBranch, label: "GitHub" },
+                { icon: Share2, label: "Social" },
+                { icon: MessageSquare, label: "Discord" },
+                { icon: Code2, label: "Docs" },
+              ].map(({ icon: Icon, label }) => (
+                <a
+                  key={label}
+                  href="#"
+                  aria-label={label}
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-[color:var(--line)] text-[color:var(--muted)] transition-all hover:border-[color:var(--accent)]/30 hover:bg-[color:var(--accent-soft)] hover:text-[color:var(--accent)]"
+                >
+                  <Icon size={18} />
+                </a>
+              ))}
             </div>
           </div>
-          
-          <div>
-            <h4 className="text-sm font-bold uppercase tracking-widest text-[color:var(--foreground)]">Product</h4>
-            <ul className="mt-6 space-y-4 text-sm text-muted">
-              <li><Link href="/features" className="transition-colors hover:text-[color:var(--foreground)]">Features</Link></li>
-              <li><Link href="/pricing" className="transition-colors hover:text-[color:var(--foreground)]">Pricing</Link></li>
-              <li><Link href="/changelog" className="transition-colors hover:text-[color:var(--foreground)]">Changelog</Link></li>
-              <li><Link href="/docs" className="transition-colors hover:text-[color:var(--foreground)]">Documentation</Link></li>
-            </ul>
-          </div>
-          
-          <div>
-            <h4 className="text-sm font-bold uppercase tracking-widest text-[color:var(--foreground)]">Company</h4>
-            <ul className="mt-6 space-y-4 text-sm text-muted">
-              <li><Link href="/about" className="transition-colors hover:text-[color:var(--foreground)]">About Us</Link></li>
-              <li><Link href="/careers" className="transition-colors hover:text-[color:var(--foreground)]">Careers</Link></li>
-              <li><Link href="/blog" className="transition-colors hover:text-[color:var(--foreground)]">Blog</Link></li>
-              <li><Link href="/contact" className="transition-colors hover:text-[color:var(--foreground)]">Contact</Link></li>
-            </ul>
-          </div>
-          
-          <div>
-            <h4 className="text-sm font-bold uppercase tracking-widest text-[color:var(--foreground)]">Legal</h4>
-            <ul className="mt-6 space-y-4 text-sm text-muted">
-              <li><Link href="/privacy" className="transition-colors hover:text-[color:var(--foreground)]">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="transition-colors hover:text-[color:var(--foreground)]">Terms of Service</Link></li>
-              <li><Link href="/cookie" className="transition-colors hover:text-[color:var(--foreground)]">Cookie Policy</Link></li>
-            </ul>
-          </div>
+
+          {columns.map((col) => (
+            <div key={col.title}>
+              <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-[color:var(--foreground)]">
+                {col.title}
+              </h4>
+              <ul className="mt-5 space-y-3.5">
+                {col.links.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-[color:var(--muted)] transition-colors hover:text-[color:var(--accent)]"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
-        
-        <div className="mt-16 border-t border-white/5 pt-8 text-center text-xs text-muted">
-          <p>© {new Date().getFullYear()} DevPulse Inc. All rights reserved. Built with passion for developers.</p>
+
+        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-[color:var(--line)] pt-8 sm:flex-row">
+          <p className="text-xs text-[color:var(--muted)]">
+            © {new Date().getFullYear()} DevPulse Inc. All rights reserved.
+          </p>
+          <p className="text-xs text-[color:var(--muted)]">
+            Built with passion for developers worldwide.
+          </p>
         </div>
       </div>
     </footer>
