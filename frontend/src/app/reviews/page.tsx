@@ -50,7 +50,7 @@ export default function ReviewsPage() {
         <Link href="/reviews/new"><Button>New Review</Button></Link>
       </div>
       <div className="card max-w-sm p-5">
-        <select className="w-full rounded-2xl border border-[var(--line)] bg-white px-4 py-3" value={status} onChange={(event) => setStatus(event.target.value)}>
+        <select className="w-full" value={status} onChange={(event) => setStatus(event.target.value)}>
           <option value="">All statuses</option>
           <option value="pending">Pending</option>
           <option value="reviewed">Reviewed</option>

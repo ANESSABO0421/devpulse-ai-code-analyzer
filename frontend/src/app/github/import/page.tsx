@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable react-hooks/set-state-in-effect */
+
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -8,6 +10,7 @@ import { Button } from "@/components/ui/Button";
 import { getApiErrorMessage } from "@/lib/api";
 import { axiosInstance } from "@/lib/axios";
 import { useAuth } from "@/hooks/useAuth";
+import { FileCode, FolderGit2, Search } from "lucide-react";
 
 interface Repo {
   id: string;
@@ -16,13 +19,23 @@ interface Repo {
   defaultBranch: string;
 }
 
+interface GithubFile {
+  path: string;
+  name: string;
+  size?: number;
+}
+
 export default function GithubImportPage() {
   useAuth();
   const router = useRouter();
   const [repos, setRepos] = useState<Repo[]>([]);
   const [search, setSearch] = useState("");
+  const [fileSearch, setFileSearch] = useState("");
+  const [files, setFiles] = useState<GithubFile[]>([]);
+  const [loadingFiles, setLoadingFiles] = useState(false);
   const [loadingRepos, setLoadingRepos] = useState(true);
   const [repoError, setRepoError] = useState<string | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
   const [form, setForm] = useState({
     repoFullName: "",
     branch: "",
@@ -49,20 +62,78 @@ export default function GithubImportPage() {
       .finally(() => setLoadingRepos(false));
   }, []);
 
+  useEffect(() => {
+    if (!form.repoFullName) {
+      setFiles([]);
+      return;
+    }
+
+    const request = new AbortController();
+    setLoadingFiles(true);
+    setFileError(null);
+    setFiles([]);
+    setFileSearch("");
+
+    axiosInstance
+      .get("/github/files", {
+        params: { repoFullName: form.repoFullName, branch: form.branch },
+        signal: request.signal,
+      })
+      .then(({ data }) => {
+        setFiles(data.files || []);
+      })
+      .catch((error: unknown) => {
+        if (!request.signal.aborted) {
+          setFileError(getApiErrorMessage(error, "Unable to load repository files"));
+        }
+      })
+      .finally(() => {
+        if (!request.signal.aborted) {
+          setLoadingFiles(false);
+        }
+      });
+
+    return () => request.abort();
+  }, [form.repoFullName, form.branch]);
+
   const filteredRepos = useMemo(
     () => repos.filter((repo) => repo.fullName.toLowerCase().includes(search.toLowerCase())),
     [repos, search],
   );
 
+  const filteredFiles = useMemo(
+    () => files.filter((file) => file.path.toLowerCase().includes(fileSearch.toLowerCase())),
+    [files, fileSearch],
+  );
+
+  const selectedFile = files.find((file) => file.path === form.filePath);
+
+  function selectRepo(repo: Repo) {
+    setForm({ repoFullName: repo.fullName, branch: repo.defaultBranch, filePath: "" });
+  }
+
   return (
     <AppShell>
       <div>
         <h1 className="text-5xl font-black">GitHub Import</h1>
-        <p className="mt-3 text-[var(--muted)]">Search your connected repos, enter a file path, and open it in a new review draft.</p>
+        <p className="mt-3 text-[var(--muted)]">Pick a connected repository, choose a file, and open it in a new review draft.</p>
       </div>
-      <div className="grid gap-6 xl:grid-cols-[0.8fr_1.2fr]">
-        <div className="card p-6">
-          <input className="mb-4 w-full" placeholder="Search repos" value={search} onChange={(event) => setSearch(event.target.value)} />
+      <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
+        <section className="card space-y-4 p-5">
+          <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-muted">
+            <FolderGit2 size={16} className="text-accent" />
+            Repositories
+          </div>
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={18} />
+            <input
+              className="w-full"
+              style={{ paddingLeft: "2.5rem" }}
+              placeholder="Search repos"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+            />
+          </div>
           {repoError ? (
             <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
               {repoError}
@@ -88,8 +159,12 @@ export default function GithubImportPage() {
                 filteredRepos.map((repo) => (
                   <button
                     key={repo.id}
-                    className="w-full rounded-2xl border border-[var(--line)] bg-[color:var(--glass)] p-4 text-left transition-colors hover:border-[color:var(--accent)]/25"
-                    onClick={() => setForm({ ...form, repoFullName: repo.fullName, branch: repo.defaultBranch })}
+                    className={`w-full rounded-xl border p-4 text-left transition-colors ${
+                      form.repoFullName === repo.fullName
+                        ? "border-[color:var(--accent)] bg-[color:var(--accent-soft)]"
+                        : "border-[var(--line)] bg-[color:var(--glass)] hover:border-[color:var(--accent)]/35"
+                    }`}
+                    onClick={() => selectRepo(repo)}
                   >
                     <div className="font-semibold">{repo.fullName}</div>
                     <div className="text-sm text-[var(--muted)]">Default branch: {repo.defaultBranch}</div>
@@ -100,30 +175,92 @@ export default function GithubImportPage() {
               )}
             </div>
           )}
-        </div>
-        <div className="card space-y-4 p-6">
-          <h2 className="text-2xl font-semibold">Import file</h2>
-          <input className="w-full" placeholder="owner/repo" value={form.repoFullName} onChange={(event) => setForm({ ...form, repoFullName: event.target.value })} />
-          <div className="grid gap-4 md:grid-cols-2">
-            <input className="w-full" placeholder="Branch" value={form.branch} onChange={(event) => setForm({ ...form, branch: event.target.value })} />
-            <input className="w-full" placeholder="src/app/page.tsx" value={form.filePath} onChange={(event) => setForm({ ...form, filePath: event.target.value })} />
+        </section>
+        <section className="card space-y-5 p-5">
+          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div>
+              <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-muted">
+                <FileCode size={16} className="text-accent" />
+                Repository Files
+              </div>
+              <p className="mt-2 text-sm text-muted">
+                {form.repoFullName ? form.repoFullName : "Select a repository to browse files"}
+              </p>
+            </div>
+            <input
+              className="w-full md:w-48"
+              placeholder="Branch"
+              value={form.branch}
+              disabled={!form.repoFullName}
+              onChange={(event) => setForm({ ...form, branch: event.target.value, filePath: "" })}
+            />
           </div>
-          <Button
-            disabled={Boolean(repoError) || !form.repoFullName || !form.filePath}
-            onClick={async () => {
-              try {
-                const { data } = await axiosInstance.post("/github/import", form);
-                router.push(
-                  `/reviews/new?fileName=${encodeURIComponent(data.fileName)}&language=${encodeURIComponent(data.language)}&code=${encodeURIComponent(data.code)}`,
-                );
-              } catch (error: unknown) {
-                toast.error(getApiErrorMessage(error, "Import failed"));
-              }
-            }}
-          >
-            Import into Review Draft
-          </Button>
-        </div>
+
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={18} />
+            <input
+              className="w-full"
+              style={{ paddingLeft: "2.5rem" }}
+              placeholder="Search files"
+              value={fileSearch}
+              disabled={!form.repoFullName || loadingFiles}
+              onChange={(event) => setFileSearch(event.target.value)}
+            />
+          </div>
+
+          <div className="rounded-xl border border-[color:var(--line)] bg-[color:var(--surface-muted)]">
+            <div data-lenis-prevent className="max-h-[410px] overflow-y-auto overscroll-contain">
+              {!form.repoFullName ? (
+                <div className="p-5 text-sm text-muted">Choose a repository from the left.</div>
+              ) : loadingFiles ? (
+                <div className="p-5 text-sm text-muted">Loading files...</div>
+              ) : fileError ? (
+                <div className="p-5 text-sm text-amber-600">{fileError}</div>
+              ) : filteredFiles.length ? (
+                filteredFiles.map((file) => (
+                  <button
+                    key={file.path}
+                    className={`flex w-full items-center gap-3 border-b border-[color:var(--line)] px-4 py-3 text-left text-sm transition last:border-b-0 ${
+                      form.filePath === file.path
+                        ? "bg-[color:var(--accent-soft)] text-[color:var(--foreground)]"
+                        : "hover:bg-[color:var(--glass)]"
+                    }`}
+                    onClick={() => setForm({ ...form, filePath: file.path })}
+                  >
+                    <FileCode size={16} className="shrink-0 text-accent" />
+                    <span className="min-w-0 flex-1 truncate">{file.path}</span>
+                    {file.size ? <span className="shrink-0 text-xs text-muted">{Math.ceil(file.size / 1024)} KB</span> : null}
+                  </button>
+                ))
+              ) : (
+                <div className="p-5 text-sm text-muted">No files found.</div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-3 rounded-xl border border-[color:var(--line)] bg-[color:var(--glass)] p-4 md:flex-row md:items-center md:justify-between">
+            <div className="min-w-0">
+              <div className="text-xs font-bold uppercase tracking-widest text-muted">Selected file</div>
+              <div className="mt-1 truncate font-semibold">{selectedFile?.path || "No file selected"}</div>
+            </div>
+            <Button
+              className="shrink-0"
+              disabled={Boolean(repoError) || !form.repoFullName || !form.filePath}
+              onClick={async () => {
+                try {
+                  const { data } = await axiosInstance.post("/github/import", form);
+                  router.push(
+                    `/reviews/new?fileName=${encodeURIComponent(data.fileName)}&language=${encodeURIComponent(data.language)}&code=${encodeURIComponent(data.code)}`,
+                  );
+                } catch (error: unknown) {
+                  toast.error(getApiErrorMessage(error, "Import failed"));
+                }
+              }}
+            >
+              Import into Review Draft
+            </Button>
+          </div>
+        </section>
       </div>
     </AppShell>
   );

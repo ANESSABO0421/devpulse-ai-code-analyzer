@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import Comment from "../models/Comment";
-import Project from "../models/Project";
-import Review from "../models/Review";
-import User from "../models/User";
-import { emitToReviewRoom } from "../services/socket.service";
-import { analyzeCode } from "../services/ai.service";
-import { createHttpError, sendSuccess } from "../utils/response";
+import Comment from "../../models/Comment";
+import Project from "../../models/Project";
+import Review from "../../models/Review";
+import User from "../../models/User";
+import { emitToReviewRoom } from "../../services/socket.service";
+import { analyzeCode } from "../../services/ai.service";
+import { createHttpError, sendSuccess } from "../../utils/response";
 
 async function requireProjectMembership(projectId: string, userId?: string) {
   const project = await Project.findById(projectId);

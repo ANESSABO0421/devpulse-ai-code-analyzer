@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import Project from "../models/Project";
-import User from "../models/User";
-import { createHttpError, sendSuccess } from "../utils/response";
+import Project from "../../models/Project";
+import User from "../../models/User";
+import { createHttpError, sendSuccess } from "../../utils/response";
 
 function isOwner(project: any, userId?: string) {
   return project.ownerId.toString() === userId;

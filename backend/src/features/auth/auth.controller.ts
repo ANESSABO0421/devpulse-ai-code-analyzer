@@ -1,8 +1,8 @@
 import bcrypt from "bcryptjs";
 import { NextFunction, Request, Response } from "express";
-import User from "../models/User";
-import { generateToken } from "../utils/jwt";
-import { createHttpError, sendSuccess } from "../utils/response";
+import User from "../../models/User";
+import { generateToken } from "../../utils/jwt";
+import { createHttpError, sendSuccess } from "../../utils/response";
 
 function sanitizeUser(user: any) {
   const object = user.toObject ? user.toObject() : user;

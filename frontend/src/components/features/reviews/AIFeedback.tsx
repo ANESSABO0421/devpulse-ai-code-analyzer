@@ -28,7 +28,7 @@ export function AIFeedback({ review }: { review: Review }) {
       </div>
       
       <div className="mb-10 rounded-2xl bg-white/5 p-6 border border-white/5">
-        <p className="text-base leading-relaxed text-muted italic">"{review.aiSummary}"</p>
+        <p className="text-base leading-relaxed text-muted italic">&quot;{review.aiSummary}&quot;</p>
       </div>
 
       <div className="space-y-4">

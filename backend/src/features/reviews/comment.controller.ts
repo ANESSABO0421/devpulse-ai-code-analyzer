@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import Comment from "../models/Comment";
-import Review from "../models/Review";
-import { emitToReviewRoom } from "../services/socket.service";
-import { createHttpError, sendSuccess } from "../utils/response";
+import Comment from "../../models/Comment";
+import Review from "../../models/Review";
+import { emitToReviewRoom } from "../../services/socket.service";
+import { createHttpError, sendSuccess } from "../../utils/response";
 
 export async function createComment(req: Request, res: Response, next: NextFunction) {
   try {

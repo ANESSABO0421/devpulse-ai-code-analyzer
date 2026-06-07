@@ -15,17 +15,15 @@ export function ReviewCard({
   deleting?: boolean;
   onDelete?: (review: Review) => void | Promise<void>;
 }) {
-  const scoreColor = review.aiScore > 75 ? "text-[#10B981]" : review.aiScore > 45 ? "text-[#F59E0B]" : "text-[#EF4444]";
-
   return (
-    <div className="rounded-xl border border-[#334155] bg-[#1E293B] p-6 hover:border-[#3B82F6] transition-colors">
+    <div className="rounded-xl border border-[color:var(--line)] bg-[color:var(--surface)] p-6 transition-colors hover:border-[color:var(--accent)]">
       <div className="mb-4 flex items-start justify-between gap-4">
         <Link href={`/reviews/${review._id}`} className="min-w-0 flex-1">
-          <h3 className="text-lg font-semibold text-[#F1F5F9] transition-colors group-hover:text-[#3B82F6]">{review.title}</h3>
-          <p className="mt-1 text-xs font-medium uppercase tracking-wider text-[#94A3B8]">{formatDate(review.createdAt)}</p>
+          <h3 className="text-lg font-semibold text-[color:var(--foreground)] transition-colors group-hover:text-[color:var(--accent)]">{review.title}</h3>
+          <p className="mt-1 text-xs font-medium uppercase tracking-wider text-muted">{formatDate(review.createdAt)}</p>
         </Link>
         <div className="flex items-center gap-2">
-          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#3B82F6]/10 font-bold text-lg text-[#3B82F6]">
+          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[color:var(--accent-soft)] text-lg font-bold text-[color:var(--accent)]">
             {review.aiScore}
           </div>
           {canDelete && onDelete ? (
@@ -39,9 +37,9 @@ export function ReviewCard({
         </div>
       </div>
       <Link href={`/reviews/${review._id}`} className="block">
-        <div className="flex items-center gap-6 text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
+        <div className="flex items-center gap-6 text-xs font-semibold uppercase tracking-wider text-muted">
           <span className="flex items-center gap-1.5">
-            <Code2 size={14} className="text-[#3B82F6]" />
+            <Code2 size={14} className="text-[color:var(--accent)]" />
             {review.language}
           </span>
           <span className="flex items-center gap-1.5">

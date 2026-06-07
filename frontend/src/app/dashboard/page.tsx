@@ -102,8 +102,8 @@ export default function DashboardPage() {
     <AppShell>
       <div ref={container}>
         <section className="dash-header mb-10">
-          <h1 className="text-4xl font-bold text-[#F1F5F9] md:text-5xl">Dashboard</h1>
-          <p className="mt-4 text-lg text-[#94A3B8]">
+          <h1 className="text-4xl font-bold text-[color:var(--foreground)] md:text-5xl">Dashboard</h1>
+          <p className="mt-4 text-lg text-muted">
             Track your reviews and projects.
           </p>
         </section>
@@ -115,9 +115,9 @@ export default function DashboardPage() {
         <div className="grid gap-8 xl:grid-cols-2">
           <section className="dash-section">
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-[#F1F5F9]">Recent Reviews</h2>
+              <h2 className="text-2xl font-bold text-[color:var(--foreground)]">Recent Reviews</h2>
               <Link href="/reviews">
-                <Button variant="ghost" className="group text-sm font-semibold text-[#94A3B8] hover:text-[#F1F5F9]">
+                <Button variant="ghost" className="group text-sm font-semibold">
                   All Reviews <ArrowRight size={16} className="ml-2 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
@@ -126,8 +126,8 @@ export default function DashboardPage() {
               {reviews.length > 0 ? (
                 reviews.map((review) => <ReviewCard key={review._id} review={review} />)
               ) : (
-                <div className="rounded-xl border border-dashed border-[#334155] bg-[#1E293B] flex h-32 flex-col items-center justify-center p-6 text-center">
-                  <p className="text-[#94A3B8]">No reviews found yet.</p>
+                <div className="flex h-32 flex-col items-center justify-center rounded-xl border border-dashed border-[color:var(--line)] bg-[color:var(--surface-muted)] p-6 text-center">
+                  <p className="text-muted">No reviews found yet.</p>
                 </div>
               )}
             </div>
@@ -135,9 +135,9 @@ export default function DashboardPage() {
 
           <section className="dash-section">
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-[#F1F5F9]">Active Projects</h2>
+              <h2 className="text-2xl font-bold text-[color:var(--foreground)]">Active Projects</h2>
               <Link href="/projects">
-                <Button variant="ghost" className="group text-sm font-semibold text-[#94A3B8] hover:text-[#F1F5F9]">
+                <Button variant="ghost" className="group text-sm font-semibold">
                   All Projects <ArrowRight size={16} className="ml-2 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
@@ -146,8 +146,8 @@ export default function DashboardPage() {
               {projects.length > 0 ? (
                 projects.map((project) => <ProjectCard key={project._id} project={project} />)
               ) : (
-                <div className="rounded-xl border border-dashed border-[#334155] bg-[#1E293B] flex h-32 flex-col items-center justify-center p-6 text-center">
-                  <p className="text-[#94A3B8]">No active projects.</p>
+                <div className="flex h-32 flex-col items-center justify-center rounded-xl border border-dashed border-[color:var(--line)] bg-[color:var(--surface-muted)] p-6 text-center">
+                  <p className="text-muted">No active projects.</p>
                 </div>
               )}
             </div>
@@ -155,21 +155,21 @@ export default function DashboardPage() {
         </div>
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
-          <Link href="/reviews/new" className="dash-action rounded-xl border border-[#334155] bg-[#1E293B] group flex flex-col p-8 hover:border-[#3B82F6] transition-colors">
-            <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-[#3B82F6]/10">
-              <FileCode size={24} className="text-[#3B82F6]" />
+          <Link href="/reviews/new" className="dash-action group flex flex-col rounded-xl border border-[color:var(--line)] bg-[color:var(--surface)] p-8 transition-colors hover:border-[color:var(--accent)]">
+            <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-[color:var(--accent-soft)]">
+              <FileCode size={24} className="text-[color:var(--accent)]" />
             </div>
-            <h3 className="text-xl font-bold text-[#F1F5F9] transition-colors group-hover:text-[#3B82F6]">New Review</h3>
-            <p className="mt-3 text-[#94A3B8] leading-relaxed">
+            <h3 className="text-xl font-bold text-[color:var(--foreground)] transition-colors group-hover:text-[color:var(--accent)]">New Review</h3>
+            <p className="mt-3 leading-relaxed text-muted">
               Paste code and get AI feedback.
             </p>
           </Link>
-          <Link href="/projects/new" className="dash-action rounded-xl border border-[#334155] bg-[#1E293B] group flex flex-col p-8 hover:border-[#3B82F6] transition-colors">
-            <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-[#3B82F6]/10">
-              <Plus size={24} className="text-[#3B82F6]" />
+          <Link href="/projects/new" className="dash-action group flex flex-col rounded-xl border border-[color:var(--line)] bg-[color:var(--surface)] p-8 transition-colors hover:border-[color:var(--accent)]">
+            <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-[color:var(--accent-soft)]">
+              <Plus size={24} className="text-[color:var(--accent)]" />
             </div>
-            <h3 className="text-xl font-bold text-[#F1F5F9] transition-colors group-hover:text-[#3B82F6]">New Project</h3>
-            <p className="mt-3 text-[#94A3B8] leading-relaxed">
+            <h3 className="text-xl font-bold text-[color:var(--foreground)] transition-colors group-hover:text-[color:var(--accent)]">New Project</h3>
+            <p className="mt-3 leading-relaxed text-muted">
               Create a workspace for your team.
             </p>
           </Link>

@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import Project from "../models/Project";
-import Review from "../models/Review";
-import User from "../models/User";
-import { createHttpError, sendSuccess } from "../utils/response";
+import Project from "../../models/Project";
+import Review from "../../models/Review";
+import User from "../../models/User";
+import { createHttpError, sendSuccess } from "../../utils/response";
 
 export async function getProfile(req: Request, res: Response, next: NextFunction) {
   try {

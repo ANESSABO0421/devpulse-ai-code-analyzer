@@ -1,9 +1,9 @@
 import { Router } from "express";
 import passport from "passport";
-import { getCurrentUser, login, register } from "../controllers/auth.controller";
-import { verifyJwt } from "../middleware/auth.middleware";
-import { requireFields } from "../middleware/validate.middleware";
-import { generateToken } from "../utils/jwt";
+import { getCurrentUser, login, register } from "./auth.controller";
+import { verifyJwt } from "../../middleware/auth.middleware";
+import { requireFields } from "../../middleware/validate.middleware";
+import { generateToken } from "../../utils/jwt";
 
 const router = Router();
 

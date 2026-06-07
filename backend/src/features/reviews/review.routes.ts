@@ -6,9 +6,9 @@ import {
   listReviews,
   rerunAiReview,
   updateReviewStatus,
-} from "../controllers/review.controller";
-import { verifyJwt } from "../middleware/auth.middleware";
-import { requireFields } from "../middleware/validate.middleware";
+} from "./review.controller";
+import { verifyJwt } from "../../middleware/auth.middleware";
+import { requireFields } from "../../middleware/validate.middleware";
 
 const router = Router();
 

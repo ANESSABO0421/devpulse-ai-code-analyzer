@@ -5,9 +5,9 @@ import {
   getIssueById,
   listIssues,
   updateIssue,
-} from "../controllers/issue.controller";
-import { verifyJwt } from "../middleware/auth.middleware";
-import { requireFields } from "../middleware/validate.middleware";
+} from "./issue.controller";
+import { verifyJwt } from "../../middleware/auth.middleware";
+import { requireFields } from "../../middleware/validate.middleware";
 
 const router = Router();
 

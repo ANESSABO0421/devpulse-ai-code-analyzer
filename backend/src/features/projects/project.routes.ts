@@ -7,9 +7,9 @@ import {
   listProjects,
   removeProjectMember,
   updateProject,
-} from "../controllers/project.controller";
-import { verifyJwt } from "../middleware/auth.middleware";
-import { requireFields } from "../middleware/validate.middleware";
+} from "./project.controller";
+import { verifyJwt } from "../../middleware/auth.middleware";
+import { requireFields } from "../../middleware/validate.middleware";
 
 const router = Router();
 

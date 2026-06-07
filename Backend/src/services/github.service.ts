@@ -26,6 +26,21 @@ export async function fetchGithubRepos(accessToken: string) {
   }));
 }
 
+export async function fetchGithubFiles(accessToken: string, repoFullName: string, branch?: string) {
+  const { data } = await githubApi.get(`/repos/${repoFullName}/git/trees/${branch || "HEAD"}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    params: { recursive: "1" },
+  });
+
+  return (data.tree || [])
+    .filter((item: any) => item.type === "blob")
+    .map((item: any) => ({
+      path: item.path,
+      name: item.path.split("/").pop(),
+      size: item.size,
+    }));
+}
+
 export async function importGithubFile(
   accessToken: string,
   repoFullName: string,

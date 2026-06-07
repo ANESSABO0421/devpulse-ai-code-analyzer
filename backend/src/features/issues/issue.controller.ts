@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import Issue from "../models/Issue";
-import Project from "../models/Project";
-import { createHttpError, sendSuccess } from "../utils/response";
+import Issue from "../../models/Issue";
+import Project from "../../models/Project";
+import { createHttpError, sendSuccess } from "../../utils/response";
 
 async function ensureProjectMember(projectId: string, userId?: string) {
   const project = await Project.findById(projectId);

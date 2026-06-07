@@ -34,7 +34,7 @@ export default function NewProjectPage() {
   return (
     <AppShell>
       <section className="mb-10">
-        <h1 className="text-4xl font-black text-white md:text-5xl">Create Project</h1>
+        <h1 className="text-4xl font-black text-[color:var(--foreground)] md:text-5xl">Create Project</h1>
         <p className="mt-4 max-w-2xl text-lg text-muted">
           Spin up a professional code review hub for your repository, team, and automated issue tracking.
         </p>

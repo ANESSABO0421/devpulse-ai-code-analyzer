@@ -3,8 +3,8 @@ import {
   getProfile,
   getUserStats,
   updateProfile,
-} from "../controllers/user.controller";
-import { verifyJwt } from "../middleware/auth.middleware";
+} from "./user.controller";
+import { verifyJwt } from "../../middleware/auth.middleware";
 
 const router = Router();
 

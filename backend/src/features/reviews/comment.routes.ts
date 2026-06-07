@@ -4,9 +4,9 @@ import {
   deleteComment,
   listComments,
   updateComment,
-} from "../controllers/comment.controller";
-import { verifyJwt } from "../middleware/auth.middleware";
-import { requireFields } from "../middleware/validate.middleware";
+} from "./comment.controller";
+import { verifyJwt } from "../../middleware/auth.middleware";
+import { requireFields } from "../../middleware/validate.middleware";
 
 const router = Router();
 
