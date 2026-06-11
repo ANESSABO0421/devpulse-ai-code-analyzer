@@ -36,6 +36,8 @@ export default function GithubImportPage() {
   const [loadingRepos, setLoadingRepos] = useState(true);
   const [repoError, setRepoError] = useState<string | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
+  const [branches, setBranches] = useState<{name: string}[]>([]);
+  const [loadingBranches, setLoadingBranches] = useState(false);
   const [form, setForm] = useState({
     repoFullName: "",
     branch: "",
@@ -61,6 +63,37 @@ export default function GithubImportPage() {
       })
       .finally(() => setLoadingRepos(false));
   }, []);
+
+  useEffect(() => {
+    if (!form.repoFullName) {
+      setBranches([]);
+      return;
+    }
+
+    const request = new AbortController();
+    setLoadingBranches(true);
+
+    axiosInstance
+      .get("/github/branches", {
+        params: { repoFullName: form.repoFullName },
+        signal: request.signal,
+      })
+      .then(({ data }) => {
+        setBranches(data.branches || []);
+      })
+      .catch((error: unknown) => {
+        if (!request.signal.aborted) {
+          toast.error(getApiErrorMessage(error, "Unable to load branches"));
+        }
+      })
+      .finally(() => {
+        if (!request.signal.aborted) {
+          setLoadingBranches(false);
+        }
+      });
+
+    return () => request.abort();
+  }, [form.repoFullName]);
 
   useEffect(() => {
     if (!form.repoFullName) {
@@ -127,8 +160,7 @@ export default function GithubImportPage() {
           <div className="relative">
             <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={18} />
             <input
-              className="w-full"
-              style={{ paddingLeft: "2.5rem" }}
+              className="input-premium"
               placeholder="Search repos"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
@@ -187,20 +219,30 @@ export default function GithubImportPage() {
                 {form.repoFullName ? form.repoFullName : "Select a repository to browse files"}
               </p>
             </div>
-            <input
+            <select
               className="w-full md:w-48"
-              placeholder="Branch"
               value={form.branch}
-              disabled={!form.repoFullName}
+              disabled={!form.repoFullName || loadingBranches}
               onChange={(event) => setForm({ ...form, branch: event.target.value, filePath: "" })}
-            />
+            >
+              {loadingBranches ? (
+                <option value="">Loading...</option>
+              ) : branches.length ? (
+                branches.map((b) => (
+                  <option key={b.name} value={b.name}>
+                    {b.name}
+                  </option>
+                ))
+              ) : (
+                <option value={form.branch || ""}>{form.branch || "Branch"}</option>
+              )}
+            </select>
           </div>
 
           <div className="relative">
             <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={18} />
             <input
-              className="w-full"
-              style={{ paddingLeft: "2.5rem" }}
+              className="input-premium"
               placeholder="Search files"
               value={fileSearch}
               disabled={!form.repoFullName || loadingFiles}

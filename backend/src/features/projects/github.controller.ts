@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../../models/User";
-import { fetchGithubFiles, fetchGithubRepos, importGithubFile } from "../../services/github.service";
+import { fetchGithubFiles, fetchGithubRepos, importGithubFile, fetchGithubBranches } from "../../services/github.service";
 import { createHttpError, sendSuccess } from "../../utils/response";
 
 async function getGithubToken(userId?: string) {
@@ -31,6 +31,21 @@ export async function listGithubFiles(req: Request, res: Response, next: NextFun
 
     const files = await fetchGithubFiles(await getGithubToken(req.user?._id?.toString()), repoFullName, branch);
     return sendSuccess(res, { files });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function listGithubBranches(req: Request, res: Response, next: NextFunction) {
+  try {
+    const repoFullName = req.query.repoFullName as string | undefined;
+
+    if (!repoFullName) {
+      throw createHttpError("Repository is required", 400);
+    }
+
+    const branches = await fetchGithubBranches(await getGithubToken(req.user?._id?.toString()), repoFullName);
+    return sendSuccess(res, { branches });
   } catch (error) {
     next(error);
   }

@@ -26,6 +26,16 @@ export async function fetchGithubRepos(accessToken: string) {
   }));
 }
 
+export async function fetchGithubBranches(accessToken: string, repoFullName: string) {
+  const { data } = await githubApi.get(`/repos/${repoFullName}/branches`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+  return data.map((branch: any) => ({
+    name: branch.name,
+  }));
+}
+
 export async function fetchGithubFiles(accessToken: string, repoFullName: string, branch?: string) {
   const { data } = await githubApi.get(`/repos/${repoFullName}/git/trees/${branch || "HEAD"}`, {
     headers: { Authorization: `Bearer ${accessToken}` },

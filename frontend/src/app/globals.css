@@ -272,7 +272,7 @@ input::placeholder, textarea::placeholder {
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-sm);
   color: var(--foreground);
-  padding: 0.9rem 1rem 0.9rem 2.75rem;
+  padding: 0.9rem 1rem 0.9rem 2.75rem !important;
   transition: all 0.25s ease;
 }
 

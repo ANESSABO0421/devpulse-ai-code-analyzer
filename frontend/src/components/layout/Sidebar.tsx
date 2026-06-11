@@ -73,7 +73,12 @@ export function Sidebar() {
 
         <nav className="flex gap-1.5 overflow-x-auto pb-1 lg:block lg:space-y-1 lg:overflow-visible lg:pb-0">
           {items.map((item) => {
-            const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
+            // Find the best match by checking exact matches first, then the longest prefix match.
+            const isActive =
+              pathname === item.href ||
+              (pathname.startsWith(item.href) &&
+                item.href !== "/dashboard" &&
+                !items.some((other) => other.href !== item.href && pathname.startsWith(other.href) && other.href.length > item.href.length));
             return (
               <Link
                 key={item.href}
@@ -81,7 +86,7 @@ export function Sidebar() {
                 title={collapsed ? item.label : undefined}
                 className={cn(
                   "group flex shrink-0 items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition-all duration-250",
-                  collapsed && "lg:justify-center lg:px-0",
+                  collapsed && "lg:justify-center lg:p-0 lg:w-[42px] lg:h-[42px] lg:mx-auto",
                   isActive ? "sidebar-item-active" : "sidebar-item",
                 )}
               >
