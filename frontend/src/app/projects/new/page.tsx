@@ -17,7 +17,6 @@ export default function NewProjectPage() {
     name: "",
     description: "",
     language: "typescript",
-    githubRepo: "",
   });
 
   async function handleSubmit(event: React.FormEvent) {
@@ -68,38 +67,23 @@ export default function NewProjectPage() {
           />
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2">
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-muted">
-              <Code2 size={16} className="text-accent" />
-              Primary Language
-            </label>
-            <select
-              className="w-full"
-              value={form.language}
-              onChange={(e) => setForm({ ...form, language: e.target.value })}
-            >
-              <option value="typescript">TypeScript</option>
-              <option value="javascript">JavaScript</option>
-              <option value="python">Python</option>
-              <option value="go">Go</option>
-              <option value="rust">Rust</option>
-              <option value="java">Java</option>
-            </select>
-          </div>
-
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-muted">
-              <GitBranch size={16} className="text-accent" />
-              GitHub Repository
-            </label>
-            <input
-              className="w-full"
-              placeholder="owner/repo"
-              value={form.githubRepo}
-              onChange={(e) => setForm({ ...form, githubRepo: e.target.value })}
-            />
-          </div>
+        <div className="space-y-2">
+          <label className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-muted">
+            <Code2 size={16} className="text-accent" />
+            Primary Language
+          </label>
+          <select
+            className="w-full"
+            value={form.language}
+            onChange={(e) => setForm({ ...form, language: e.target.value })}
+          >
+            <option value="typescript">TypeScript</option>
+            <option value="javascript">JavaScript</option>
+            <option value="python">Python</option>
+            <option value="go">Go</option>
+            <option value="rust">Rust</option>
+            <option value="java">Java</option>
+          </select>
         </div>
 
         <div className="pt-4">

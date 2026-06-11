@@ -21,6 +21,7 @@ export interface Review {
   aiSuggestions: AISuggestion[];
   status: "pending" | "reviewed" | "resolved";
   commentCount: number;
+  correctedCode?: string;
   createdAt: string;
   updatedAt: string;
 }

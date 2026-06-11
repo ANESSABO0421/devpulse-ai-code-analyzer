@@ -166,6 +166,7 @@ export default function ReviewDetailPage() {
               language={currentReview.language}
               readOnly
               suggestions={currentReview.aiSuggestions}
+              correctedCode={currentReview.correctedCode}
             />
           </div>
 

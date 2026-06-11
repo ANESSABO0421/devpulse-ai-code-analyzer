@@ -12,6 +12,7 @@ export interface IReview extends Document {
   aiSuggestions: AISuggestion[];
   status: "pending" | "reviewed" | "resolved";
   commentCount: number;
+  correctedCode: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -45,6 +46,7 @@ const reviewSchema = new Schema<IReview>(
       default: "pending",
     },
     commentCount: { type: Number, default: 0 },
+    correctedCode: { type: String, default: "" },
   },
   { timestamps: true },
 );

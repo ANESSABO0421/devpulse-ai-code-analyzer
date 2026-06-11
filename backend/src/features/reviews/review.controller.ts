@@ -166,6 +166,7 @@ export async function rerunAiReview(req: Request, res: Response, next: NextFunct
     review.aiScore = analysis.aiScore;
     review.aiSummary = analysis.aiSummary;
     review.aiSuggestions = analysis.aiSuggestions;
+    review.correctedCode = analysis.correctedCode;
     await review.save();
 
     return sendSuccess(res, analysis);

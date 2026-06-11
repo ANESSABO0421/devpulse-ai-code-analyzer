@@ -30,6 +30,7 @@ function buildPrompt(code: string, language: string) {
 - score: number (0-100, code quality score)
 - summary: string (2-3 sentence overall assessment)
 - suggestions: array of { line: number, type: "error"|"warning"|"suggestion"|"praise", message: string }
+- correctedCode: string (a complete, improved version of the original code incorporating all suggestions. MUST be a string, not an array)
 
 Code:
 ${code}
@@ -86,6 +87,7 @@ function normalizeAnalysis(payload: {
   score?: number;
   summary?: string;
   suggestions?: AISuggestion[];
+  correctedCode?: string;
 }) {
   return {
     aiScore: Math.max(0, Math.min(100, Number(payload.score) || 0)),
@@ -97,5 +99,6 @@ function normalizeAnalysis(payload: {
           message: item.message || "No message provided.",
         }))
       : [],
+    correctedCode: payload.correctedCode || "",
   };
 }
