@@ -5,7 +5,6 @@ import "./globals.css";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { SmoothScroll } from "@/components/ui/SmoothScroll";
-import { ClientPageLoader } from "@/components/ui/ClientPageLoader";
 
 const displayFont = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -55,7 +54,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <ClientPageLoader />
         <SmoothScroll>
           <div className="bg-mesh" />
           <div className="bg-grid" />

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -106,9 +107,9 @@ export default function RegisterPage() {
 
         <p className="text-center text-sm text-[color:var(--muted)]">
           Already have an account?{" "}
-          <a href="/login" className="font-semibold text-[color:var(--accent)] transition-colors hover:underline">
+          <Link href="/login" className="font-semibold text-[color:var(--accent)] transition-colors hover:underline">
             Sign in
-          </a>
+          </Link>
         </p>
       </form>
     </AuthLayout>
