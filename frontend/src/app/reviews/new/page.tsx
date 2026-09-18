@@ -83,7 +83,7 @@ function NewReviewContent() {
   return (
     <AppShell>
       <section className="mb-10">
-        <h1 className="text-4xl font-black text-white md:text-5xl">New Review</h1>
+        <h1 className="text-3xl font-black text-white sm:text-4xl md:text-5xl">New Review</h1>
         <p className="mt-4 max-w-2xl text-lg text-muted">
           Paste code or import from GitHub. Let our AI analyze security, performance, and best practices in seconds.
         </p>

@@ -8,7 +8,7 @@ export function ProjectStats({
   items: Array<{ label: string; value: string | number }>;
 }) {
   return (
-    <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
       {items.map((item, index) => (
         <div
           key={item.label}

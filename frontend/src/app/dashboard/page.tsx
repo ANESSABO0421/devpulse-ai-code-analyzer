@@ -104,7 +104,7 @@ export default function DashboardPage() {
         <section className="dash-header mb-10 flex items-end justify-between gap-4 border-b-[3px] border-[color:var(--edge)] pb-6">
           <div>
             <span className="section-label">Workspace</span>
-            <h1 className="mt-3 text-5xl font-black leading-[0.95] tracking-tight text-[color:var(--foreground)] md:text-6xl">
+            <h1 className="mt-3 text-4xl font-black leading-[0.95] tracking-tight text-[color:var(--foreground)] sm:text-5xl md:text-6xl">
               Dashboard<span className="text-[color:var(--accent)]">.</span>
             </h1>
           </div>

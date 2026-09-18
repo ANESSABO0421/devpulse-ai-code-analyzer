@@ -104,7 +104,7 @@ export function CodeEditor({
   }, []);
 
   return (
-    <div className="flex flex-col overflow-hidden">
+    <div className="flex h-[400px] flex-col overflow-hidden md:h-[520px]">
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b-2 border-[color:var(--line)] bg-[color:var(--surface-muted)] px-3 py-2.5 sm:px-4">
         <div className="flex gap-3 sm:gap-4">
           <button
@@ -128,7 +128,7 @@ export function CodeEditor({
         </button>
       </div>
       <MonacoEditor
-        height="480px"
+        height="100%"
         defaultLanguage={language}
         language={language}
         value={activeTab === "corrected" ? correctedCode : value}
