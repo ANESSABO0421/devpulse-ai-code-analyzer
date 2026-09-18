@@ -91,11 +91,11 @@ export default function ProfilePage() {
         <div className="relative px-6 pb-6">
           <div className="-mt-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <div className="flex items-end gap-5">
-              <div className="rounded-full ring-4 ring-[color:var(--background)]">
+              <div className="shrink-0 h-24 w-24 rounded-full ring-4 ring-[color:var(--background)]">
                 <Avatar user={user} size={96} />
               </div>
-              <div className="pb-1">
-                <h1 className="font-display text-3xl font-extrabold tracking-tight md:text-4xl">{user.name}</h1>
+              <div className="pb-1 min-w-0">
+                <h1 className="font-display text-3xl font-extrabold tracking-tight md:text-4xl break-words">{user.name}</h1>
                 <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-[color:var(--muted)]">
                   <span className="flex items-center gap-1.5">
                     <Mail size={14} />
