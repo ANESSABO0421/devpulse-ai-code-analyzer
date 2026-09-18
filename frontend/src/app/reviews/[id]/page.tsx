@@ -253,7 +253,7 @@ export default function ReviewDetailPage() {
           </section>
         </div>
 
-        <aside className="space-y-6">
+        <aside className="space-y-6 self-start">
           <AIFeedback review={currentReview} />
         </aside>
       </div>

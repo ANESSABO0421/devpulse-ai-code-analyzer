@@ -128,7 +128,7 @@ export default function ProfilePage() {
       </div>
 
       {/* Stats grid */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {[
           { icon: FileText, label: "Total Reviews", value: stats.reviewCount, color: "var(--accent)" },
           { icon: Briefcase, label: "Projects", value: stats.projectCount, color: "var(--accent-secondary)" },

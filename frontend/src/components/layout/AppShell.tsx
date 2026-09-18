@@ -21,7 +21,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <div className="app-shell">
       <Sidebar collapsed={collapsed} onToggle={toggle} />
       <div className={cn("app-main", collapsed && "is-collapsed")}>
-        <div className="shell max-w-none px-6 py-8 lg:px-10">{children}</div>
+        <div className="shell max-w-none space-y-6 px-6 py-8 lg:px-10">{children}</div>
       </div>
     </div>
   );

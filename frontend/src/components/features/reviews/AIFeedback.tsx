@@ -15,7 +15,7 @@ export function AIFeedback({ review }: { review: Review }) {
   };
 
   return (
-    <div className="card flex flex-col p-6 shadow-[var(--shadow-soft)] sm:p-8">
+    <div className="card sticky top-4 flex max-h-[calc(100vh-6rem)] flex-col p-6 shadow-[var(--shadow-soft)] sm:p-8">
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <Sparkles size={20} className="text-[color:var(--accent)]" />
@@ -27,12 +27,13 @@ export function AIFeedback({ review }: { review: Review }) {
         </div>
       </div>
 
-      <div className="mb-10 rounded-[var(--radius-md)] border-2 border-[color:var(--line)] bg-[color:var(--surface-muted)] p-6">
+      <div className="mb-6 rounded-[var(--radius-md)] border-2 border-[color:var(--line)] bg-[color:var(--surface-muted)] p-6">
         <p className="text-base italic leading-relaxed text-muted">&quot;{review.aiSummary}&quot;</p>
       </div>
 
-      <div className="space-y-4">
-        <h4 className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-muted">Automated Findings</h4>
+      <div className="min-h-0 flex-1 overflow-y-auto">
+        <h4 className="sticky top-0 z-10 mb-4 bg-[color:var(--surface)] pb-2 text-xs font-black uppercase tracking-[0.2em] text-muted">Automated Findings</h4>
+        <div className="space-y-5">
         {review.aiSuggestions.map((item, index) => (
           <div
             key={`${item.line}-${index}`}
@@ -52,6 +53,7 @@ export function AIFeedback({ review }: { review: Review }) {
             <p className="text-sm leading-relaxed text-muted transition-colors group-hover:text-[color:var(--foreground)]">{item.message}</p>
           </div>
         ))}
+        </div>
       </div>
     </div>
   );
