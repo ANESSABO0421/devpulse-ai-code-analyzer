@@ -198,8 +198,8 @@ export default function GithubImportPage() {
                     }`}
                     onClick={() => selectRepo(repo)}
                   >
-                    <div className="font-semibold">{repo.fullName}</div>
-                    <div className="text-sm text-[var(--muted)]">Default branch: {repo.defaultBranch}</div>
+                    <div className="font-semibold truncate" title={repo.fullName}>{repo.fullName}</div>
+                    <div className="truncate text-sm text-[var(--muted)]">Default branch: {repo.defaultBranch}</div>
                   </button>
                 ))
               ) : (
@@ -215,7 +215,7 @@ export default function GithubImportPage() {
                 <FileCode size={16} className="text-accent" />
                 Repository Files
               </div>
-              <p className="mt-2 text-sm text-muted">
+              <p className="mt-2 break-all text-sm text-muted">
                 {form.repoFullName ? form.repoFullName : "Select a repository to browse files"}
               </p>
             </div>

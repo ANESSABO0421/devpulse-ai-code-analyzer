@@ -20,7 +20,7 @@ export const ReviewCard = memo(function ReviewCard({
     <div className="premium-card pl-6 pr-6 py-5">
       <div className="mb-4 flex items-start justify-between gap-4">
         <Link href={`/reviews/${review._id}`} className="min-w-0 flex-1">
-          <h3 className="text-lg font-extrabold text-[color:var(--foreground)] transition-colors group-hover:text-[color:var(--accent)]">{review.title}</h3>
+          <h3 className="break-all text-lg font-extrabold text-[color:var(--foreground)] transition-colors group-hover:text-[color:var(--accent)]">{review.title}</h3>
           <p className="mt-1 text-xs font-bold uppercase tracking-wider text-muted">{formatDate(review.createdAt)}</p>
         </Link>
         <div className="flex items-center gap-2">

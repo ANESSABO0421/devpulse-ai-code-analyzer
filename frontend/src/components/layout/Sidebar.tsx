@@ -2,6 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useLayoutStore } from "@/store/useLayoutStore";
+import { useAuthStore } from "@/store/useAuthStore";
+import { Avatar } from "@/components/ui/Avatar";
+import { Button } from "@/components/ui/Button";
 import {
   Briefcase,
   ChevronLeft,
@@ -33,9 +37,13 @@ export function Sidebar({
   onToggle: () => void;
 }) {
   const pathname = usePathname();
+  const mobileSidebarOpen = useLayoutStore((state) => state.mobileSidebarOpen);
+  const user = useAuthStore((state) => state.user);
+  const token = useAuthStore((state) => state.token);
+  const logout = useAuthStore((state) => state.logout);
 
   return (
-    <aside className={cn("app-sidebar", collapsed && "is-collapsed")}>
+    <aside className={cn("app-sidebar", collapsed && "is-collapsed", mobileSidebarOpen && "mobile-open")}>
       <div
         className={cn(
           "flex items-center overflow-hidden border-b-[2.5px] border-[color:var(--edge)] px-4 py-3 lg:py-4",
@@ -53,8 +61,8 @@ export function Sidebar({
         </span>
       </div>
 
-      <nav className="flex-1 overflow-x-auto overflow-y-hidden px-2.5 py-2.5 lg:overflow-x-hidden lg:overflow-y-auto lg:py-4">
-        <div className="flex gap-1.5 lg:flex-col">
+      <nav className="flex-1 overflow-y-auto overflow-x-hidden px-2.5 py-2.5 lg:py-4">
+        <div className="flex flex-col gap-1.5">
           {items.map((item) => {
             const isActive =
               pathname === item.href ||
@@ -71,6 +79,7 @@ export function Sidebar({
                   collapsed && "lg:justify-center lg:px-0",
                   isActive && "sidebar-item-active",
                 )}
+                onClick={() => useLayoutStore.getState().setMobileSidebarOpen(false)}
               >
                 <item.icon size={17} className="shrink-0" />
                 <span className={cn("truncate", collapsed && "lg:sr-only")}>{item.label}</span>
@@ -89,6 +98,27 @@ export function Sidebar({
         {collapsed ? <ChevronRight size={15} className="mx-auto" /> : <ChevronLeft size={15} />}
         {!collapsed ? <span>Collapse</span> : null}
       </button>
+
+      {token && user && (
+        <div className="lg:hidden flex items-center justify-between border-t-[2.5px] border-[color:var(--edge)] p-4">
+          <Link
+            href="/profile"
+            className="flex items-center gap-2.5 min-w-0"
+            onClick={() => useLayoutStore.getState().setMobileSidebarOpen(false)}
+          >
+            <Avatar user={user} size={32} />
+            <span className="truncate text-sm font-semibold text-[color:var(--foreground)]">
+              {user.name.split(" ")[0]}
+            </span>
+          </Link>
+          <Button variant="secondary" size="sm" className="px-3 text-[11px]" onClick={() => {
+            logout();
+            useLayoutStore.getState().setMobileSidebarOpen(false);
+          }}>
+            Log Out
+          </Button>
+        </div>
+      )}
     </aside>
   );
 }

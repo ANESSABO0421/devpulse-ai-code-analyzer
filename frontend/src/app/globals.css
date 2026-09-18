@@ -266,13 +266,20 @@ input::placeholder, textarea::placeholder {
   top: var(--nav-h);
   left: 0;
   bottom: 0;
-  z-index: 40;
+  z-index: 50;
   width: var(--sidebar-w);
   display: flex;
   flex-direction: column;
   background: var(--surface-strong);
   border-right: var(--border-w) solid var(--edge);
-  transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s ease-in-out;
+}
+
+.mobile-sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 40;
 }
 
 .app-sidebar.is-collapsed {
@@ -290,12 +297,20 @@ input::placeholder, textarea::placeholder {
 }
 
 @media (max-width: 1023px) {
-  .app-sidebar {
-    position: static;
-    width: 100% !important;
-    height: auto;
-    border-right: none;
-    border-bottom: 1px solid var(--line);
+  .app-sidebar,
+  .app-sidebar.is-collapsed {
+    position: fixed;
+    top: var(--nav-h);
+    left: 0;
+    width: var(--sidebar-w);
+    height: calc(100vh - var(--nav-h));
+    border-right: var(--border-w) solid var(--edge);
+    transform: translateX(-100%);
+  }
+
+  .app-sidebar.mobile-open,
+  .app-sidebar.is-collapsed.mobile-open {
+    transform: translateX(0);
   }
 
   .app-main,
