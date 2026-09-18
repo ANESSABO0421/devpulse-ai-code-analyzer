@@ -62,7 +62,7 @@ export default function ProjectIssuesPage() {
           loadIssues();
         }}
       />
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {issues.map((issue) => <IssueCard key={issue._id} issue={issue} />)}
       </div>
     </AppShell>

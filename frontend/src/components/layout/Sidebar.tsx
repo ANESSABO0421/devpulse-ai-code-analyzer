@@ -43,7 +43,10 @@ export function Sidebar({
   const logout = useAuthStore((state) => state.logout);
 
   return (
-    <aside className={cn("app-sidebar", collapsed && "is-collapsed", mobileSidebarOpen && "mobile-open")}>
+    <aside
+      id="app-sidebar"
+      className={cn("app-sidebar", collapsed && "is-collapsed", mobileSidebarOpen && "mobile-open")}
+    >
       <div
         className={cn(
           "flex items-center overflow-hidden border-b-[2.5px] border-[color:var(--edge)] px-4 py-3 lg:py-4",

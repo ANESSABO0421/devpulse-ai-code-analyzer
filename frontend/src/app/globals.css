@@ -132,8 +132,14 @@ html[data-theme="light"] .bg-grid {
 }
 
 .shell {
-  width: min(1320px, calc(100% - 2.5rem));
+  width: min(1320px, calc(100% - 2rem));
   margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .shell {
+    width: min(1320px, calc(100% - 2.5rem));
+  }
 }
 
 /* ─── Surfaces ─── */
@@ -277,9 +283,15 @@ input::placeholder, textarea::placeholder {
 
 .mobile-sidebar-backdrop {
   position: fixed;
-  inset: 0;
+  inset: var(--nav-h) 0 0 0;
   background: rgba(0, 0, 0, 0.5);
   z-index: 40;
+}
+
+@media (min-width: 1024px) {
+  .mobile-sidebar-backdrop {
+    display: none;
+  }
 }
 
 .app-sidebar.is-collapsed {
@@ -302,10 +314,12 @@ input::placeholder, textarea::placeholder {
     position: fixed;
     top: var(--nav-h);
     left: 0;
-    width: var(--sidebar-w);
-    height: calc(100vh - var(--nav-h));
+    width: min(var(--sidebar-w), 82vw);
+    max-width: 320px;
+    height: calc(100dvh - var(--nav-h));
     border-right: var(--border-w) solid var(--edge);
     transform: translateX(-100%);
+    box-shadow: 6px 0 18px rgba(0, 0, 0, 0.28);
   }
 
   .app-sidebar.mobile-open,
@@ -316,6 +330,17 @@ input::placeholder, textarea::placeholder {
   .app-main,
   .app-main.is-collapsed {
     margin-left: 0;
+  }
+
+  body.sidebar-drawer-open {
+    overflow: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-sidebar,
+  .app-main {
+    transition: none;
   }
 }
 
@@ -366,10 +391,16 @@ input::placeholder, textarea::placeholder {
 
 /* ─── Auth layout ─── */
 .auth-shell {
-  min-height: calc(100vh - 80px);
+  min-height: calc(100dvh - var(--nav-h));
   display: grid;
   place-items: center;
-  padding: 2rem 0 4rem;
+  padding: 1.5rem 1rem 2.5rem;
+}
+
+@media (min-width: 640px) {
+  .auth-shell {
+    padding: 2rem 1.5rem 4rem;
+  }
 }
 
 .auth-grid {
@@ -382,7 +413,7 @@ input::placeholder, textarea::placeholder {
   box-shadow: var(--shadow-soft);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
   .auth-grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -393,7 +424,8 @@ input::placeholder, textarea::placeholder {
   display: none;
   flex-direction: column;
   justify-content: space-between;
-  padding: 3rem;
+  gap: 2.5rem;
+  padding: 2.5rem;
   background:
     radial-gradient(circle at 20% 20%, rgba(226, 135, 47, 0.22), transparent 45%),
     radial-gradient(circle at 80% 80%, rgba(124, 92, 255, 0.22), transparent 50%),
@@ -401,9 +433,15 @@ input::placeholder, textarea::placeholder {
   overflow: hidden;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
   .auth-brand-panel {
     display: flex;
+  }
+}
+
+@media (min-width: 1280px) {
+  .auth-brand-panel {
+    padding: 3rem;
   }
 }
 
