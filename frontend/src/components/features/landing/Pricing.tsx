@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useRef } from "react";
 import { Button } from "@/components/ui/Button";
+import { CtaLink } from "@/components/ui/CtaLink";
 import { Check, Crown } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -56,11 +56,11 @@ export function Pricing() {
             ))}
           </ul>
 
-          <Link href="/register" className="mt-8">
+          <CtaLink className="mt-8">
             <Button variant="outline" className="h-12 w-full">
               Get Started
             </Button>
-          </Link>
+          </CtaLink>
         </div>
 
         <div className="pricing-card premium-card relative flex flex-col border-[color:var(--accent)]/40 p-8">
@@ -84,9 +84,9 @@ export function Pricing() {
             ))}
           </ul>
 
-          <Link href="/register" className="mt-8">
+          <CtaLink className="mt-8">
             <Button className="h-12 w-full">Upgrade to Pro</Button>
-          </Link>
+          </CtaLink>
         </div>
       </div>
     </section>

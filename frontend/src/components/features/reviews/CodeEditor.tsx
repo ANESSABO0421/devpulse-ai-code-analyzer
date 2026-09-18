@@ -104,25 +104,25 @@ export function CodeEditor({
   }, []);
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-[22px] border border-[var(--line)]">
-      <div className="flex items-center justify-between border-b border-[var(--line)] bg-[var(--surface-muted)] px-4 py-2">
-        <div className="flex gap-4">
+    <div className="flex flex-col overflow-hidden">
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b-2 border-[color:var(--line)] bg-[color:var(--surface-muted)] px-3 py-2.5 sm:px-4">
+        <div className="flex gap-3 sm:gap-4">
           <button
-            className={`text-sm font-semibold transition-colors ${activeTab === "original" ? "text-[color:var(--accent)]" : "text-muted hover:text-foreground"}`}
+            className={`text-xs font-bold sm:text-sm ${activeTab === "original" ? "text-[color:var(--accent)]" : "text-muted hover:text-foreground"}`}
             onClick={() => setActiveTab("original")}
           >
             Original Code
           </button>
           {correctedCode && (
             <button
-              className={`text-sm font-semibold transition-colors ${activeTab === "corrected" ? "text-[color:var(--accent)]" : "text-muted hover:text-foreground"}`}
+              className={`text-xs font-bold sm:text-sm ${activeTab === "corrected" ? "text-[color:var(--accent)]" : "text-muted hover:text-foreground"}`}
               onClick={() => setActiveTab("corrected")}
             >
               Corrected Code
             </button>
           )}
         </div>
-        <button onClick={handleCopy} className="flex items-center gap-1.5 p-1 text-xs font-semibold text-muted transition-colors hover:text-foreground" title="Copy code">
+        <button onClick={handleCopy} className="flex items-center gap-1.5 p-1 text-xs font-bold text-muted transition-colors hover:text-foreground" title="Copy code">
           {copied ? <Check size={14} className="text-[color:var(--success)]" /> : <Copy size={14} />}
           {copied ? "Copied!" : "Copy"}
         </button>

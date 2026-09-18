@@ -9,7 +9,7 @@ export function ReviewStatus({
     <select
       value={value}
       onChange={(event) => onChange(event.target.value)}
-      className="rounded-full border border-[var(--line)] bg-white px-4 py-2"
+      className="rounded-md border-2 border-[color:var(--edge)] bg-[color:var(--surface)] px-4 py-2 font-bold text-[color:var(--foreground)]"
     >
       <option value="pending">Pending</option>
       <option value="reviewed">Reviewed</option>

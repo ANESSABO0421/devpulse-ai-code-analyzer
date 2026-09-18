@@ -1,19 +1,23 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 
 export function useAuth(required = true) {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, token, logout } = useAuthStore();
+  const user = useAuthStore((state) => state.user);
+  const token = useAuthStore((state) => state.token);
+  const hasHydrated = useAuthStore((state) => state.hasHydrated);
+  const logout = useAuthStore((state) => state.logout);
 
   useEffect(() => {
+    if (!hasHydrated) return;
     if (required && !token && !pathname.startsWith("/login") && !pathname.startsWith("/register")) {
       router.push("/login");
     }
-  }, [pathname, required, router, token]);
+  }, [hasHydrated, pathname, required, router, token]);
 
-  return { user, token, logout };
+  return useMemo(() => ({ user, token, logout }), [user, token, logout]);
 }

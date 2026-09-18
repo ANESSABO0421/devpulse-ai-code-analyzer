@@ -1,10 +1,28 @@
+"use client";
+
+import { useState } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { cn } from "@/lib/utils";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+  const [collapsed, setCollapsed] = useState(
+    () => typeof window !== "undefined" && window.localStorage.getItem("devpulse-sidebar") === "collapsed",
+  );
+
+  function toggle() {
+    setCollapsed((current) => {
+      const next = !current;
+      window.localStorage.setItem("devpulse-sidebar", next ? "collapsed" : "expanded");
+      return next;
+    });
+  }
+
   return (
-    <div className="shell grid gap-6 py-6 lg:grid-cols-[auto_minmax(0,1fr)] lg:py-8">
-      <Sidebar />
-      <div className="min-w-0 space-y-6">{children}</div>
+    <div className="app-shell">
+      <Sidebar collapsed={collapsed} onToggle={toggle} />
+      <div className={cn("app-main", collapsed && "is-collapsed")}>
+        <div className="shell max-w-none px-6 py-8 lg:px-10">{children}</div>
+      </div>
     </div>
   );
 }

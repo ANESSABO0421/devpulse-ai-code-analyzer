@@ -148,7 +148,7 @@ export default function GithubImportPage() {
   return (
     <AppShell>
       <div>
-        <h1 className="text-5xl font-black">GitHub Import</h1>
+        <h1 className="text-3xl font-black sm:text-4xl lg:text-5xl break-words">GitHub Import</h1>
         <p className="mt-3 text-[var(--muted)]">Pick a connected repository, choose a file, and open it in a new review draft.</p>
       </div>
       <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">

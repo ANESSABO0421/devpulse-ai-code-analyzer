@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import { CtaLink } from "@/components/ui/CtaLink";
 import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -42,12 +43,12 @@ export function CTA() {
             Join hundreds of teams using DevPulse to review smarter, collaborate faster, and merge with confidence.
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link href="/register">
+            <CtaLink>
               <Button size="lg">
                 Start Free Trial
                 <ArrowRight size={18} />
               </Button>
-            </Link>
+            </CtaLink>
             <Link href="/reviews">
               <Button variant="secondary" size="lg">
                 View Demo

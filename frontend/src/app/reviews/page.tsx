@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
 import { ReviewCard } from "@/components/features/reviews/ReviewCard";
@@ -9,12 +9,10 @@ import { axiosInstance } from "@/lib/axios";
 import { getApiErrorMessage } from "@/lib/api";
 import { Review } from "@/types/review";
 import { useAuth } from "@/hooks/useAuth";
-import { useAuthStore } from "@/store/useAuthStore";
 import toast from "react-hot-toast";
 
 export default function ReviewsPage() {
-  useAuth();
-  const { user } = useAuthStore();
+  const { user } = useAuth();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [status, setStatus] = useState("");
   const [deletingReviewId, setDeletingReviewId] = useState<string | null>(null);
@@ -23,28 +21,40 @@ export default function ReviewsPage() {
     axiosInstance.get("/reviews", { params: { status } }).then(({ data }) => setReviews(data.reviews));
   }, [status]);
 
-  async function handleDeleteReview(review: Review) {
-    const authorId = typeof review.authorId === "string" ? review.authorId : review.authorId?._id;
-    if (!user || authorId !== user._id) return;
-    if (!window.confirm(`Delete review "${review.title}"? This cannot be undone.`)) return;
+  const handleDeleteReview = useCallback(
+    async (review: Review) => {
+      const authorId = typeof review.authorId === "string" ? review.authorId : review.authorId?._id;
+      if (!user || authorId !== user._id) return;
+      if (!window.confirm(`Delete review "${review.title}"? This cannot be undone.`)) return;
 
-    setDeletingReviewId(review._id);
-    try {
-      await axiosInstance.delete(`/reviews/${review._id}`);
-      setReviews((current) => current.filter((entry) => entry._id !== review._id));
-      toast.success("Review deleted");
-    } catch (error: unknown) {
-      toast.error(getApiErrorMessage(error, "Delete failed"));
-    } finally {
-      setDeletingReviewId(null);
-    }
-  }
+      setDeletingReviewId(review._id);
+      try {
+        await axiosInstance.delete(`/reviews/${review._id}`);
+        setReviews((current) => current.filter((entry) => entry._id !== review._id));
+        toast.success("Review deleted");
+      } catch (error: unknown) {
+        toast.error(getApiErrorMessage(error, "Delete failed"));
+      } finally {
+        setDeletingReviewId(null);
+      }
+    },
+    [user],
+  );
+
+  const reviewsWithAuthorId = useMemo(
+    () =>
+      reviews.map((review) => ({
+        review,
+        authorId: typeof review.authorId === "string" ? review.authorId : review.authorId?._id,
+      })),
+    [reviews],
+  );
 
   return (
     <AppShell>
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <h1 className="text-5xl font-black">Reviews</h1>
+          <h1 className="text-3xl font-black sm:text-4xl lg:text-5xl break-words">Reviews</h1>
           <p className="mt-3 text-[var(--muted)]">Browse every AI-assisted review and focus on what still needs discussion.</p>
         </div>
         <Link href="/reviews/new"><Button>New Review</Button></Link>
@@ -58,18 +68,15 @@ export default function ReviewsPage() {
         </select>
       </div>
       <div className="grid gap-5">
-        {reviews.map((review) => {
-          const authorId = typeof review.authorId === "string" ? review.authorId : review.authorId?._id;
-          return (
-            <ReviewCard
-              key={review._id}
-              review={review}
-              canDelete={authorId === user?._id}
-              deleting={deletingReviewId === review._id}
-              onDelete={handleDeleteReview}
-            />
-          );
-        })}
+        {reviewsWithAuthorId.map(({ review, authorId }) => (
+          <ReviewCard
+            key={review._id}
+            review={review}
+            canDelete={authorId === user?._id}
+            deleting={deletingReviewId === review._id}
+            onDelete={handleDeleteReview}
+          />
+        ))}
       </div>
     </AppShell>
   );

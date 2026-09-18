@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/Button";
 import { AuthLayout } from "@/components/layout/AuthLayout";
@@ -10,27 +10,36 @@ import { getApiErrorMessage } from "@/lib/api";
 import { axiosInstance } from "@/lib/axios";
 import { getServerBaseUrl } from "@/lib/env";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useGuestOnly } from "@/hooks/useGuestOnly";
 import { User, Mail, Lock, UserPlus, GitBranch } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { setAuth } = useAuthStore();
+  const setAuth = useAuthStore((state) => state.setAuth);
+  const { ready } = useGuestOnly();
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(event: React.FormEvent) {
-    event.preventDefault();
-    setLoading(true);
-    try {
-      const { data } = await axiosInstance.post("/auth/register", form);
-      setAuth(data.user, data.token);
-      toast.success("Account created");
-      router.push("/dashboard");
-    } catch (error: unknown) {
-      toast.error(getApiErrorMessage(error, "Registration failed"));
-    } finally {
-      setLoading(false);
-    }
+  const handleSubmit = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
+      setLoading(true);
+      try {
+        const { data } = await axiosInstance.post("/auth/register", form);
+        setAuth(data.user, data.token);
+        toast.success("Account created");
+        router.push("/dashboard");
+      } catch (error: unknown) {
+        toast.error(getApiErrorMessage(error, "Registration failed"));
+      } finally {
+        setLoading(false);
+      }
+    },
+    [form, router, setAuth],
+  );
+
+  if (!ready) {
+    return null;
   }
 
   return (

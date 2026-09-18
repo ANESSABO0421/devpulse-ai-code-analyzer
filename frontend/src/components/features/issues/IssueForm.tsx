@@ -40,17 +40,17 @@ export function IssueForm({
       }}
     >
       <h3 className="text-xl font-semibold">Create Issue</h3>
-      <input className="w-full rounded-2xl border border-[var(--line)] bg-white px-4 py-3" placeholder="Issue title" value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} />
-      <textarea className="min-h-32 w-full rounded-2xl border border-[var(--line)] bg-white px-4 py-3" placeholder="Describe the bug or follow-up task" value={form.description} onChange={(event) => setForm({ ...form, description: event.target.value })} />
+      <input className="w-full rounded-2xl border border-[var(--line)] px-4 py-3" placeholder="Issue title" value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} />
+      <textarea className="min-h-32 w-full rounded-2xl border border-[var(--line)] px-4 py-3" placeholder="Describe the bug or follow-up task" value={form.description} onChange={(event) => setForm({ ...form, description: event.target.value })} />
       <div className="grid gap-4 md:grid-cols-3">
-        <select className="rounded-2xl border border-[var(--line)] bg-white px-4 py-3" value={form.severity} onChange={(event) => setForm({ ...form, severity: event.target.value })}>
+        <select className="rounded-2xl border border-[var(--line)] px-4 py-3" value={form.severity} onChange={(event) => setForm({ ...form, severity: event.target.value })}>
           <option value="low">Low</option>
           <option value="medium">Medium</option>
           <option value="high">High</option>
           <option value="critical">Critical</option>
         </select>
-        <input className="rounded-2xl border border-[var(--line)] bg-white px-4 py-3" placeholder="frontend, api, auth" value={form.tags} onChange={(event) => setForm({ ...form, tags: event.target.value })} />
-        <select className="rounded-2xl border border-[var(--line)] bg-white px-4 py-3" value={form.linkedReviewId} onChange={(event) => setForm({ ...form, linkedReviewId: event.target.value })}>
+        <input className="rounded-2xl border border-[var(--line)] px-4 py-3" placeholder="frontend, api, auth" value={form.tags} onChange={(event) => setForm({ ...form, tags: event.target.value })} />
+        <select className="rounded-2xl border border-[var(--line)] px-4 py-3" value={form.linkedReviewId} onChange={(event) => setForm({ ...form, linkedReviewId: event.target.value })}>
           <option value="">No linked review</option>
           {linkedReviewOptions.map((option) => (
             <option key={option.value} value={option.value}>

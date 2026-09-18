@@ -105,7 +105,7 @@ export default function ProjectOverviewPage() {
       <section className="card p-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
-            <h1 className="text-5xl font-black">{project.name}</h1>
+            <h1 className="text-3xl font-black sm:text-4xl lg:text-5xl break-words">{project.name}</h1>
             <p className="mt-3 max-w-3xl text-[var(--muted)]">{project.description}</p>
           </div>
           <div className="flex items-center gap-3">
@@ -129,9 +129,9 @@ export default function ProjectOverviewPage() {
         ]}
       />
 
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
         {tabs.map((item) => (
-          <Button key={item} variant={tab === item ? "primary" : "secondary"} onClick={() => setTab(item)}>
+          <Button key={item} size="sm" variant={tab === item ? "primary" : "secondary"} onClick={() => setTab(item)} className="sm:h-11 sm:px-6 sm:text-sm">
             {item}
           </Button>
         ))}
@@ -145,11 +145,11 @@ export default function ProjectOverviewPage() {
             <h2 className="mb-5 text-2xl font-semibold">Members</h2>
             <div className="space-y-4">
               {members.map((member) => (
-                <div key={member._id} className="flex items-center gap-4 rounded-2xl border border-[var(--line)] bg-white/70 p-4">
+                <div key={member._id} className="flex items-center gap-4 rounded-[var(--radius-md)] border-2 border-[color:var(--line)] bg-[color:var(--surface-muted)] p-4">
                   <Avatar user={member} />
                   <div>
-                    <div className="font-semibold">{member.name}</div>
-                    <div className="text-sm text-[var(--muted)]">{member.email}</div>
+                    <div className="font-semibold text-[color:var(--foreground)]">{member.name}</div>
+                    <div className="text-sm text-muted">{member.email}</div>
                   </div>
                 </div>
               ))}
@@ -157,7 +157,7 @@ export default function ProjectOverviewPage() {
           </div>
           <form className="card space-y-4 p-6" onSubmit={inviteMember}>
             <h2 className="text-2xl font-semibold">Invite by Email</h2>
-            <input className="w-full rounded-2xl border border-[var(--line)] bg-white px-4 py-3" placeholder="teammate@example.com" value={email} onChange={(event) => setEmail(event.target.value)} />
+            <input className="w-full" placeholder="teammate@example.com" value={email} onChange={(event) => setEmail(event.target.value)} />
             <Button type="submit">Invite Member</Button>
           </form>
         </div>

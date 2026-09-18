@@ -9,13 +9,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export function Button({ className, variant = "primary", size = "md", ...props }: ButtonProps) {
   const variants = {
     primary:
-      "btn-glow bg-gradient-to-r from-[var(--accent)] to-[var(--accent-secondary)] text-white shadow-[0_8px_32px_rgba(34,211,238,0.25)] hover:shadow-[0_12px_40px_rgba(34,211,238,0.35)] hover:brightness-110",
+      "border-[color:var(--edge)] bg-[color:var(--accent)] text-[#191410] shadow-[var(--shadow-soft-sm)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_0_var(--edge)]",
     secondary:
-      "border border-[color:var(--glass-border)] bg-[color:var(--glass)] text-[color:var(--foreground)] backdrop-blur-xl hover:border-[color:var(--accent)]/35 hover:bg-[color:var(--accent-soft)]",
+      "border-[color:var(--edge)] bg-[color:var(--surface)] text-[color:var(--foreground)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_var(--edge)]",
     outline:
-      "border border-[color:var(--accent)]/50 text-[color:var(--accent)] hover:bg-[color:var(--accent-soft)] hover:border-[color:var(--accent)]",
+      "border-[color:var(--accent)] text-[color:var(--accent)] hover:bg-[color:var(--accent-soft)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_var(--accent)]",
     ghost:
-      "text-[color:var(--muted)] hover:bg-[color:var(--accent-soft)] hover:text-[color:var(--foreground)]",
+      "border-transparent text-[color:var(--muted)] hover:border-[color:var(--edge)] hover:bg-[color:var(--surface)] hover:text-[color:var(--foreground)]",
   };
 
   const sizes = {
@@ -27,7 +27,7 @@ export function Button({ className, variant = "primary", size = "md", ...props }
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-full font-bold transition-all duration-300 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50",
+        "inline-flex items-center justify-center gap-2 rounded-md border-2 font-bold uppercase tracking-wide transition-all duration-150 active:translate-x-0 active:translate-y-0 active:shadow-none disabled:cursor-not-allowed disabled:opacity-50",
         variants[variant],
         sizes[size],
         className,

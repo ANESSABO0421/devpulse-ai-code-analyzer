@@ -9,6 +9,7 @@ import { ReviewStatus } from "@/components/features/reviews/ReviewStatus";
 import { CodeEditor } from "@/components/features/reviews/CodeEditor";
 import { LineComment } from "@/components/features/reviews/LineComment";
 import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
 import { axiosInstance } from "@/lib/axios";
 import { useReview } from "@/hooks/useReview";
 import { useSocket } from "@/hooks/useSocket";
@@ -88,9 +89,9 @@ export default function ReviewDetailPage() {
   if (loading) {
     return (
       <AppShell>
-        <div className="rounded-xl border border-[#334155] bg-[#1E293B] flex h-64 flex-col items-center justify-center p-10 text-center">
-          <RefreshCw size={32} className="mb-4 animate-spin text-[#3B82F6]" />
-          <p className="text-[#94A3B8]">Loading review workspace...</p>
+        <div className="card flex h-64 flex-col items-center justify-center p-10 text-center">
+          <RefreshCw size={32} className="mb-4 animate-spin text-[color:var(--accent)]" />
+          <p className="text-muted">Loading review workspace...</p>
         </div>
       </AppShell>
     );
@@ -99,10 +100,10 @@ export default function ReviewDetailPage() {
   if (error || !currentReview) {
     return (
       <AppShell>
-        <div className="rounded-xl border border-[#EF4444]/30 bg-[#EF4444]/5 p-10 text-center">
-          <AlertCircle size={48} className="mx-auto mb-6 text-[#EF4444]" />
-          <h2 className="text-2xl font-bold text-[#F1F5F9]">Review not found</h2>
-          <p className="mt-4 text-[#94A3B8]">
+        <div className="card border-[color:var(--danger)] bg-[color:var(--danger)]/5 p-10 text-center">
+          <AlertCircle size={48} className="mx-auto mb-6 text-[color:var(--danger)]" />
+          <h2 className="text-2xl font-black text-[color:var(--foreground)]">Review not found</h2>
+          <p className="mt-4 text-muted">
             {error || "This review may have been deleted or moved to another workspace."}
           </p>
         </div>
@@ -115,14 +116,14 @@ export default function ReviewDetailPage() {
       <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-3xl">
           <div className="mb-3 flex items-center gap-2">
-            <span className="rounded-full border border-[#3B82F6]/30 bg-[#3B82F6]/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#3B82F6]">
-              {currentReview.language}
-            </span>
+            <Badge tone="info">{currentReview.language}</Badge>
           </div>
-          <h1 className="text-4xl font-bold text-[#F1F5F9] md:text-5xl">{currentReview.title}</h1>
-          <p className="mt-2 text-lg text-[#94A3B8]">Review with line comments and AI feedback.</p>
+          <h1 className="text-3xl font-black leading-[0.95] tracking-tight text-[color:var(--foreground)] sm:text-4xl md:text-5xl">
+            {currentReview.title}
+          </h1>
+          <p className="mt-2 text-base text-muted sm:text-lg">Review with line comments and AI feedback.</p>
         </div>
-        <div className="flex shrink-0 items-center gap-3">
+        <div className="flex shrink-0 flex-wrap items-center gap-3">
           <ReviewStatus
             value={currentReview.status}
             onChange={async (status) => {
@@ -143,9 +144,9 @@ export default function ReviewDetailPage() {
                 setIsRerunning(false);
               }
             }}
-            className="h-10 px-4 font-semibold border-[#3B82F6] text-[#3B82F6] hover:bg-[#3B82F6]/10"
+            className="h-10 px-4"
           >
-            <RefreshCw size={16} className={`mr-2 ${isRerunning ? "animate-spin" : ""}`} />
+            <RefreshCw size={16} className={isRerunning ? "animate-spin" : ""} />
             Refresh
           </Button>
           {canDeleteReview ? (
@@ -160,7 +161,7 @@ export default function ReviewDetailPage() {
 
       <div className="grid gap-8 xl:grid-cols-[1fr_400px]">
         <div className="space-y-8">
-          <div className="overflow-hidden rounded-xl border border-[#334155] bg-[#1E293B]">
+          <div className="card overflow-hidden">
             <CodeEditor
               value={currentReview.code}
               language={currentReview.language}
@@ -170,17 +171,17 @@ export default function ReviewDetailPage() {
             />
           </div>
 
-          <section className="rounded-xl border border-[#334155] bg-[#1E293B] p-6">
+          <section className="card p-5 sm:p-6">
             <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#3B82F6]/10">
-                <MessageCircle size={20} className="text-[#3B82F6]" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-sm)] border-2 border-[color:var(--edge)] bg-[color:var(--accent-quinary)]">
+                <MessageCircle size={20} className="text-[#f7f1e6]" />
               </div>
-              <h2 className="text-2xl font-bold text-[#F1F5F9]">Comments</h2>
+              <h2 className="text-2xl font-black text-[color:var(--foreground)]">Comments</h2>
             </div>
-            
+
             <div className="grid gap-6 xl:grid-cols-[minmax(300px,0.95fr)_minmax(0,1.25fr)] xl:items-start">
               <form
-                className="space-y-5 rounded-xl border border-[#334155] bg-[#0F172A] p-5"
+                className="space-y-5 rounded-[var(--radius-md)] border-2 border-[color:var(--line)] bg-[color:var(--surface-muted)] p-5"
                 onSubmit={async (event) => {
                   event.preventDefault();
                   if (!comment.trim()) return;
@@ -197,31 +198,31 @@ export default function ReviewDetailPage() {
                 }}
               >
                 <div className="space-y-2">
-                  <label className="flex items-center gap-2 text-sm font-semibold text-[#94A3B8]">
-                    <Hash size={14} className="text-[#3B82F6]" />
+                  <label className="flex items-center gap-2 text-sm font-semibold text-muted">
+                    <Hash size={14} className="text-[color:var(--accent)]" />
                     Line (Optional)
                   </label>
-                  <input 
-                    className="w-full text-sm" 
-                    placeholder="Line #" 
-                    value={line} 
-                    onChange={(e) => setLine(e.target.value)} 
+                  <input
+                    className="w-full text-sm"
+                    placeholder="Line #"
+                    value={line}
+                    onChange={(e) => setLine(e.target.value)}
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="flex items-center gap-2 text-sm font-semibold text-[#94A3B8]">
-                    <MessageCircle size={14} className="text-[#3B82F6]" />
+                  <label className="flex items-center gap-2 text-sm font-semibold text-muted">
+                    <MessageCircle size={14} className="text-[color:var(--accent)]" />
                     Comment
                   </label>
-                  <textarea 
-                    className="min-h-[120px] w-full resize-y text-sm leading-relaxed" 
-                    placeholder="Share your thoughts..." 
-                    value={comment} 
-                    onChange={(e) => setComment(e.target.value)} 
+                  <textarea
+                    className="min-h-[120px] w-full resize-y text-sm leading-relaxed"
+                    placeholder="Share your thoughts..."
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
                   />
                 </div>
-                <Button type="submit" className="h-11 w-full text-base font-semibold bg-[#3B82F6] hover:bg-[#2563EB] text-white">
-                  <Send size={16} className="mr-2" />
+                <Button type="submit" className="h-11 w-full text-base">
+                  <Send size={16} />
                   Post
                 </Button>
               </form>
@@ -229,19 +230,19 @@ export default function ReviewDetailPage() {
               <div className="space-y-6">
                 {groupedComments.lineComments.length > 0 && (
                   <div>
-                    <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#94A3B8]">Line-specific</h3>
+                    <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-muted">Line-specific</h3>
                     <div className="space-y-3">
                       {groupedComments.lineComments.map((item) => <LineComment key={item._id} comment={item} />)}
                     </div>
                   </div>
                 )}
                 <div>
-                  <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#94A3B8]">General</h3>
+                  <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-muted">General</h3>
                   <div className="space-y-3">
                     {groupedComments.generalComments.length > 0 ? (
                       groupedComments.generalComments.map((item) => <LineComment key={item._id} comment={item} />)
                     ) : (
-                      <div className="rounded-xl border border-dashed border-[#334155] bg-[#0F172A] px-5 py-6 text-sm italic text-[#94A3B8] text-center">
+                      <div className="rounded-[var(--radius-md)] border-2 border-dashed border-[color:var(--line)] px-5 py-6 text-center text-sm italic text-muted">
                         No comments yet.
                       </div>
                     )}

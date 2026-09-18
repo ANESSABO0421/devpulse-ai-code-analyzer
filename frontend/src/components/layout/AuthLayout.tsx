@@ -21,8 +21,8 @@ export function AuthLayout({ title, subtitle, children }: AuthLayoutProps) {
     <div className="auth-shell">
       <div className="auth-grid">
         <div className="auth-brand-panel">
-          <div className="auth-orb left-[-20%] top-[10%] h-48 w-48 bg-[rgba(34,211,238,0.25)]" />
-          <div className="auth-orb bottom-[15%] right-[-10%] h-56 w-56 bg-[rgba(99,102,241,0.3)]" style={{ animationDelay: "-3s" }} />
+          <div className="auth-orb left-[-20%] top-[10%] h-48 w-48 bg-[rgba(226,135,47,0.3)]" />
+          <div className="auth-orb bottom-[15%] right-[-10%] h-56 w-56 bg-[rgba(124,92,255,0.3)]" style={{ animationDelay: "-3s" }} />
 
           <div className="relative z-10">
             <Logo />
@@ -34,8 +34,8 @@ export function AuthLayout({ title, subtitle, children }: AuthLayoutProps) {
           <div className="relative z-10 space-y-4">
             {highlights.map(({ icon: Icon, text }) => (
               <div key={text} className="flex items-center gap-3 text-sm text-white/80">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 backdrop-blur-sm">
-                  <Icon size={16} className="text-cyan-300" />
+                <span className="flex h-8 w-8 items-center justify-center rounded-md border-2 border-white/15 bg-white/10">
+                  <Icon size={16} className="text-[#e2872f]" />
                 </span>
                 {text}
               </div>

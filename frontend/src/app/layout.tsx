@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
-import { Footer } from "@/components/layout/Footer";
-import { Navbar } from "@/components/layout/Navbar";
-import { SmoothScroll } from "@/components/ui/SmoothScroll";
+import { AppChrome } from "@/components/layout/AppChrome";
 
 const displayFont = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -28,7 +26,7 @@ export const metadata: Metadata = {
   title: "DevPulse | AI-Powered Code Review Workspace",
   description: "DevPulse combines Claude-powered review feedback, real-time threaded comments, and GitHub integration in one premium workspace.",
   icons: {
-    icon: "/devpulse-logo-mark.png",
+    icon: "/favicon.svg",
   },
 };
 
@@ -53,27 +51,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body>
-        <SmoothScroll>
-          <div className="bg-mesh" />
-          <div className="bg-grid" />
-          <div className="bg-noise" />
-          <Navbar />
-          <main className="page-fade-in">{children}</main>
-          <Footer />
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              style: {
-                background: "var(--surface-strong)",
-                color: "var(--foreground)",
-                border: "1px solid var(--glass-border)",
-                borderRadius: "12px",
-                backdropFilter: "blur(12px)",
-              },
-            }}
-          />
-        </SmoothScroll>
+      <body suppressHydrationWarning>
+        <AppChrome>{children}</AppChrome>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            style: {
+              background: "var(--surface-strong)",
+              color: "var(--foreground)",
+              border: "1px solid var(--glass-border)",
+              borderRadius: "12px",
+              backdropFilter: "blur(12px)",
+            },
+          }}
+        />
       </body>
     </html>
   );

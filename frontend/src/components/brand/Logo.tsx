@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { memo } from "react";
 import { cn } from "@/lib/utils";
 
 interface LogoProps {
@@ -11,49 +11,45 @@ interface LogoProps {
   compact?: boolean;
 }
 
-export function Logo({
+export const Logo = memo(function Logo({
   className,
   iconClassName,
   textClassName,
   showWordmark = true,
   compact = false,
 }: LogoProps) {
-  const size = compact ? 36 : 44;
-
   return (
     <div className={cn("flex items-center gap-3", compact && "gap-2.5", className)}>
       <div
         className={cn(
-          "relative flex shrink-0 items-center justify-center overflow-hidden rounded-2xl",
-          "ring-1 ring-[color:var(--glass-border)] shadow-[0_8px_32px_rgba(34,211,238,0.12)]",
-          compact ? "h-9 w-9 rounded-xl" : "h-11 w-11",
+          "relative flex shrink-0 items-center justify-center rounded-md border-2 border-[color:var(--edge)] bg-[color:var(--accent)]",
+          compact ? "h-8 w-8 sm:h-9 sm:w-9" : "h-11 w-11",
           iconClassName,
         )}
         aria-hidden="true"
       >
-        <Image
-          src="/devpulse-logo-mark.png"
-          alt=""
-          width={size}
-          height={size}
-          className="h-full w-full object-cover"
-          priority
-        />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[rgba(34,211,238,0.15)] to-transparent" />
+        <svg viewBox="0 0 24 24" className="h-[60%] w-[60%]" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M2 12h4l2-7 4 14 3-10 2 3h5"
+            stroke="#191410"
+            strokeWidth="2.75"
+            strokeLinecap="square"
+            strokeLinejoin="round"
+          />
+        </svg>
       </div>
 
       {showWordmark ? (
         <span
           className={cn(
-            "font-display text-2xl font-extrabold tracking-tight",
-            compact && "text-xl",
+            "font-display text-xl font-black tracking-tight text-[color:var(--foreground)]",
+            compact && "text-base sm:text-lg",
             textClassName,
           )}
         >
-          <span className="accent-gradient">Dev</span>
-          <span className="text-[color:var(--foreground)]">Pulse</span>
+          Dev<span className="-rotate-1 inline-block text-[color:var(--accent)]">Pulse</span>
         </span>
       ) : null}
     </div>
   );
-}
+});

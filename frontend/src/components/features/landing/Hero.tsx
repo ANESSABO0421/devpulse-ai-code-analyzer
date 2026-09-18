@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import { CtaLink } from "@/components/ui/CtaLink";
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -48,12 +49,12 @@ export function Hero() {
           </p>
 
           <div className="hero-btns mt-10 flex flex-wrap gap-4">
-            <Link href="/register">
+            <CtaLink>
               <Button size="lg">
                 Start Free Trial
                 <ArrowRight size={18} />
               </Button>
-            </Link>
+            </CtaLink>
             <Link href="/reviews/new">
               <Button variant="outline" size="lg">
                 View Demo
